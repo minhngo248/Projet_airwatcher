@@ -1,3 +1,4 @@
+
 /*************************************************************************
                            System  -  description
                              -------------------
@@ -19,6 +20,7 @@ using namespace std;
 #include "Measurements.h"
 #include "MeasurementsType.h"
 #include "Sensor.h"
+
 
 
 
@@ -69,15 +71,14 @@ public:
 
 //------------------------------------------------------------------ PRIVE
 
-protected:
+
 //----------------------------------------------------- Méthodes protégées
 
 //----------------------------------------------------- Attributs protégés
-	list <Sensor> listeCapteurs;
+	map<int, Sensor> listeCapteurs;
 };
 
 //-------------------------------- Autres définitions dépendantes de <Measurements>
 
 #endif // MEASUREMENTS_H
-
 

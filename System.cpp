@@ -1,3 +1,4 @@
+
 /*************************************************************************
                            Measurements  -  description
                              -------------------
@@ -43,32 +44,32 @@ System::System ( const System & unMeasurements )
 } //----- Fin de System (constructeur de copie)
 
 
-System::System ( )
-// Algorithme :
-//
-{
-#ifdef MAP
-    cout << "Appel au constructeur de <System>" << endl;
-#endif
-	//listeCapteurs=new Sensor [nbSensor] ;
-	
-	
-} //----- Fin de System
+System::System() {
+    size_t sz;
+    ifstream fic;
+    string line;
+    // -------------Initialisation de la ListeCapteurs ----------------------
+    fic.open("dataset/sensors.csv");
+    while ( !fic.eof() ) {
+        fic >> line;
+        string str = "Sensor";
+        size_t pos1 = line.find(";");
+        int idSensor = stoi(line.substr(str.length(), pos1-str.length()), &sz);
+        size_t pos2 = line.find_first_of(";", pos1+1);
+        double lat = stod(line.substr(pos1+1, pos2-pos1-1), &sz);
+        double lon = stod(line.substr(pos2 + 1), &sz);
+        
+        Sensor unSensor(idSensor, lat, lon);
+        this->listeCapteurs.insert(pair<int, Sensor>(idSensor, unSensor));
+    }
+    fic.close();
+    // ----------------------------------------------------------------------
+}
+
+System::~System() {
+    this->listeCapteurs.empty();
+}
 
 
-System::~System ( )
-// Algorithme :
-//
-{
-#ifdef MAP
-    cout << "Appel au destructeur de <System>" << endl;
-#endif
 
-	delete listeCapteurs;
-} //----- Fin de ~System
-
-
-//------------------------------------------------------------------ PRIVE
-
-//----------------------------------------------------- Méthodes protégées
 

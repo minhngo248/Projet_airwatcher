@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "*.html": "c",
-        "list": "cpp"
+        "list": "cpp",
+        "string": "cpp",
+        "map": "cpp"
     }
 }

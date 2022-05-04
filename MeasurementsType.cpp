@@ -38,6 +38,11 @@ MeasurementsType::MeasurementsType ( const MeasurementsType & unMeasurementsType
 #ifdef MAP
     cout << "Appel au constructeur de copie de <Xxx>" << endl;
 #endif
+
+	attributeID=unMeasurementsType.attributeID;
+	unite=unMeasurementsType.unite;
+	description=unMeasurementsType.description;
+	
 } //----- Fin de MeasurementsType (constructeur de copie)
 
 

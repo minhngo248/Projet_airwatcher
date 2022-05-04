@@ -6,7 +6,7 @@
     e-mail               : $EMAIL$
 *************************************************************************/
 
-//---------- Réalisation de la classe <Measurements> (fichier Measurements.cpp) ------------
+//---------- Réalisation de la classe <System> (fichier System.cpp) ------------
 
 //---------------------------------------------------------------- INCLUDE
 
@@ -16,7 +16,7 @@
 using namespace std;
 
 //------------------------------------------------------ Include personnel
-#include "Measurements.h"
+#include "System.h"
 
 //------------------------------------------------------------- Constantes
 
@@ -24,7 +24,7 @@ using namespace std;
 
 //----------------------------------------------------- Méthodes publiques
 
-// type Measurements::Méthode ( liste des paramètres )
+// type System::Méthode ( liste des paramètres )
 // Algorithme :
 //
 //{
@@ -33,38 +33,39 @@ using namespace std;
 
 //-------------------------------------------- Constructeurs - destructeur
 
-Measurements::Measurements ( const Measurements & unMeasurements )
+System::System ( const System & unMeasurements )
 //Algorithme :
 //
 {
 #ifdef MAP
-    cout << "Appel au constructeur de copie de <Measurements>" << endl;
+    cout << "Appel au constructeur de copie de <System>" << endl;
 #endif
-} //----- Fin de Measurements (constructeur de copie)
+} //----- Fin de System (constructeur de copie)
 
 
-Measurements::Measurements (string p, float mes, MeasurementsType *typeMes )
+System::System ( )
 // Algorithme :
 //
 {
 #ifdef MAP
-    cout << "Appel au constructeur de <Measurements>" << endl;
+    cout << "Appel au constructeur de <System>" << endl;
 #endif
-	periode=p;
-	mesure=mes;
-	typeMesure= new MeasurementsType(*typeMes);
-} //----- Fin de Measurements
+	//listeCapteurs=new Sensor [nbSensor] ;
+	
+	
+} //----- Fin de System
 
 
-Measurements::~Measurements ( )
+System::~System ( )
 // Algorithme :
 //
 {
 #ifdef MAP
-    cout << "Appel au destructeur de <Measurements>" << endl;
+    cout << "Appel au destructeur de <System>" << endl;
 #endif
-	delete typeMesure;
-} //----- Fin de ~Measurements
+
+	delete listeCapteurs;
+} //----- Fin de ~System
 
 
 //------------------------------------------------------------------ PRIVE

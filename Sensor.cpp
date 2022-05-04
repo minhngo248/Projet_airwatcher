@@ -1,9 +1,9 @@
 using namespace std;
 
 #include "Sensor.h"
-#include "Measurements.h"
 
-list<Measurements> Sensor::GetListeMesureParType(int sensorId_in, Measurements_type type) {
+
+list<Measurements> Sensor::GetListeMesureParType(int sensorId_in, MeasurementsType type) {
 
 }
 

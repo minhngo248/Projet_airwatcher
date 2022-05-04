@@ -23,6 +23,11 @@ Sensor::Sensor(int unSensorId, double unLat, double unLong) {
     //mesures=new Measurements(*mes);
 }
 
+Sensor::Sensor() 
+{
+    
+}
+
 Sensor::~Sensor() {
 	delete [] mesures; 
 

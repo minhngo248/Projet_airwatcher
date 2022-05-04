@@ -14,13 +14,14 @@
 //-------------------------------------------------------- Include système
 
 #include <iostream>
+#include <cmath>
 using namespace std;
 
 //------------------------------------------------------ Include personnel
 #include "System.h"
 
 //------------------------------------------------------------- Constantes
-
+const double pi = M_PI;
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
@@ -31,6 +32,21 @@ using namespace std;
 //{
 //} //----- Fin de Méthode
 
+list<Sensor> System::GetListeCapteurs_zone(const Zone zoneGeo, const string temps)
+{
+    const float ky = 40000.0 / 360.0;
+    list<Sensor> sensorDeLaZone;
+    for(auto&i : this->listeCapteurs) {
+        float kx = cos(pi * zoneGeo.latitude / 180.0) * ky;
+        float dx = abs(zoneGeo.longitude - i.second.longitude) * kx;
+        float dy = abs(zoneGeo.latitude - i.second.latitude) * ky;
+        if(sqrt(dx * dx + dy * dy) <= zoneGeo.rayon) {
+            sensorDeLaZone.push_front(i.second); 
+        }
+    }
+    return sensorDeLaZone;
+    
+}
 
 //-------------------------------------------- Constructeurs - destructeur
 ostream & operator << (ostream & out, const System & unSystem) {

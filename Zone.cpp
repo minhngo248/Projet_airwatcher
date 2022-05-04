@@ -7,3 +7,7 @@ Zone::Zone(double unLat, double unLong, double unRayon) {
     this->longitude = unLong;
     this->rayon = unRayon;
 }
+
+Zone::~Zone() {
+   
+}

@@ -42,7 +42,7 @@ class System
 
 public:
 //----------------------------------------------------- Méthodes publiques
-	Sensor * GetListeCapteurs_zone(Zone zoneGeo, string temps);
+	list<Sensor> GetListeCapteurs_zone(const Zone zoneGeo, const string temps);
 	float CalculerQualiteMoyenne(Zone zoneGeo);
 	float CalculerQualiteAir_zone(list <Measurements> listeMesures);
 	float CalculerQualiteAir_point(list <Measurements> listeMesures, string temps) ;

@@ -10,6 +10,6 @@ public:
     Zone();
     Zone(double unLat, double unLong, double unRayon);
     ~Zone();
-}
+};
 
 #endif

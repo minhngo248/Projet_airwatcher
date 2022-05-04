@@ -12,9 +12,9 @@
 #include <chrono>
 using namespace std;
 #include <iostream>
+#include <string>
 
-
-
+#include "MeasurementsType.h"
 //--------------------------------------------------- Interfaces utilisées
 
 //------------------------------------------------------------- Constantes

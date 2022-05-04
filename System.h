@@ -43,12 +43,12 @@ class System
 public:
 //----------------------------------------------------- Méthodes publiques
 	Sensor * GetListeCapteurs_zone(Zone zoneGeo, string temps);
-	float CalculerQualitéMoyenne(Zone zoneGeo);
-	float CalculerQualitéAir_zone(list <Measurements> listeMesures);
-	float CalculerQualitéAir_point(list <Measurements> listeMesures, string temps) ;
-	float CalculerQualitéAir_point(list <Measurements> listeMesures, string temps,MeasurementsType type) ;
+	float CalculerQualiteMoyenne(Zone zoneGeo);
+	float CalculerQualiteAir_zone(list <Measurements> listeMesures);
+	float CalculerQualiteAir_point(list <Measurements> listeMesures, string temps) ;
+	float CalculerQualiteAir_point(list <Measurements> listeMesures, string temps,MeasurementsType type) ;
     Sensor * ClassifierCapteurs( string idCapteurRéférence, string temps, list <MeasurementsType>  donnees);
-    float VérifierAméliorationAir(Zone zoneGeo);
+    float VerifierAmeliorationAir(Zone zoneGeo);
 
 //-------------------------------------------- Constructeurs - destructeur
     System ( const System & unSystem );

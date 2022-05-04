@@ -67,9 +67,9 @@ bool User::seDeconnecter(bool connected)
     if(connected)
     {
         cout<<"Vous êtes déconnecté"<<endl;
-        return false;
+        connected = false;
     }
-
+    return connected;
 }
 
 //------------------------------------------------- Surcharge d'opérateurs

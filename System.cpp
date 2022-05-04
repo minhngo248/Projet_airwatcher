@@ -33,6 +33,14 @@ using namespace std;
 
 
 //-------------------------------------------- Constructeurs - destructeur
+ostream & operator << (ostream & out, const System & unSystem) {
+    out << "SensorID | Latitude | Longitude"<<endl;
+    for(auto& i : unSystem.listeCapteurs) {
+        out << i.first << " " << i.second << endl;
+    }
+    return out; 
+}
+
 
 System::System ( const System & unMeasurements )
 //Algorithme :
@@ -59,8 +67,8 @@ System::System() {
         double lat = stod(line.substr(pos1+1, pos2-pos1-1), &sz);
         double lon = stod(line.substr(pos2 + 1), &sz);
         
-        Sensor unSensor(idSensor, lat, lon);
-        this->listeCapteurs.insert(pair<int, Sensor>(idSensor, unSensor));
+        Sensor *unSensor = new Sensor(idSensor, lat, lon);
+        this->listeCapteurs.insert(pair<int, Sensor>(idSensor, *unSensor));
     }
     fic.close();
     // ----------------------------------------------------------------------

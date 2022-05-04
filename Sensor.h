@@ -15,7 +15,7 @@ public:
 
     friend ostream & operator<<(ostream & out, const Sensor & unSensor);
     
-    Sensor(int unSensorId, double unLat, double unLong, Measurements * mesures);
+    Sensor(int unSensorId, double unLat, double unLong);
     Sensor();
     ~Sensor();
 

@@ -47,10 +47,12 @@ public:
 	float CalculerQualiteAir_zone(list <Measurements> listeMesures);
 	float CalculerQualiteAir_point(list <Measurements> listeMesures, string temps) ;
 	float CalculerQualiteAir_point(list <Measurements> listeMesures, string temps,MeasurementsType type) ;
-    Sensor * ClassifierCapteurs( string idCapteurRéférence, string temps, list <MeasurementsType>  donnees);
+    Sensor * ClassifierCapteurs( string idCapteurReference, string temps, list <MeasurementsType>  donnees);
     float VerifierAmeliorationAir(Zone zoneGeo);
 
 //-------------------------------------------- Constructeurs - destructeur
+    friend ostream & operator<<(ostream & out, const System & unSystem);
+
     System ( const System & unSystem );
     // Mode d'emploi (constructeur de copie) :
     //

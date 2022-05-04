@@ -1,6 +1,6 @@
 CPPFLAGS= -ansi -pedantic -Wall -std=c++11 -g
 EXE = main
-OBJETS = User.o main.o Measurements.o MeasurementsType.o Zone.o Sensor.o
+OBJETS = User.o main.o Measurements.o MeasurementsType.o Zone.o Sensor.o System.o
 
 
 $(EXE) : $(OBJETS) $(EXE).o

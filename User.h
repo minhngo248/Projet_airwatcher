@@ -11,7 +11,7 @@
 #define USER_H
 
 //--------------------------------------------------- Interfaces utilisées
-#include <cstring>
+#include <string>
 using namespace std;
 //------------------------------------------------------------- Constantes
 

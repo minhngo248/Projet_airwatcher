@@ -14,6 +14,7 @@
 using namespace std;
 #include "User.h"
 #include "Sensor.h"
+#include "Measurements.h"
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
@@ -30,7 +31,7 @@ class IndividualUser : public User
 
 public:
 //----------------------------------------------------- Méthodes publiques
-    User creerCompte(int userID_in, User unUser);
+    User creerCompte(int userID_in, string unNom, string unPrenom, string unEmail, string unMdp);
     int consulterScore();
     Sensor consulterDonneesCapteur(int idCapteur);
 

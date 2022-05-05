@@ -14,6 +14,7 @@ public:
     friend ostream & operator<<(ostream & out, const Sensor & unSensor);
     double GetLatitude();
     double GetLongitude();
+    int GetSensorId();
     
     Sensor(int unSensorId = 0, double unLat = 44.0, double unLong = -1.0);
     virtual ~Sensor();

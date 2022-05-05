@@ -1,62 +1,58 @@
 /*************************************************************************
-                           IndividualUser  -  description
+                           Administrateur  -  description
                              -------------------
     début                : $DATE$
     copyright            : (C) $YEAR$ par $AUTHOR$
     e-mail               : $EMAIL$
 *************************************************************************/
 
-//---------- Interface de la classe <IndividualUser> (fichier IndividualUser.h) ----------------
-#if ! defined ( IndividualUser_H )
-#define IndividualUser_H
+//---------- Interface de la classe <Administrateur> (fichier Administrateur.h) ----------------
+#if ! defined ( Administrateur_H )
+#define Administrateur_H
 
 //--------------------------------------------------- Interfaces utilisées
 using namespace std;
+#include <cstring>
+#include<list>
 #include "User.h"
 #include "Sensor.h"
-#include "Measurements.h"
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
 
 //------------------------------------------------------------------------
-// Rôle de la classe <IndividualUser>
+// Rôle de la classe <Administrateur>
 //
 //
 //------------------------------------------------------------------------
 
-class IndividualUser : public User
+class Administrateur : public User
 {
 //----------------------------------------------------------------- PUBLIC
 
 public:
 //----------------------------------------------------- Méthodes publiques
-    User creerCompte(int userID_in, string unNom, string unPrenom, string unEmail, string unMdp);
-    int consulterScore();
-    Sensor consulterDonneesCapteur(int idCapteur);
-
+    
+bool vérifierFiabilitéCapteurs(Sensor capteurChoisi, list<Sensor> capteursRéférence);
 
 //------------------------------------------------- Surcharge d'opérateurs
 
 //-------------------------------------------- Constructeurs - destructeur
-    IndividualUser ( const IndividualUser & unIndividualUser );
+    Administrateur ( const Administrateur & unAdministrateur );
 
-    IndividualUser ();
+    Administrateur ( );
 
-    virtual ~IndividualUser ( );
+    virtual ~Administrateur ( );
+
 //------------------------------------------------------------------ PRIVE
 
 protected:
 //----------------------------------------------------- Méthodes protégées
-
 //----------------------------------------------------- Attributs protégés
-    int userID;
-    int score;
-    list <Sensor> mesCapteurs;
 
 };
 
-//-------------------------------- Autres définitions dépendantes de <IndividualUser>
+//-------------------------------- Autres définitions dépendantes de <Administrateur>
 
-#endif // IndividualUser_H
+#endif // Administrateur_H
 

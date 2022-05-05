@@ -32,6 +32,11 @@ using namespace std;
 
 
 //-------------------------------------------- Constructeurs - destructeur
+ostream & operator<<(ostream & out, const Measurements & unMeasurement) {
+    out << unMeasurement.periode << " " << unMeasurement.mesure << " " << *unMeasurement.typeMesure;
+    return out; 
+}
+
 
 Measurements::Measurements ( const Measurements & unMeasurements )
 //Algorithme :
@@ -40,6 +45,10 @@ Measurements::Measurements ( const Measurements & unMeasurements )
 #ifdef MAP
     cout << "Appel au constructeur de copie de <Measurements>" << endl;
 #endif
+
+periode = unMeasurements.periode;
+mesure = unMeasurements.mesure;
+typeMesure = unMeasurements.typeMesure;
 } //----- Fin de Measurements (constructeur de copie)
 
 
@@ -53,6 +62,15 @@ Measurements::Measurements (string p, float mes, MeasurementsType *typeMes )
 	periode=p;
 	mesure=mes;
 	typeMesure= new MeasurementsType(*typeMes);
+} //----- Fin de Measurements
+
+Measurements::Measurements ()
+// Algorithme :
+//
+{
+#ifdef MAP
+    cout << "Appel au constructeur par défaut de <Measurements>" << endl;
+#endif
 } //----- Fin de Measurements
 
 

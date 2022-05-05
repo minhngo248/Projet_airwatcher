@@ -38,6 +38,8 @@ public:
 
 
 //-------------------------------------------- Constructeurs - destructeur
+    friend ostream & operator<<(ostream & out, const Measurements & unMeasurement);
+    
     Measurements ( const Measurements & unMeasurements );
     // Mode d'emploi (constructeur de copie) :
     //
@@ -45,6 +47,12 @@ public:
     //
 
     Measurements (string periode, float mesure ,MeasurementsType *typeMes );
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    Measurements ();
     // Mode d'emploi :
     //
     // Contrat :

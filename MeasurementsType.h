@@ -34,6 +34,7 @@ public:
     // Contrat :
 	//
 
+    friend ostream & operator<<(ostream & out, const MeasurementsType & unMeasurementsType);
 
 //-------------------------------------------- Constructeurs - destructeur
     MeasurementsType ( const MeasurementsType & unMeasurementsType );
@@ -42,7 +43,13 @@ public:
     // Contrat :
     //
 
-    MeasurementsType (int aID, string unit, string descrip );
+    MeasurementsType (string aID);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    MeasurementsType ();
     // Mode d'emploi :
     //
     // Contrat :
@@ -61,7 +68,7 @@ protected:
 
 //----------------------------------------------------- Attributs protégés
 
-	int attributeID;
+	string attributeID;
 	string unite;
 	string description;
 

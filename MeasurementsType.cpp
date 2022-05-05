@@ -12,8 +12,6 @@
 
 //-------------------------------------------------------- Include système
 
-#include <iostream>
-#include <fstream>
 using namespace std;
 
 //------------------------------------------------------ Include personnel
@@ -30,17 +28,15 @@ using namespace std;
 //{
 //} //----- Fin de Méthode
 
-ostream & operator<<(ostream & out, const MeasurementsType & unMeasurementsType) {
-    out << unMeasurementsType.attributeID << " " << unMeasurementsType.unite << " " << unMeasurementsType.description;
-    return out; 
+string MeasurementsType::GetId() {
+    return attributeID;
 }
+
 //-------------------------------------------- Constructeurs - destructeur
-MeasurementsType::MeasurementsType ( const MeasurementsType & unMeasurementsType )
-// Algorithme :
-//
-{
+
+MeasurementsType::MeasurementsType ( const MeasurementsType & unMeasurementsType ) {
 #ifdef MAP
-    cout << "Appel au constructeur de copie de <MeasurementsType>" << endl;
+    cout << "Appel au constructeur de copie de <Xxx>" << endl;
 #endif
 
 	attributeID=unMeasurementsType.attributeID;
@@ -50,7 +46,7 @@ MeasurementsType::MeasurementsType ( const MeasurementsType & unMeasurementsType
 } //----- Fin de MeasurementsType (constructeur de copie)
 
 
-MeasurementsType::MeasurementsType (string aID)
+MeasurementsType::MeasurementsType (string aID, string unit, string descrip )
 // Algorithme :
 //
 {
@@ -58,39 +54,11 @@ MeasurementsType::MeasurementsType (string aID)
     cout << "Appel au constructeur de <MeasurementsType>" << endl;
 #endif
 
-    ifstream fic;
-    char lineGet[100];
-    string line;
-    fic.open("dataset/attributes.csv");
-    fic >> line; //skip the first line
-    while ( !fic.eof() ) {
-        fic.getline(lineGet,100,'\n');
-        line = lineGet;
-        size_t pos1 = line.find(";");
-        string unID = line.substr(0,pos1);
-        
-        if(!unID.compare(aID))
-        {
-            attributeID = aID;
-            size_t pos2 = line.find_first_of(";", pos1+1);
-            unite = line.substr(pos1+1, pos2-pos1-1);
-            size_t pos3 = line.find_first_of(";", pos2+1);
-            description = line.substr(pos2+1, pos3-pos2-1);
-            break;
-        }
-    }
-    fic.close();
+	this->attributeID=aID;
+	this->unite=unit;
+	this->description=descrip;
 } //----- Fin de MeasurementsType
 
-
-MeasurementsType::MeasurementsType ()
-// Algorithme :
-//
-{
-#ifdef MAP
-    cout << "Appel au constructeur par défaut de <MeasurementsType>" << endl;
-#endif
-}
 
 MeasurementsType::~MeasurementsType ( )
 // Algorithme :

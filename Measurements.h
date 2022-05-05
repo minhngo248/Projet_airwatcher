@@ -36,23 +36,15 @@ class Measurements
 public:
 //----------------------------------------------------- Méthodes publiques
 
-
+    friend ostream & operator<<(ostream & out, const Measurements& uneMesure);
 //-------------------------------------------- Constructeurs - destructeur
-    friend ostream & operator<<(ostream & out, const Measurements & unMeasurement);
-    
     Measurements ( const Measurements & unMeasurements );
     // Mode d'emploi (constructeur de copie) :
     //
     // Contrat :
     //
 
-    Measurements (string periode, float mesure ,MeasurementsType *typeMes );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
-    Measurements ();
+    Measurements(string ins, string typeMes, double mes);
     // Mode d'emploi :
     //
     // Contrat :
@@ -64,9 +56,10 @@ public:
     // Contrat :
     //
 
-    string periode;
-    float mesure;
-    MeasurementsType *typeMesure;
+private:
+    string instant;
+    double mesure;
+    string typeMesure;
 };
 
 //-------------------------------- Autres définitions dépendantes de <Measurements>

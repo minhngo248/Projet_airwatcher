@@ -10,10 +10,9 @@
 //---------- Interface de la classe <System> (fichier System.h) ----------------
 #if ! defined ( SYSTEM_H )
 #define SYSTEM_H
-#include <chrono>
 using namespace std;
 #include <iostream>
-
+#include <map>
 #include <list>
 
 #include "Zone.h"
@@ -42,16 +41,20 @@ class System
 
 public:
 //----------------------------------------------------- Méthodes publiques
-	list<Sensor> GetListeCapteurs_zone(const Zone zoneGeo, const string temps);
-	float CalculerQualiteMoyenne(Zone zoneGeo);
-	float CalculerQualiteAir_zone(list <Measurements> listeMesures);
-	float CalculerQualiteAir_point(list <Measurements> listeMesures, string temps) ;
-	float CalculerQualiteAir_point(list <Measurements> listeMesures, string temps,MeasurementsType type) ;
-    Sensor * ClassifierCapteurs( string idCapteurReference, string temps, list <MeasurementsType>  donnees);
-    float VerifierAmeliorationAir(Zone zoneGeo);
 
-//-------------------------------------------- Constructeurs - destructeur
+    //list<Measurements> GetListeMesureParType(int sensorId_in, MeasurementsType type);
+    list<Measurements> GetListeMesure(int sensorId_in);
+
+	list<Sensor> GetListeCapteurs_zone(Zone& zoneGeo, const string temps);
+	float CalculerQualiteMoyenne(Zone zoneGeo);
+	float CalculerQualiteAir_zone(list<Measurements> & liste_Mesures);
+	float CalculerQualiteAir_point(list<Measurements> & liste_Mesures, string temps) ;
+	float CalculerQualiteAir_point(list<Measurements> & liste_Mesures, string temps, MeasurementsType type) ;
+    list<Sensor> ClassifierCapteurs( string idCapteurReference, string temps, list<MeasurementsType> & donnees);
+    float VerifierAmeliorationAir(Zone zoneGeo); 
+    
     friend ostream & operator<<(ostream & out, const System & unSystem);
+//-------------------------------------------- Constructeurs - destructeur
 
     System ( const System & unSystem );
     // Mode d'emploi (constructeur de copie) :
@@ -77,7 +80,9 @@ public:
 //----------------------------------------------------- Méthodes protégées
 
 //----------------------------------------------------- Attributs protégés
-	map<int, Sensor> listeCapteurs;
+private:
+    map<int, Sensor> listeCapteurs;
+	map<int, list<Measurements>> listeMesures;
 };
 
 //-------------------------------- Autres définitions dépendantes de <Measurements>

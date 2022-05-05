@@ -3,6 +3,9 @@
         "*.html": "c",
         "list": "cpp",
         "string": "cpp",
-        "map": "cpp"
+        "map": "cpp",
+        "iostream": "cpp",
+        "iosfwd": "cpp",
+        "xstring": "cpp"
     }
 }

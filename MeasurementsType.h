@@ -11,6 +11,7 @@
 #define MEASUREMENTSTYPE_H
 
 //--------------------------------------------------- Interfaces utilisées
+#include <iostream>
 
 //------------------------------------------------------------- Constantes
 
@@ -33,23 +34,16 @@ public:
     //
     // Contrat :
 	//
-
-    friend ostream & operator<<(ostream & out, const MeasurementsType & unMeasurementsType);
-
+    string GetId();
 //-------------------------------------------- Constructeurs - destructeur
+
     MeasurementsType ( const MeasurementsType & unMeasurementsType );
     // Mode d'emploi (constructeur de copie) :
     //
     // Contrat :
     //
 
-    MeasurementsType (string aID);
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
-    MeasurementsType ();
+    MeasurementsType (string aID = "", string unit = "", string descrip = "" );
     // Mode d'emploi :
     //
     // Contrat :
@@ -63,7 +57,7 @@ public:
 
 //------------------------------------------------------------------ PRIVE
 
-protected:
+private:
 //----------------------------------------------------- Méthodes protégées
 
 //----------------------------------------------------- Attributs protégés

@@ -11,7 +11,6 @@
 //---------------------------------------------------------------- INCLUDE
 
 //-------------------------------------------------------- Include système
-
 #include <iostream>
 using namespace std;
 
@@ -30,13 +29,12 @@ using namespace std;
 //{
 //} //----- Fin de Méthode
 
-
-//-------------------------------------------- Constructeurs - destructeur
-ostream & operator<<(ostream & out, const Measurements & unMeasurement) {
-    out << unMeasurement.periode << " " << unMeasurement.mesure << " " << *unMeasurement.typeMesure;
-    return out; 
+ostream & operator<<(ostream & out, const Measurements& uneMesure) {
+    out << uneMesure.instant << " " << uneMesure.typeMesure << " " << uneMesure.mesure;
+    return out;
 }
 
+//-------------------------------------------- Constructeurs - destructeur
 
 Measurements::Measurements ( const Measurements & unMeasurements )
 //Algorithme :
@@ -45,32 +43,18 @@ Measurements::Measurements ( const Measurements & unMeasurements )
 #ifdef MAP
     cout << "Appel au constructeur de copie de <Measurements>" << endl;
 #endif
-
-periode = unMeasurements.periode;
-mesure = unMeasurements.mesure;
-typeMesure = unMeasurements.typeMesure;
 } //----- Fin de Measurements (constructeur de copie)
 
 
-Measurements::Measurements (string p, float mes, MeasurementsType *typeMes )
+Measurements::Measurements(string ins, string typeMes, double mes) {
 // Algorithme :
 //
-{
 #ifdef MAP
     cout << "Appel au constructeur de <Measurements>" << endl;
 #endif
-	periode=p;
-	mesure=mes;
-	typeMesure= new MeasurementsType(*typeMes);
-} //----- Fin de Measurements
-
-Measurements::Measurements ()
-// Algorithme :
-//
-{
-#ifdef MAP
-    cout << "Appel au constructeur par défaut de <Measurements>" << endl;
-#endif
+	this->instant = ins;
+	this->mesure = mes;
+	this->typeMesure = typeMes;
 } //----- Fin de Measurements
 
 
@@ -81,7 +65,6 @@ Measurements::~Measurements ( )
 #ifdef MAP
     cout << "Appel au destructeur de <Measurements>" << endl;
 #endif
-	delete typeMesure;
 } //----- Fin de ~Measurements
 
 

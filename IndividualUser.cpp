@@ -20,34 +20,42 @@ using namespace std;
 #include "IndividualUser.h"
 #include "User.h"
 #include "Sensor.h"
+#include "Measurements.h"
 
 //------------------------------------------------------------- Constantes
 
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
-User IndividualUser::creerCompte(int userID_in, User unUser)
+User IndividualUser::creerCompte(int userID_in, string unNom, string unPrenom, string unEmail, string unMdp)
 {
+    User *u;
     size_t sz;
     ifstream fic;
     string line;
+    bool existe = false;
     
     fic.open("dataset/users.csv");
 
     while ( !fic.eof() ) {
         fic >> line;
-        string str = "Sensor";
-        // size_t pos1 = line.find(";");
-        // int idSensor = stoi(line.substr(str.length(), pos1-str.length()), &sz);
-        // size_t pos2 = line.find_first_of(";", pos1+1);
-        // double lat = stod(line.substr(pos1+1, pos2-pos1-1), &sz);
-        // double lon = stod(line.substr(pos2 + 1), &sz);
-        
-        // Sensor unSensor(idSensor, lat, lon);
-        // this->listeCapteurs.insert(pair<int, Sensor>(idSensor, unSensor));
+        string str = "User";
+        size_t pos1 = line.find(";");
+        int idUser = stoi(line.substr(str.length(), pos1-str.length()), &sz);
+        cout << idUser << endl;
+        if (idUser == userID_in) {
+            existe = true;
+            break;
+        }
     }
     fic.close();
 
+       if (existe) {
+        u = new User(unNom, unPrenom, unEmail, unMdp);
+       } else {
+           u = new User();
+       }
+    return *u;
 }
 
 int IndividualUser::consulterScore()
@@ -57,8 +65,8 @@ int IndividualUser::consulterScore()
 
 Sensor IndividualUser::consulterDonneesCapteur(int idCapteur)
 {
-    std::list<Sensor>::iterator it;
-    Sensor monCapteur;
+    list<Sensor>::iterator it;
+    Sensor monCapteur ;
 
     for (it = mesCapteurs.begin(); it != mesCapteurs.end(); ++it) {
         if (it->getSensorID() == idCapteur){

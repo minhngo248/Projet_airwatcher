@@ -12,6 +12,7 @@ public:
     double GetLatitude();
     double GetLongitude();
     friend ostream & operator<<(ostream & out, const Sensor & unSensor);
+    friend bool operator == ( Sensor & unSensor1, Sensor & unSensor2 );
     
     Sensor(int unSensorId = 0, double unLat = 44.0, double unLong = -1.0);
     virtual ~Sensor();

@@ -13,7 +13,8 @@
 //--------------------------------------------------- Interfaces utilisées
 using namespace std;
 #include <cstring>
-#include<list>
+#include <list>
+#include <iostream>
 #include "User.h"
 #include "Sensor.h"
 //------------------------------------------------------------- Constantes
@@ -31,17 +32,17 @@ class Administrateur : public User
 //----------------------------------------------------------------- PUBLIC
 
 public:
+
 //----------------------------------------------------- Méthodes publiques
-    
-bool vérifierFiabilitéCapteurs(Sensor capteurChoisi, list<Sensor> capteursRéférence);
+bool verifierFiabiliteCapteur(Sensor capteurChoisi, Sensor capteurReference);
 
 //------------------------------------------------- Surcharge d'opérateurs
+friend ostream & operator <<(ostream& out, const Administrateur & unAdministrateur);
 
 //-------------------------------------------- Constructeurs - destructeur
     Administrateur ( const Administrateur & unAdministrateur );
-
+    Administrateur (string unNom, string unPrenom, string unEmail, string unMdp);
     Administrateur ( );
-
     virtual ~Administrateur ( );
 
 //------------------------------------------------------------------ PRIVE

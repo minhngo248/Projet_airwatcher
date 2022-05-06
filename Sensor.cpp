@@ -18,6 +18,15 @@ ostream & operator<<(ostream & out, const Sensor & unSensor) {
     return out; 
 }
 
+
+bool operator == ( Sensor & unSensor1, Sensor & unSensor2 ){
+    bool res = false;
+    if ( unSensor1.GetId() == unSensor2.GetId()){
+        res = true;
+    }
+    return res;
+}
+
 Sensor::Sensor(int unSensorId, double unLat, double unLong) {
     this->sensorId = unSensorId;
     this->latitude = unLat;

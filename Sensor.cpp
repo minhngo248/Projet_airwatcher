@@ -1,16 +1,16 @@
 using namespace std;
 #include "Sensor.h"
 
+int Sensor::GetId() {
+    return sensorId;
+}
+
 double Sensor::GetLatitude() {
     return latitude;
 }
 
 double Sensor::GetLongitude() {
     return longitude;
-}
-
-int Sensor::GetSensorId() {
-    return sensorId;
 }
 
 ostream & operator<<(ostream & out, const Sensor & unSensor) {

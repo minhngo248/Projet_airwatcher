@@ -1,8 +1,6 @@
 #if ! defined (SENSOR_H)
 #define SENSOR_H
 
-#include <list>
-#include <fstream>
 #include <string>
 #include <iostream>
 
@@ -10,11 +8,10 @@
 
 class Sensor {
 public:
-
-    friend ostream & operator<<(ostream & out, const Sensor & unSensor);
+    int GetId();
     double GetLatitude();
     double GetLongitude();
-    int GetSensorId();
+    friend ostream & operator<<(ostream & out, const Sensor & unSensor);
     
     Sensor(int unSensorId = 0, double unLat = 44.0, double unLong = -1.0);
     virtual ~Sensor();

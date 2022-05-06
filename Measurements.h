@@ -7,13 +7,11 @@
 *************************************************************************/
 
 //---------- Interface de la classe <Measurements> (fichier Measurements.h) ----------------
-#if ! defined ( MEASUREMENTS_H )
+#if ! defined (MEASUREMENTS_H)
 #define MEASUREMENTS_H
 
-using namespace std;
 #include <iostream>
-
-#include "MeasurementsType.h"
+#include <string>
 
 
 
@@ -29,28 +27,23 @@ using namespace std;
 //
 //------------------------------------------------------------------------
 
-class Measurements
-{
+class Measurements {
 //----------------------------------------------------------------- PUBLIC
-
 public:
 //----------------------------------------------------- Méthodes publiques
-
+    string GetTypeMesure();
+    double GetMesure();
+    string GetInstant();
     friend ostream & operator<<(ostream & out, const Measurements& uneMesure);
 //-------------------------------------------- Constructeurs - destructeur
-    Measurements ( const Measurements & unMeasurements );
-    // Mode d'emploi (constructeur de copie) :
-    //
-    // Contrat :
-    //
 
-    Measurements(string ins, string typeMes, double mes);
+    Measurements(string ins = "", string typeMes = "", double mes = 0.0);
     // Mode d'emploi :
     //
     // Contrat :
     //
 
-    virtual ~Measurements ( );
+    virtual ~Measurements();
     // Mode d'emploi :
     //
     // Contrat :
@@ -58,8 +51,8 @@ public:
 
 private:
     string instant;
-    double mesure;
     string typeMesure;
+    double mesure;
 };
 
 //-------------------------------- Autres définitions dépendantes de <Measurements>

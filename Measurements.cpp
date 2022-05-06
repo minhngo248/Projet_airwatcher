@@ -11,7 +11,6 @@
 //---------------------------------------------------------------- INCLUDE
 
 //-------------------------------------------------------- Include système
-#include <iostream>
 using namespace std;
 
 //------------------------------------------------------ Include personnel
@@ -29,21 +28,24 @@ using namespace std;
 //{
 //} //----- Fin de Méthode
 
+string Measurements::GetTypeMesure() {
+    return typeMesure;
+}
+
+double Measurements::GetMesure() {
+    return mesure;
+}
+
+string Measurements::GetInstant() {
+    return instant;
+}
+
 ostream & operator<<(ostream & out, const Measurements& uneMesure) {
     out << uneMesure.instant << " " << uneMesure.typeMesure << " " << uneMesure.mesure;
     return out;
 }
 
 //-------------------------------------------- Constructeurs - destructeur
-
-Measurements::Measurements ( const Measurements & unMeasurements )
-//Algorithme :
-//
-{
-#ifdef MAP
-    cout << "Appel au constructeur de copie de <Measurements>" << endl;
-#endif
-} //----- Fin de Measurements (constructeur de copie)
 
 
 Measurements::Measurements(string ins, string typeMes, double mes) {

@@ -12,6 +12,7 @@
 #define SYSTEM_H
 using namespace std;
 #include <iostream>
+#include <fstream>
 #include <map>
 #include <list>
 
@@ -45,13 +46,12 @@ public:
     //list<Measurements> GetListeMesureParType(int sensorId_in, MeasurementsType type);
     list<Measurements> GetListeMesure(int sensorId_in);
 
-	list<Sensor> GetListeCapteurs_zone(Zone& zoneGeo, const string temps);
-	float CalculerQualiteMoyenne(Zone zoneGeo);
-	float CalculerQualiteAir_zone(list<Measurements> & liste_Mesures);
-	float CalculerQualiteAir_point(list<Measurements> & liste_Mesures, string temps) ;
-	float CalculerQualiteAir_point(list<Measurements> & liste_Mesures, string temps, MeasurementsType type) ;
-    list<Sensor> ClassifierCapteurs( string idCapteurReference, string temps, list<MeasurementsType> & donnees);
-    float VerifierAmeliorationAir(Zone zoneGeo); 
+	list<Sensor> GetListeCapteurs_zone(Zone& zoneGeo);
+	map<string, double> CalculerQualiteAir_zone(Zone & zoneGeo);
+	double CalculerQualiteAir(list<Measurements>& listeMesures, string periode,
+                                 string typeMesure);
+    multimap<double, int> ClassifierCapteurs(int idCapteurReference, string periode, string typeMesure);
+    //float VerifierAmeliorationAir(Zone & zoneGeo); 
     
     friend ostream & operator<<(ostream & out, const System & unSystem);
 //-------------------------------------------- Constructeurs - destructeur

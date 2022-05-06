@@ -8,4 +8,6 @@
 - Dans Measurements, periode se change en instant.
 - Il faut private car c'est programmation objet orienté
 
-Note : je vais faire la fonctionnalité ClassifierCapteurs
+## Note : 
++ ClassifierCapteurs : done
++ CalculerQualiteAir : done

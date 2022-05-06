@@ -39,14 +39,10 @@ const double pi = M_PI;
 list<Measurements> System::GetListeMesure(int sensorId_in) {
     cout << "Instant | " << "type | " << "mesure" << endl;
     list<Measurements> uneListe = this->listeMesures.at(sensorId_in);
-    for(auto& i:uneListe) {
-        cout << i << endl;
-    } 
-    cout << uneListe.size() << endl;
     return uneListe;
 }
 
-list<Sensor> System::GetListeCapteurs_zone(Zone& zoneGeo, const string temps) {
+list<Sensor> System::GetListeCapteurs_zone(Zone& zoneGeo) {
     const float ky = 40000.0 / 360.0;
     list<Sensor> sensorDeLaZone;
     for(auto& i:this->listeCapteurs) {
@@ -57,8 +53,67 @@ list<Sensor> System::GetListeCapteurs_zone(Zone& zoneGeo, const string temps) {
             sensorDeLaZone.push_back(i.second); 
         }
     }
-    return sensorDeLaZone;
-    
+    return sensorDeLaZone;   
+}
+
+map<string, double> System::CalculerQualiteAir_zone(Zone & zoneGeo) {
+    // string : typeMesure (O3, PM10 ...), double : mesure
+    map<string, double> qualite;
+    list<Sensor> sensorsDeLaZone = GetListeCapteurs_zone(zoneGeo);
+    cout << sensorsDeLaZone.size() << " capteurs sont dans cette zone" << endl;
+    list<Measurements> mesuresDeLaZone;
+    for(auto& i:sensorsDeLaZone) {
+        for (auto& j:this->listeMesures.at(i.GetId())) {
+            mesuresDeLaZone.push_back(j);
+        }    
+    }
+    string periode = "2019-01-01 12:00:00to2019-12-31 12:00:00";
+    double qualiteO3 = CalculerQualiteAir(mesuresDeLaZone, periode, "O3");
+    qualite.insert(pair<string, double>("O3", qualiteO3));
+    double qualiteNO2 = CalculerQualiteAir(mesuresDeLaZone, periode, "NO2");
+    qualite.insert(pair<string, double>("NO2", qualiteNO2));
+    double qualiteSO2 = CalculerQualiteAir(mesuresDeLaZone, periode, "SO2");
+    qualite.insert(pair<string, double>("SO2", qualiteSO2));
+    double qualitePM10 = CalculerQualiteAir(mesuresDeLaZone, periode, "PM10");
+    qualite.insert(pair<string, double>("PM10", qualitePM10));
+    return qualite;
+} 
+
+double System::CalculerQualiteAir(list<Measurements>& listeMesures, string periode,
+                                     string typeMesure) {
+    double quality = 0.0;
+    list<Measurements> listeMesuresPeriode;
+    for (auto& i:listeMesures) {
+        //recuperer la listeMesure par periode
+        size_t pos1 = periode.find("to");
+        string tempsDeb = periode.substr(0, pos1);
+        string tempsFin = periode.substr(pos1+2);
+        if (tempsDeb <= i.GetInstant() && i.GetInstant() <= tempsFin) {
+            listeMesuresPeriode.push_back(i);
+        }
+    }
+    int j = 0;
+    for(auto& i : listeMesuresPeriode) {
+        if (i.GetTypeMesure() == typeMesure) {
+            quality += i.GetMesure();
+            ++j; }
+    }
+    quality /= j;
+    return quality;
+}
+
+multimap<double, int> System::ClassifierCapteurs(int idCapteurRef, string periode, 
+                                            string typeMesure) {
+    multimap<double, int> listeQualiteCapteur;
+    // double : similitude, int : idCapteur (idSensor)
+    list<Measurements> listeMesuresRef = this->listeMesures[idCapteurRef];
+    double qualiteRef = CalculerQualiteAir(listeMesuresRef, periode, typeMesure);
+    for (auto& i:this->listeCapteurs) {
+        list<Measurements> listeMesuresParCapteur = this->listeMesures.at(i.first);
+        double similitude = abs(CalculerQualiteAir(listeMesuresParCapteur, periode, typeMesure)-qualiteRef);
+        listeQualiteCapteur.insert(pair<double, int>(similitude, i.first));
+    }
+    return listeQualiteCapteur;
 }
 
 //-------------------------------------------- Constructeurs - destructeur
@@ -103,27 +158,24 @@ System::System() {
 
         list<Measurements> uneListeMesures;
         uneListeMesures.clear();
-        while( !fic1.eof() ) {
-            getline(fic1, line1);
-            size_t pos11;
-            size_t pos12;
-            size_t pos13;
-            int idSensor1;
-            if (line1.length() > 0) {
-                pos11 = line1.find(";");
-                pos12 = line1.find(";", pos11+1);
-                pos13 = line1.find(";", pos12+1);
-                idSensor1 = stoi(line1.substr(pos11+7, pos12-pos11-7), &sz);
-            } else break;
-            
-            if (idSensor != idSensor1) {        
+        int i = 0;
+        while ( !fic1.eof() ) {
+            if (i == 1460) {        
                 break;
+            } 
+            getline(fic1, line1);
+            if (line1.length() > 0) {
+                size_t pos11 = line1.find(";");
+                size_t pos12 = line1.find(";", pos11+1);
+                size_t pos13 = line1.find(";", pos12+1);
+                int idSensor1 = stoi(line1.substr(pos11+7, pos12-pos11-7), &sz);
+                string instant = line1.substr(0, pos11);
+                double mesure = stod(line1.substr(pos13+1), &sz);
+                string attribut = line1.substr(pos12+1, pos13-pos12-1); 
+                Measurements uneMesure(instant, attribut, mesure);
+                uneListeMesures.push_back(uneMesure);
             }
-            string instant = line1.substr(0, pos11);
-            double mesure = stod(line1.substr(pos13+1), &sz);
-            string attribut = line1.substr(pos12+1, pos13-pos12-1); 
-            Measurements uneMesure(instant, attribut, mesure);
-            uneListeMesures.push_back(uneMesure);
+            ++i;  
         }
         this->listeMesures.insert(pair<int, list<Measurements>>(idSensor, uneListeMesures));
     }

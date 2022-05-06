@@ -2,32 +2,32 @@
 using namespace std;
 
 #include "System.h"
-#include "User.h"
-#include "Provider.h"
-#include "Sensor.h"
-#include "IndividualUser.h"
+
+void testerClassifierCapteurs() {
+    System system;
+    string periode = "2019-01-01 12:00:00to2019-05-05 13:00:00";
+    // respecter le format de saisie la periode
+    multimap<double, int> listeCroissante = system.ClassifierCapteurs(2, periode, "PM10");
+    cout << "IdCap   |   " << "similitude" << endl;
+    for(auto& i:listeCroissante) {
+        cout << i.second << "   " << i.first << endl;
+    }
+    listeCroissante.clear();
+}
+
+void testerCalculerQualiteAir_zone() {
+    Zone uneZone(44.4, 0.4, 100);
+    System system;
+    map<string, double> qualite = system.CalculerQualiteAir_zone(uneZone);
+    cout << "Attribut |" << " Mesure" << endl;
+    for (auto& i:qualite) {
+        cout << i.first << "   " << i.second << endl;
+    }
+    qualite.clear();
+}
 
 int main(int argc, char* argv[]) {
-//     System system;
-//     system.GetListeMesure(0);
-//     User connected;
-//     //User *u = new User("Gh","bada","m@l","1234");
-//     Provider* u = new Provider();
-//     connected = u->creerCompte(1,"jean","albert", "a@e.fr", "azerty");
-//     cout << connected <<endl;
-//     Cleaner c=u->consulterDonneesPurificateur();
-    
-    User connected;
-    IndividualUser* iu = new IndividualUser();
-    connected = iu->creerCompte(0,"Gh","bada","m@l","1234");
-
-    if (connected.seConnecter("m@l","1234")){
-        cout << connected;
-        cout << iu->consulterScore()<< endl;
-        iu->setScore(2);
-        cout << iu->consulterScore()<< endl;
-        cout << iu->consulterDonneesCapteur(70) << endl;
-    }
-    
+    //testerClassifierCapteurs();
+    testerCalculerQualiteAir_zone();
     return 0;
 }

@@ -23,11 +23,6 @@ using namespace std;
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
-// type User::Méthode ( liste des paramètres )
-// Algorithme :
-//
-//{
-//} //----- Fin de Méthode
 
 bool User::seConnecter(string email_in, string mdp)
 {
@@ -82,58 +77,49 @@ ostream & operator<<(ostream& out, const User & unUser)
 
 //-------------------------------------------- Constructeurs - destructeur
 User::User ( const User & unUser )
-// Algorithme :
-//
 {
-#ifdef MAP
-    cout << "Appel au constructeur de copie de <User>" << endl;
-#endif
+    #ifdef MAP
+        cout << "Appel au constructeur de copie de <User>" << endl;
+    #endif
 } //----- Fin de User (constructeur de copie)
 
 
 User::User (string unNom, string unPrenom, string unEmail, string unMdp)
-// Algorithme :
-//
 {
-#ifdef MAP
-    cout << "Appel au constructeur de <User>" << endl;
-#endif
+    nom=unNom;
+    prenom = unPrenom;
+    email = unEmail;
+    motDePasse = unMdp;
 
-
-nom=unNom;
-prenom = unPrenom;
-email = unEmail;
-motDePasse = unMdp;
-
-ofstream fSauvegarde;
-fSauvegarde.open("users.txt", ios::app);
-if(fSauvegarde)
-{
+    ofstream fSauvegarde;
+    fSauvegarde.open("users.txt", ios::app);
+    if(fSauvegarde)
+    {
+        
+        fSauvegarde << *this;
+    }
+    fSauvegarde.close();
     
-    fSauvegarde << *this <<endl;
-}
-
-fSauvegarde.close();
+    #ifdef MAP
+        cout << "Appel au constructeur de <User>" << endl;
+    #endif
 
 } //----- Fin de User
 
 
 User::User ( )
-// Algorithme :
-//
 {
-#ifdef MAP
-    cout << "Appel au constructeur par def de <User>" << endl;
-#endif
+    #ifdef MAP
+        cout << "Appel au constructeur par def de <User>" << endl;
+    #endif
 } //----- Fin de ~User
 
+
 User::~User ( )
-// Algorithme :
-//
 {
-#ifdef MAP
-    cout << "Appel au destructeur de <User>" << endl;
-#endif
+    #ifdef MAP
+        cout << "Appel au destructeur de <User>" << endl;
+    #endif
 } //----- Fin de ~User
 
 

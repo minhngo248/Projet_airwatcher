@@ -37,7 +37,7 @@ const double pi = M_PI;
 } */
 
 list<Measurements> System::GetListeMesure(int sensorId_in) {
-    cout << "Instant | " << "type | " << "mesure" << endl;
+    //cout << "Instant | " << "type | " << "mesure" << endl;
     list<Measurements> uneListe = this->listeMesures.at(sensorId_in);
     return uneListe;
 }

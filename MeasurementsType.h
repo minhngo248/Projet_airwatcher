@@ -1,13 +1,13 @@
 /*************************************************************************
-                           Xxx  -  description
+                           Measurements  -  description
                              -------------------
-    début                : $DATE$
-    copyright            : (C) $YEAR$ par $AUTHOR$
-    e-mail               : $EMAIL$
+    début                : 04/05/2022
+    copyright            : (C) 2022 par Ngoc Minh NGO, Laetitia BÉZIE, Nathan NOWAKOWSKI, Ghizlane BADAOUI, Henri BAILLEUX
+    e-mail               : ngoc-minh.ngo@insa-lyon.fr, laetitia.bezie@insa-lyon.fr, nathan.nowakowski@insa-lyon.fr, ghizlane.badaoui@insa-lyon.fr, henri.bailleux@insa-lyon.fr
 *************************************************************************/
 
 //---------- Interface de la classe <MeasurementsType> (fichier MeasurementsType.h) ----------------
-#if ! defined ( MEASUREMENTSTYPE_H )
+#if !defined(MEASUREMENTSTYPE_H)
 #define MEASUREMENTSTYPE_H
 
 //--------------------------------------------------- Interfaces utilisées
@@ -19,56 +19,49 @@
 
 //------------------------------------------------------------------------
 // Rôle de la classe <MeasurementsType>
-//
+//  Cette classe définit les différents types de mesures récoltés par les capteurs.
 //
 //------------------------------------------------------------------------
 
-class MeasurementsType 
+class MeasurementsType
 {
-//----------------------------------------------------------------- PUBLIC
+    //----------------------------------------------------------------- PUBLIC
 
 public:
-//----------------------------------------------------- Méthodes publiques
-    // type Méthode ( liste des paramètres );
-    // Mode d'emploi :
-    //
-    // Contrat :
-	//
-    string GetId();
-//-------------------------------------------- Constructeurs - destructeur
+    //----------------------------------------------------- Méthodes publiques
+    string getId();
+    //-------------------------------------------- Constructeurs - destructeur
 
-    MeasurementsType ( const MeasurementsType & unMeasurementsType );
+    MeasurementsType(const MeasurementsType &unMeasurementsType);
     // Mode d'emploi (constructeur de copie) :
     //
     // Contrat :
     //
 
-    MeasurementsType (string aID = "", string unit = "", string descrip = "" );
+    MeasurementsType(string aID = "", string unit = "", string descrip = "");
     // Mode d'emploi :
     //
     // Contrat :
     //
 
-    virtual ~MeasurementsType ( );
+    virtual ~MeasurementsType();
     // Mode d'emploi :
     //
     // Contrat :
     //
 
-//------------------------------------------------------------------ PRIVE
+    //------------------------------------------------------------------ PRIVE
 
 private:
-//----------------------------------------------------- Méthodes protégées
+    //----------------------------------------------------- Méthodes protégées
 
-//----------------------------------------------------- Attributs protégés
+    //----------------------------------------------------- Attributs protégés
 
-	string attributeID;
-	string unite;
-	string description;
-
+    string attributeID;
+    string unite;
+    string description;
 };
 
 //-------------------------------- Autres définitions dépendantes de <Xxx>
 
 #endif // MEASUREMENTSTYPE_H
-

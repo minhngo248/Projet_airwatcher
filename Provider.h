@@ -1,9 +1,9 @@
 /*************************************************************************
                            Provider  -  description
                              -------------------
-    début                : $DATE$
-    copyright            : (C) $YEAR$ par $AUTHOR$
-    e-mail               : $EMAIL$
+    début                : 04/05/2022
+    copyright            : (C) 2022 par Ngoc Minh NGO, Laetitia BÉZIE, Nathan NOWAKOWSKI, Ghizlane BADAOUI, Henri BAILLEUX
+    e-mail               : ngoc-minh.ngo@insa-lyon.fr, laetitia.bezie@insa-lyon.fr, nathan.nowakowski@insa-lyon.fr, ghizlane.badaoui@insa-lyon.fr, henri.bailleux@insa-lyon.fr
 *************************************************************************/
 
 //---------- Interface de la classe <Provider> (fichier Provider.h) ----------------
@@ -25,7 +25,7 @@ using namespace std;
 
 //------------------------------------------------------------------------
 // Rôle de la classe <Provider>
-//
+//  La classe provider définit ce que sont les fournisseurs des purificateurs d'air. Elle hérite de User
 //
 //------------------------------------------------------------------------
 
@@ -35,9 +35,8 @@ class Provider : public User
 
 public:
 //----------------------------------------------------- Méthodes publiques
-    User creerCompte(int Provider_ID_in,string nom_in,string prenom_in, string email_in, string mdp_in);
-    Cleaner consulterDonneesPurificateur();
-
+    User CreerCompte(int Provider_ID_in,string nom_in,string prenom_in, string email_in, string mdp_in);
+    Cleaner ConsulterDonneesPurificateur();
 
 //------------------------------------------------- Surcharge d'opérateurs
 
@@ -62,7 +61,7 @@ public:
 
 //------------------------------------------------------------------ PRIVE
 
-protected:
+private:
 //----------------------------------------------------- Méthodes protégées
 
 //----------------------------------------------------- Attributs protégés

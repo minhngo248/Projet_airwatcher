@@ -1,9 +1,9 @@
 /*************************************************************************
                            Measurements  -  description
                              -------------------
-    début                : 05/2022
-    copyright            : (C) 2022 par $AUTHOR$
-    e-mail               : $EMAIL$
+    début                : 04/05/2022
+    copyright            : (C) 2022 par Ngoc Minh NGO, Laetitia BÉZIE, Nathan NOWAKOWSKI, Ghizlane BADAOUI, Henri BAILLEUX
+    e-mail               : ngoc-minh.ngo@insa-lyon.fr, laetitia.bezie@insa-lyon.fr, nathan.nowakowski@insa-lyon.fr, ghizlane.badaoui@insa-lyon.fr, henri.bailleux@insa-lyon.fr
 *************************************************************************/
 
 //---------- Réalisation de la classe <Measurements> (fichier Measurements.cpp) ------------
@@ -22,45 +22,43 @@ using namespace std;
 
 //----------------------------------------------------- Méthodes publiques
 
-// type Measurements::Méthode ( liste des paramètres )
-// Algorithme :
-//
-//{
-//} //----- Fin de Méthode
-
-string Measurements::GetTypeMesure() {
+string Measurements::getTypeMesure()
+{
     return typeMesure;
-}
+} //----- Fin de getTypeMesure
 
-double Measurements::GetMesure() {
+double Measurements::getMesure()
+{
     return mesure;
-}
+} //----- Fin de getMesure
 
-string Measurements::GetInstant() {
+string Measurements::getInstant()
+{
     return instant;
-}
+} //----- Fin de getInstanta
 
-ostream & operator<<(ostream & out, const Measurements& uneMesure) {
+//-------------------------------------------- Surchage d'opérateurs
+ostream &operator<<(ostream &out, const Measurements &uneMesure)
+{
     out << uneMesure.instant << " " << uneMesure.typeMesure << " " << uneMesure.mesure;
     return out;
-}
+} //----- Fin de operator <<
 
 //-------------------------------------------- Constructeurs - destructeur
 
-
-Measurements::Measurements(string ins, string typeMes, double mes) {
+Measurements::Measurements(string ins, string typeMes, double mes)
+{
 // Algorithme :
 //
 #ifdef MAP
     cout << "Appel au constructeur de <Measurements>" << endl;
 #endif
-	this->instant = ins;
-	this->mesure = mes;
-	this->typeMesure = typeMes;
+    this->instant = ins;
+    this->mesure = mes;
+    this->typeMesure = typeMes;
 } //----- Fin de Measurements
 
-
-Measurements::~Measurements ( )
+Measurements::~Measurements()
 // Algorithme :
 //
 {
@@ -69,8 +67,6 @@ Measurements::~Measurements ( )
 #endif
 } //----- Fin de ~Measurements
 
-
 //------------------------------------------------------------------ PRIVE
 
 //----------------------------------------------------- Méthodes protégées
-

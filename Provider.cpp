@@ -1,9 +1,9 @@
 /*************************************************************************
                            Provider  -  description
                              -------------------
-    début                : $DATE$
-    copyright            : (C) $YEAR$ par $AUTHOR$
-    e-mail               : $EMAIL$
+    début                : 04/05/2022
+    copyright            : (C) 2022 par Ngoc Minh NGO, Laetitia BÉZIE, Nathan NOWAKOWSKI, Ghizlane BADAOUI, Henri BAILLEUX
+    e-mail               : ngoc-minh.ngo@insa-lyon.fr, laetitia.bezie@insa-lyon.fr, nathan.nowakowski@insa-lyon.fr, ghizlane.badaoui@insa-lyon.fr, henri.bailleux@insa-lyon.fr
 *************************************************************************/
 
 //---------- Réalisation de la classe <Provider> (fichier Provider.cpp) ------------
@@ -24,7 +24,7 @@ using namespace std;
 
 //----------------------------------------------------- Méthodes publiques
 
-Cleaner creerCleaner(int cleanerID){
+Cleaner CreerCleaner(int cleanerID){
     ifstream fic;
     string line;
     string str="Cleaner";
@@ -36,7 +36,7 @@ Cleaner creerCleaner(int cleanerID){
     string tab[5];
     int j;
     size_t pos=0;
-    // -------------Initialisation de la ListeCapteurs ----------------------
+
     fic.open("dataset/cleaners.csv");
     while (getline(fic, line)) {
         //cout<<i<<": "<<line.c_str()<<endl;
@@ -67,8 +67,9 @@ Cleaner creerCleaner(int cleanerID){
     Cleaner cleaner=Cleaner(idCleaner,lat,longi,deb,fin);
     fic.close();
     return cleaner;
-}
-User Provider::creerCompte(int Provider_ID_in,string nom_in,string prenom_in, string email_in, string mdp_in){
+} //----- Fin de CreerCleaner
+
+User Provider::CreerCompte(int Provider_ID_in,string nom_in,string prenom_in, string email_in, string mdp_in){
     ifstream fChargement;
     bool dejaInscrit=false;
     size_t sz;
@@ -76,7 +77,7 @@ User Provider::creerCompte(int Provider_ID_in,string nom_in,string prenom_in, st
     string line;
     User user;
     int i=0;
-    // -------------Initialisation de la ListeCapteurs ----------------------
+    // -------------Initialisation de la ListePurificateurs ----------------------
     fic.open("dataset/providers.csv");
     while (!fic.eof()) {
         fic >> line;
@@ -93,28 +94,26 @@ User Provider::creerCompte(int Provider_ID_in,string nom_in,string prenom_in, st
                 user=User (nom_in, prenom_in, email_in, mdp_in);
                 dejaInscrit=true;
             }
-            listePurificateur.push_back(creerCleaner(idCleaner));
+            listePurificateur.push_back(CreerCleaner(idCleaner));
         }
     }
     fic.close();
     return user;
-}
+} //----- Fin de CreerCompte
 
-Cleaner Provider::consulterDonneesPurificateur() {
+Cleaner Provider::ConsulterDonneesPurificateur() {
     for (it = listePurificateur.begin (); it != listePurificateur.end (); ++it) {
         cout<<*it<<endl;
     }
     //cout<<listePurificateur.size()<<endl;
     return *listePurificateur.begin();
-}
+} //----- Fin de ConsulterDonneesPurificateur
 
 
 //------------------------------------------------- Surcharge d'opérateurs
 
 //-------------------------------------------- Constructeurs - destructeur
 Provider::Provider ( const Provider & unProvider )
-// Algorithme :
-//
 {
 #ifdef MAP
     cout << "Appel au constructeur de copie de <Provider>" << endl;
@@ -123,10 +122,7 @@ Provider::Provider ( const Provider & unProvider )
 
 
 Provider::Provider ( )
-// Algorithme :
-//
 {
-
 #ifdef MAP
     cout << "Appel au constructeur de <Provider>" << endl;
 #endif
@@ -134,8 +130,6 @@ Provider::Provider ( )
 
 
 Provider::~Provider ( )
-// Algorithme :
-//
 {
 #ifdef MAP
     cout << "Appel au destructeur de <Provider>" << endl;

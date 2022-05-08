@@ -33,13 +33,13 @@ bool Administrateur::verifierFiabiliteCapteur(Sensor capteurChoisi, Sensor capte
 
     for(auto& it1:sensorDeLaZone) {
         if (it1 == capteurReference){
-            list<Measurements> listeMesuresReference = system.GetListeMesure(capteurReference.getId());
-            list<Measurements> listeMesuresAVerifier = system.GetListeMesure(capteurChoisi.getId());
+            list<Measurements> listeMesuresReference = system.getListeMesure(capteurReference.getId());
+            list<Measurements> listeMesuresAVerifier = system.getListeMesure(capteurChoisi.getId());
 
             for(auto& it2:listeMesuresAVerifier) {
                 for (auto& it3:listeMesuresAVerifier){
-                    if (it2.GetInstant() == it3.GetInstant() && it2.GetTypeMesure() == it3.GetTypeMesure()){
-                        if (it2.GetMesure()<(it3.GetMesure()-0.05) || (it3.GetMesure()+0.05)<it2.GetMesure())
+                    if (it2.getInstant() == it3.getInstant() && it2.getTypeMesure() == it3.getTypeMesure()){
+                        if (it2.getMesure()<(it3.getMesure()-0.05) || (it3.getMesure()+0.05)<it2.getMesure())
                         {
                             cout << "A exclure : mesures incompatibles avec celles de capteur reference " << endl;
                             return false;
@@ -52,7 +52,7 @@ bool Administrateur::verifierFiabiliteCapteur(Sensor capteurChoisi, Sensor capte
     }
     cout << "capteur reference n'existe pas dans la meme zone que le capteur choisi " << endl;
     return false;
-}
+} //----- Fin de VerifierFiabiliteCapteur
 
 //------------------------------------------------- Surcharge d'opérateurs
 ostream & operator <<(ostream& out, const Administrateur & unAdministrateur)
@@ -61,7 +61,7 @@ ostream & operator <<(ostream& out, const Administrateur & unAdministrateur)
     out <<",motDePasse:"<<unAdministrateur.motDePasse;
     out <<",nom:"<<unAdministrateur.nom <<",prenom:"<<unAdministrateur.prenom << endl;
     return out;
-}
+} //----- Fin de operator <<
 
 //-------------------------------------------- Constructeurs - destructeur
 Administrateur::Administrateur ( const Administrateur & unAdministrateur )
@@ -83,9 +83,9 @@ Administrateur::Administrateur (string unNom, string unPrenom, string unEmail, s
 Administrateur::Administrateur ()
 {
     #ifdef MAP
-        cout << "Appel au constructeur de <Administrateur>" << endl;
+        cout << "Appel au constructeur par défaut de <Administrateur>" << endl;
     #endif
-} //----- Fin de Administrateur
+} //----- Fin de Administrateur (par défaut)
 
 Administrateur::~Administrateur ( )
 {

@@ -1,9 +1,9 @@
 /*************************************************************************
                            Administrateur  -  description
                              -------------------
-    début                : $DATE$
-    copyright            : (C) $YEAR$ par $AUTHOR$
-    e-mail               : $EMAIL$
+    début                : 04/05/2022
+    copyright            : (C) 2022 par Ngoc Minh NGO, Laetitia BÉZIE, Nathan NOWAKOWSKI, Ghizlane BADAOUI, Henri BAILLEUX
+    e-mail               : ngoc-minh.ngo@insa-lyon.fr, laetitia.bezie@insa-lyon.fr, nathan.nowakowski@insa-lyon.fr, ghizlane.badaoui@insa-lyon.fr, henri.bailleux@insa-lyon.fr
 *************************************************************************/
 
 //---------- Interface de la classe <Administrateur> (fichier Administrateur.h) ----------------
@@ -23,7 +23,7 @@ using namespace std;
 
 //------------------------------------------------------------------------
 // Rôle de la classe <Administrateur>
-//
+//  Cette classe définit ce qu'est un administrateur. Elle hérite de User
 //
 //------------------------------------------------------------------------
 

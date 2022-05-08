@@ -219,8 +219,8 @@ System::System()
             size_t pos11 = line1.find(";");
             size_t pos12 = line1.find(";", pos11 + 1);
             size_t pos13 = line1.find(";", pos12 + 1);
-            int idSensor1;
-            if (pos11 != string::npos || pos12 != string::npos || pos13 != string::npos)
+            int idSensor1 = 200;
+            if (pos11 != string::npos && pos12 != string::npos && pos13 != string::npos)
                 idSensor1 = stoi(line1.substr(pos11 + 7, pos12 - pos11 - 7), &sz);
             if (idSensor1 != idSensor)
                 break;

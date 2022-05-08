@@ -35,8 +35,8 @@ void testerVerifierFiabliteCapteur(){
 }
 
 int main(int argc, char* argv[]) {
-    //testerClassifierCapteurs();
-    testerCalculerQualiteAir_zone();
+    testerClassifierCapteurs();
+    //testerCalculerQualiteAir_zone();
     //testerVerifierFiabliteCapteur();
     return 0;
 }

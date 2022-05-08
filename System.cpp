@@ -46,10 +46,10 @@ list<Sensor> System::GetListeCapteurs_zone(Zone& zoneGeo) {
     const float ky = 40000.0 / 360.0;
     list<Sensor> sensorDeLaZone;
     for(auto& i:this->listeCapteurs) {
-        float kx = cos(pi * zoneGeo.GetLatitude() / 180.0) * ky;
-        float dx = abs(zoneGeo.GetLongitude() - i.second.GetLongitude()) * kx;
-        float dy = abs(zoneGeo.GetLatitude() - i.second.GetLatitude()) * ky;
-        if(sqrt(dx * dx + dy * dy) <= zoneGeo.GetRayon()) {
+        float kx = cos(pi * zoneGeo.getLatitude() / 180.0) * ky;
+        float dx = abs(zoneGeo.getLongitude() - i.second.getLongitude()) * kx;
+        float dy = abs(zoneGeo.getLatitude() - i.second.getLatitude()) * ky;
+        if(sqrt(dx * dx + dy * dy) <= zoneGeo.getRayon()) {
             sensorDeLaZone.push_back(i.second); 
         }
     }
@@ -63,7 +63,7 @@ map<string, double> System::CalculerQualiteAir_zone(Zone & zoneGeo) {
     cout << sensorsDeLaZone.size() << " capteurs sont dans cette zone" << endl;
     list<Measurements> mesuresDeLaZone;
     for(auto& i:sensorsDeLaZone) {
-        for (auto& j:this->listeMesures.at(i.GetId())) {
+        for (auto& j:this->listeMesures.at(i.getId())) {
             mesuresDeLaZone.push_back(j);
         }    
     }

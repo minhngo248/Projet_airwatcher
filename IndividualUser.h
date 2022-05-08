@@ -1,9 +1,9 @@
 /*************************************************************************
                            IndividualUser  -  description
                              -------------------
-    début                : $DATE$
-    copyright            : (C) $YEAR$ par $AUTHOR$
-    e-mail               : $EMAIL$
+    début                : 04/05/2022
+    copyright            : (C) 2022 par Ngoc Minh NGO, Laetitia BÉZIE, Nathan NOWAKOWSKI, Ghizlane BADAOUI, Henri BAILLEUX
+    e-mail               : ngoc-minh.ngo@insa-lyon.fr, laetitia.bezie@insa-lyon.fr, nathan.nowakowski@insa-lyon.fr, ghizlane.badaoui@insa-lyon.fr, henri.bailleux@insa-lyon.fr
 *************************************************************************/
 
 //---------- Interface de la classe <IndividualUser> (fichier IndividualUser.h) ----------------
@@ -14,6 +14,7 @@
 using namespace std;
 #include "User.h"
 #include "Sensor.h"
+#include <list>
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
@@ -30,11 +31,11 @@ class IndividualUser : public User
 
 public:
 //----------------------------------------------------- Méthodes publiques    
-    User creerCompte(int unUserID, string unNom, string unPrenom, string unEmail, string unMdp);
+    User CreerCompte(int unUserID, string unNom, string unPrenom, string unEmail, string unMdp);
     int consulterScore();
     void setScore(int unScore);
-    Sensor consulterDonneesCapteur(int idCapteur);
-    Sensor creerSensor(int unSensorID);
+    Sensor ConsulterDonneesCapteur(int idCapteur);
+    Sensor CreerSensor(int unSensorID);
 
 
 //------------------------------------------------- Surcharge d'opérateurs

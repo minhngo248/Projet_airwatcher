@@ -1,9 +1,9 @@
 /*************************************************************************
                            Administrateur  -  description
                              -------------------
-    début                : $DATE$
-    copyright            : (C) $YEAR$ par $AUTHOR$
-    e-mail               : $EMAIL$
+    début                : 04/05/2022
+    copyright            : (C) 2022 par Ngoc Minh NGO, Laetitia BÉZIE, Nathan NOWAKOWSKI, Ghizlane BADAOUI, Henri BAILLEUX
+    e-mail               : ngoc-minh.ngo@insa-lyon.fr, laetitia.bezie@insa-lyon.fr, nathan.nowakowski@insa-lyon.fr, ghizlane.badaoui@insa-lyon.fr, henri.bailleux@insa-lyon.fr
 *************************************************************************/
 
 //---------- Réalisation de la classe <Administrateur> (fichier Administrateur.cpp) ------------
@@ -11,7 +11,6 @@
 //---------------------------------------------------------------- INCLUDE
 //-------------------------------------------------------- Include système
 using namespace std;
-#include <cstring>
 #include <iostream>
 
 //------------------------------------------------------ Include personnel
@@ -28,14 +27,14 @@ using namespace std;
 //----------------------------------------------------- Méthodes publiques
 bool Administrateur::verifierFiabiliteCapteur(Sensor capteurChoisi, Sensor capteurReference)
 {
-    Zone zone = Zone(capteurChoisi.GetLatitude(), capteurChoisi.GetLongitude(), 50); 
+    Zone zone = Zone(capteurChoisi.getLatitude(), capteurChoisi.getLongitude(), 50); 
     System system = System();
     list<Sensor> sensorDeLaZone = system.GetListeCapteurs_zone(zone);
 
     for(auto& it1:sensorDeLaZone) {
         if (it1 == capteurReference){
-            list<Measurements> listeMesuresReference = system.GetListeMesure(capteurReference.GetId());
-            list<Measurements> listeMesuresAVerifier = system.GetListeMesure(capteurChoisi.GetId());
+            list<Measurements> listeMesuresReference = system.GetListeMesure(capteurReference.getId());
+            list<Measurements> listeMesuresAVerifier = system.GetListeMesure(capteurChoisi.getId());
 
             for(auto& it2:listeMesuresAVerifier) {
                 for (auto& it3:listeMesuresAVerifier){
@@ -54,6 +53,7 @@ bool Administrateur::verifierFiabiliteCapteur(Sensor capteurChoisi, Sensor capte
     cout << "capteur reference n'existe pas dans la meme zone que le capteur choisi " << endl;
     return false;
 }
+
 //------------------------------------------------- Surcharge d'opérateurs
 ostream & operator <<(ostream& out, const Administrateur & unAdministrateur)
 {

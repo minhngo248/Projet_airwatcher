@@ -1,15 +1,15 @@
 using namespace std;
 #include "Sensor.h"
 
-int Sensor::GetId() {
+int Sensor::getId() {
     return sensorId;
 }
 
-double Sensor::GetLatitude() {
+double Sensor::getLatitude() {
     return latitude;
 }
 
-double Sensor::GetLongitude() {
+double Sensor::getLongitude() {
     return longitude;
 }
 
@@ -21,7 +21,7 @@ ostream & operator<<(ostream & out, const Sensor & unSensor) {
 
 bool operator == ( Sensor & unSensor1, Sensor & unSensor2 ){
     bool res = false;
-    if ( unSensor1.GetId() == unSensor2.GetId()){
+    if ( unSensor1.getId() == unSensor2.getId()){
         res = true;
     }
     return res;

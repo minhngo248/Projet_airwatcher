@@ -7,7 +7,7 @@
 *************************************************************************/
 
 //---------- Interface de la classe <Administrateur> (fichier Administrateur.h) ----------------
-#if ! defined ( Administrateur_H )
+#if !defined(Administrateur_H)
 #define Administrateur_H
 
 //--------------------------------------------------- Interfaces utilisées
@@ -29,31 +29,28 @@ using namespace std;
 
 class Administrateur : public User
 {
-//----------------------------------------------------------------- PUBLIC
+    //----------------------------------------------------------------- PUBLIC
 
 public:
+    //----------------------------------------------------- Méthodes publiques
+    bool verifierFiabiliteCapteur(Sensor capteurChoisi, Sensor capteurReference);
 
-//----------------------------------------------------- Méthodes publiques
-bool verifierFiabiliteCapteur(Sensor capteurChoisi, Sensor capteurReference);
+    //------------------------------------------------- Surcharge d'opérateurs
+    friend ostream &operator<<(ostream &out, const Administrateur &unAdministrateur);
 
-//------------------------------------------------- Surcharge d'opérateurs
-friend ostream & operator <<(ostream& out, const Administrateur & unAdministrateur);
+    //-------------------------------------------- Constructeurs - destructeur
+    Administrateur(const Administrateur &unAdministrateur);
+    Administrateur(string unNom, string unPrenom, string unEmail, string unMdp);
+    Administrateur();
+    virtual ~Administrateur();
 
-//-------------------------------------------- Constructeurs - destructeur
-    Administrateur ( const Administrateur & unAdministrateur );
-    Administrateur (string unNom, string unPrenom, string unEmail, string unMdp);
-    Administrateur ( );
-    virtual ~Administrateur ( );
-
-//------------------------------------------------------------------ PRIVE
+    //------------------------------------------------------------------ PRIVE
 
 protected:
-//----------------------------------------------------- Méthodes protégées
-//----------------------------------------------------- Attributs protégés
-
+    //----------------------------------------------------- Méthodes protégées
+    //----------------------------------------------------- Attributs protégés
 };
 
 //-------------------------------- Autres définitions dépendantes de <Administrateur>
 
 #endif // Administrateur_H
-

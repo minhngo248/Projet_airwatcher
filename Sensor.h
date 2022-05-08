@@ -8,9 +8,9 @@
 
 class Sensor {
 public:
-    int GetId();
-    double GetLatitude();
-    double GetLongitude();
+    int getId();
+    double getLatitude();
+    double getLongitude();
     friend ostream & operator<<(ostream & out, const Sensor & unSensor);
     friend bool operator == ( Sensor & unSensor1, Sensor & unSensor2 );
     

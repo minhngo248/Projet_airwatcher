@@ -16,7 +16,9 @@ using namespace std;
 #include <list>
 #include <iostream>
 #include "User.h"
-#include "Sensor.h"
+#include "modele/Sensor.h"
+#include "modele/Zone.h"
+#include "service/System.h"
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
@@ -51,6 +53,78 @@ protected:
     //----------------------------------------------------- Attributs protégés
 };
 
-//-------------------------------- Autres définitions dépendantes de <Administrateur>
+
+
+//----------------------------------------------------------------- PUBLIC
+
+//----------------------------------------------------- Méthodes publiques
+bool Administrateur::verifierFiabiliteCapteur(Sensor capteurChoisi, Sensor capteurReference)
+{
+    Zone zone = Zone(capteurChoisi.getLatitude(), capteurChoisi.getLongitude(), 50); 
+    System system = System();
+    list<Sensor> sensorDeLaZone = system.GetListeCapteurs_zone(zone);
+
+    for(auto& it1:sensorDeLaZone) {
+        if (it1 == capteurReference){
+            list<Measurements> listeMesuresReference = system.getListeMesure(capteurReference.getId());
+            list<Measurements> listeMesuresAVerifier = system.getListeMesure(capteurChoisi.getId());
+
+            for(auto& it2:listeMesuresAVerifier) {
+                for (auto& it3:listeMesuresAVerifier){
+                    if (it2.getInstant() == it3.getInstant() && it2.getTypeMesure() == it3.getTypeMesure()){
+                        if (it2.getMesure()<(it3.getMesure()-0.05) || (it3.getMesure()+0.05)<it2.getMesure())
+                        {
+                            cout << "A exclure : mesures incompatibles avec celles de capteur reference " << endl;
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+    }
+    cout << "capteur reference n'existe pas dans la meme zone que le capteur choisi " << endl;
+    return false;
+} //----- Fin de VerifierFiabiliteCapteur
+
+//------------------------------------------------- Surcharge d'opérateurs
+ostream & operator <<(ostream& out, const Administrateur & unAdministrateur)
+{
+    out <<"email:"<<unAdministrateur.email;
+    out <<",motDePasse:"<<unAdministrateur.motDePasse;
+    out <<",nom:"<<unAdministrateur.nom <<",prenom:"<<unAdministrateur.prenom << endl;
+    return out;
+} //----- Fin de operator <<
+
+//-------------------------------------------- Constructeurs - destructeur
+Administrateur::Administrateur ( const Administrateur & unAdministrateur )
+{
+#ifdef MAP
+    cout << "Appel au constructeur de copie de <Administrateur>" << endl;
+#endif
+} //----- Fin de Administrateur (constructeur de copie)
+
+
+Administrateur::Administrateur (string unNom, string unPrenom, string unEmail, string unMdp)
+:User(unNom, unPrenom, unEmail, unMdp) {
+
+    #ifdef MAP
+        cout << "Appel au constructeur de <Administrateur>" << endl;
+    #endif
+} //----- Fin de Administrateur
+
+Administrateur::Administrateur ()
+{
+    #ifdef MAP
+        cout << "Appel au constructeur par défaut de <Administrateur>" << endl;
+    #endif
+} //----- Fin de Administrateur (par défaut)
+
+Administrateur::~Administrateur ( )
+{
+    #ifdef MAP
+        cout << "Appel au destructeur de <Administrateur>" << endl;
+    #endif
+} //----- Fin de ~Administrateur
 
 #endif // Administrateur_H

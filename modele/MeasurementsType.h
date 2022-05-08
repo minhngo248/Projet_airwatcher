@@ -62,6 +62,51 @@ private:
     string description;
 };
 
-//-------------------------------- Autres définitions dépendantes de <Xxx>
+
+
+//----------------------------------------------------------------- PUBLIC
+
+//----------------------------------------------------- Méthodes publiques
+
+string MeasurementsType::getId()
+{
+    return attributeID;
+} //----- Fin de getId
+
+//-------------------------------------------- Constructeurs - destructeur
+
+MeasurementsType::MeasurementsType(const MeasurementsType &unMeasurementsType)
+{
+#ifdef MAP
+    cout << "Appel au constructeur de copie de <Xxx>" << endl;
+#endif
+
+    attributeID = unMeasurementsType.attributeID;
+    unite = unMeasurementsType.unite;
+    description = unMeasurementsType.description;
+
+} //----- Fin de MeasurementsType (constructeur de copie)
+
+MeasurementsType::MeasurementsType(string aID, string unit, string descrip)
+// Algorithme :
+//
+{
+#ifdef MAP
+    cout << "Appel au constructeur de <MeasurementsType>" << endl;
+#endif
+
+    this->attributeID = aID;
+    this->unite = unit;
+    this->description = descrip;
+} //----- Fin de MeasurementsType
+
+MeasurementsType::~MeasurementsType()
+// Algorithme :
+//
+{
+#ifdef MAP
+    cout << "Appel au destructeur de <MeasurementsType>" << endl;
+#endif
+} //----- Fin de ~MeasurementsType
 
 #endif // MEASUREMENTSTYPE_H

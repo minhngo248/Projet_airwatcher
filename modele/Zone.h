@@ -1,58 +1,77 @@
 /*************************************************************************
-                           Sensor  -  description
+                           Zone  -  description
                              -------------------
     début                : 04/05/2022
     copyright            : (C) 2022 par Ngoc Minh NGO, Laetitia BÉZIE, Nathan NOWAKOWSKI, Ghizlane BADAOUI, Henri BAILLEUX
     e-mail               : ngoc-minh.ngo@insa-lyon.fr, laetitia.bezie@insa-lyon.fr, nathan.nowakowski@insa-lyon.fr, ghizlane.badaoui@insa-lyon.fr, henri.bailleux@insa-lyon.fr
 *************************************************************************/
 
-//---------- Interface de la classe <Sensor> (fichier Sensor.h) ----------------
-
-#if !defined(SENSOR_H)
-#define SENSOR_H
-
-#include <string>
-#include <iostream>
-
+//---------- Interface de la classe <ZONE (fichier Zone.h) ----------------
+#if !defined(ZONE_H)
+#define ZONE_H
 //--------------------------------------------------- Interfaces utilisées
-
-#include "Measurements.h"
 //------------------------------------------------------------- Constantes
-
 //------------------------------------------------------------------ Types
-
 //------------------------------------------------------------------------
-// Rôle de la classe <Srnsor>
-//  La classe Sensor définit ce qu'est un capteur
+// Rôle de la classe <ZONE>
+// La classe ZONE définit ce qu'est une zone géographique
 //
 //------------------------------------------------------------------------
-class Sensor
+class Zone
 {
     //----------------------------------------------------------------- PUBLIC
-
 public:
     //----------------------------------------------------- Méthodes publiques
-    int getId();
     double getLatitude();
     double getLongitude();
-
-    //-------------------------------------------- Surchage d'opérateurs
-    friend ostream &operator<<(ostream &out, const Sensor &unSensor);
-    friend bool operator==(Sensor &unSensor1, Sensor &unSensor2);
+    double getRayon();
 
     //-------------------------------------------- Constructeurs - destructeur
-    Sensor(int unSensorId = 0, double unLat = 44.0, double unLong = -1.0);
-    virtual ~Sensor();
-    //------------------------------------------------------------------ PRIVE
+    Zone();
+    Zone(double unLat, double unLong, double unRayon);
+    ~Zone();
 
+    //------------------------------------------------------------------ PRIVE
+private:
     //----------------------------------------------------- Méthodes protégées
 
     //----------------------------------------------------- Attributs protégés
-private:
-    int sensorId;
     double latitude;
     double longitude;
+    double rayon;
 };
-//-------------------------------- Autres définitions dépendantes de <Sensor>
 
-#endif // Sensor_H
+
+
+//----------------------------------------------------------------- PUBLIC
+
+//----------------------------------------------------- Méthodes publiques
+
+double Zone::getLatitude()
+{
+    return latitude;
+} //----- Fin de getLatitude
+
+double Zone::getLongitude()
+{
+    return longitude;
+} //----- Fin de getLongitude
+
+double Zone::getRayon()
+{
+    return rayon;
+} //----- Fin de getRayon
+
+Zone::Zone(double unLat, double unLong, double unRayon)
+{
+    this->latitude = unLat;
+    this->longitude = unLong;
+    this->rayon = unRayon;
+} //----- Fin de Zone
+
+Zone::~Zone()
+{
+
+} //----- Fin de ~Zone
+
+#endif // ZONE_H

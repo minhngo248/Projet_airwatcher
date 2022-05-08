@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 
-#include "System.h"
+#include "service/System.h"
 #include "Administrateur.h"
 
 void testerClassifierCapteurs() {
@@ -19,7 +19,7 @@ void testerClassifierCapteurs() {
 void testerCalculerQualiteAir_zone() {
     Zone uneZone(44.4, 0.4, 100);
     System system;
-    map<string, double> qualite = system.CalculerQualiteAir_zone(uneZone);
+    list<pair<string, double>> qualite = system.CalculerQualiteAir_zone(uneZone);
     cout << "Attribut |" << " Mesure" << endl;
     for (auto& i:qualite) {
         cout << i.first << "   " << i.second << endl;
@@ -28,15 +28,15 @@ void testerCalculerQualiteAir_zone() {
 }
 
 void testerVerifierFiabliteCapteur(){
-    Administrateur *a = new Administrateur("a", "b", "c", "d");
-    Sensor *s = new Sensor(24,44.8,1.8); 
-    Sensor *sRef = new Sensor(25,44.8,2.5);
-    cout << a->verifierFiabiliteCapteur(*s, *sRef) << endl;
+    Administrateur a("a", "b", "c", "d");
+    Sensor s(24,44.8,1.8); 
+    Sensor sRef(25,44.8,2.5);
+    cout << a.verifierFiabiliteCapteur(s, sRef) << endl;
 }
 
 int main(int argc, char* argv[]) {
     //testerClassifierCapteurs();
-    //testerCalculerQualiteAir_zone();
-    testerVerifierFiabliteCapteur();
+    testerCalculerQualiteAir_zone();
+    //testerVerifierFiabliteCapteur();
     return 0;
 }

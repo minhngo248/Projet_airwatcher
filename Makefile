@@ -1,19 +1,15 @@
 CPPFLAGS= -ansi -pedantic -Wall -std=c++11 -g
 VUEPATH = %.o ../vue
 EXE = main
-OBJETS = User.o Measurements.o MeasurementsType.o Zone.o Sensor.o System.o Provider.o Cleaner.o Administrateur.o IndividualUser.o main.o
+OBJETS = main.cpp
 
-$(EXE) : $(OBJETS) $(EXE).o
+$(EXE) : $(OBJETS) $(EXE).cpp
 	@echo "Édition des liens de main"
 	g++ -o $@ $^
 
-%.o : %.cpp
-	@echo "Compilation de $<"
-	g++ -c $< $(CPPFLAGS)
-
 clean:
 	@echo "Suppresion des fichiers compilés"
-	rm *.o main
+	rm main
 
 memoryCheck:
 	make clean

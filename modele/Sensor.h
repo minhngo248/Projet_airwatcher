@@ -6,18 +6,53 @@
     e-mail               : ngoc-minh.ngo@insa-lyon.fr, laetitia.bezie@insa-lyon.fr, nathan.nowakowski@insa-lyon.fr, ghizlane.badaoui@insa-lyon.fr, henri.bailleux@insa-lyon.fr
 *************************************************************************/
 
-//---------- Réalisation de la classe <System> (fichier Sensor.cpp) ------------
+//---------- Interface de la classe <Sensor> (fichier Sensor.h) ----------------
 
-//---------------------------------------------------------------- INCLUDE
+#if !defined(SENSOR_H)
+#define SENSOR_H
 
-//-------------------------------------------------------- Include système
+#include <string>
+#include <iostream>
 
-using namespace std;
-//------------------------------------------------------ Include personnel
+//--------------------------------------------------- Interfaces utilisées
 
-#include "Sensor.h"
-
+#include "Measurements.h"
 //------------------------------------------------------------- Constantes
+
+//------------------------------------------------------------------ Types
+
+//------------------------------------------------------------------------
+// Rôle de la classe <Srnsor>
+//  La classe Sensor définit ce qu'est un capteur
+//
+//------------------------------------------------------------------------
+class Sensor
+{
+    //----------------------------------------------------------------- PUBLIC
+
+public:
+    //----------------------------------------------------- Méthodes publiques
+    int getId();
+    double getLatitude();
+    double getLongitude();
+
+    //-------------------------------------------- Surchage d'opérateurs
+    friend ostream &operator<<(ostream &out, const Sensor &unSensor);
+    friend bool operator==(Sensor &unSensor1, Sensor &unSensor2);
+
+    //-------------------------------------------- Constructeurs - destructeur
+    Sensor(int unSensorId = 0, double unLat = 44.0, double unLong = -1.0);
+    virtual ~Sensor();
+    //------------------------------------------------------------------ PRIVE
+
+    //----------------------------------------------------- Méthodes protégées
+
+    //----------------------------------------------------- Attributs protégés
+private:
+    int sensorId;
+    double latitude;
+    double longitude;
+};
 
 //----------------------------------------------------------------- PUBLIC
 
@@ -69,3 +104,5 @@ Sensor::~Sensor()
 {
 
 } //----- Fin ~Sensor
+
+#endif // Sensor_H

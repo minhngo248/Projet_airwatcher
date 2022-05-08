@@ -6,28 +6,75 @@
     e-mail               : ngoc-minh.ngo@insa-lyon.fr, laetitia.bezie@insa-lyon.fr, nathan.nowakowski@insa-lyon.fr, ghizlane.badaoui@insa-lyon.fr, henri.bailleux@insa-lyon.fr
 *************************************************************************/
 
-//---------- Réalisation de la classe <System> (fichier System.cpp) ------------
-
-//---------------------------------------------------------------- INCLUDE
-
-//-------------------------------------------------------- Include système
-
-#include <iostream>
-#include <cmath>
+//---------- Interface de la classe <System> (fichier System.h) ----------------
+#if ! defined (SYSTEM_H)
+#define SYSTEM_H
 using namespace std;
+#include <iostream>
+#include <fstream>
+#include <map>
+#include <list>
+#include <cmath>
 
-//------------------------------------------------------ Include personnel
-#include "System.h"
+//--------------------------------------------------- Interfaces utilisées
+#include "../modele/Zone.h"
+#include "../modele/Measurements.h"
+#include "../modele/MeasurementsType.h"
+#include "../modele/Sensor.h"
 
 //------------------------------------------------------------- Constantes
 const double pi = M_PI;
+
+//------------------------------------------------------------------ Types
+
+//------------------------------------------------------------------------
+// Rôle de la classe <System>
+//  La classe System fournie les fonctionnalités de l'application AirWatcher
+//
+//------------------------------------------------------------------------
+
+class System
+{
+//----------------------------------------------------------------- PUBLIC
+
+public:
+//----------------------------------------------------- Méthodes publiques
+
+    list<Measurements> getListeMesure(int sensorId_in);
+	list<Sensor> GetListeCapteurs_zone(Zone& zoneGeo);
+	list<pair<string, double>> CalculerQualiteAir_zone(Zone & zoneGeo);
+	double CalculerQualiteAir(list<Measurements>& listeMesures, string periode,
+                                 string typeMesure);
+    multimap<double, int> ClassifierCapteurs(int idCapteurReference, string periode, string typeMesure);
+    //float VerifierAmeliorationAir(Zone & zoneGeo); 
+
+//-------------------------------------------- Surchage d'opérateurs
+    friend ostream & operator<<(ostream & out, const System & unSystem);
+
+//-------------------------------------------- Constructeurs - destructeur
+
+    System( const System & unSystem );
+    System();
+    virtual ~System();
+    // Mode d'emploi :
+
+//------------------------------------------------------------------ PRIVE
+
+//----------------------------------------------------- Méthodes protégées
+
+//----------------------------------------------------- Attributs protégés
+private:
+    map<int, Sensor> listeCapteurs;
+	map<int, list<Measurements>> listeMesures;
+};
+
+
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
 
 list<Measurements> System::getListeMesure(int sensorId_in)
 {
-    // cout << "Instant | " << "type | " << "mesure" << endl;
     list<Measurements> uneListe = this->listeMesures.at(sensorId_in);
     return uneListe;
 } //----- Fin getListeMesure
@@ -49,10 +96,10 @@ list<Sensor> System::GetListeCapteurs_zone(Zone &zoneGeo)
     return sensorDeLaZone;
 } //----- Fin de GetListeCapteur_zone
 
-map<string, double> System::CalculerQualiteAir_zone(Zone &zoneGeo)
+list<pair<string, double>> System::CalculerQualiteAir_zone(Zone &zoneGeo)
 {
     // string : typeMesure (O3, PM10 ...), double : mesure
-    map<string, double> qualite;
+    list<pair<string, double>> qualite;
     list<Sensor> sensorsDeLaZone = GetListeCapteurs_zone(zoneGeo);
     cout << sensorsDeLaZone.size() << " capteurs sont dans cette zone" << endl;
     list<Measurements> mesuresDeLaZone;
@@ -65,13 +112,13 @@ map<string, double> System::CalculerQualiteAir_zone(Zone &zoneGeo)
     }
     string periode = "2019-01-01 12:00:00to2019-12-31 12:00:00";
     double qualiteO3 = CalculerQualiteAir(mesuresDeLaZone, periode, "O3");
-    qualite.insert(pair<string, double>("O3", qualiteO3));
+    qualite.push_back(pair<string, double>("O3", qualiteO3));
     double qualiteNO2 = CalculerQualiteAir(mesuresDeLaZone, periode, "NO2");
-    qualite.insert(pair<string, double>("NO2", qualiteNO2));
+    qualite.push_back(pair<string, double>("NO2", qualiteNO2));
     double qualiteSO2 = CalculerQualiteAir(mesuresDeLaZone, periode, "SO2");
-    qualite.insert(pair<string, double>("SO2", qualiteSO2));
+    qualite.push_back(pair<string, double>("SO2", qualiteSO2));
     double qualitePM10 = CalculerQualiteAir(mesuresDeLaZone, periode, "PM10");
-    qualite.insert(pair<string, double>("PM10", qualitePM10));
+    qualite.push_back(pair<string, double>("PM10", qualitePM10));
     return qualite;
 } //----- Fin de CalculerQualiteAir_zone
 
@@ -166,27 +213,23 @@ System::System()
 
         list<Measurements> uneListeMesures;
         uneListeMesures.clear();
-        int i = 0;
         while (!fic1.eof())
-        {
-            if (i == 1460)
-            {
-                break;
-            }
+        {   
             getline(fic1, line1);
-            if (line1.length() > 0)
-            {
-                size_t pos11 = line1.find(";");
-                size_t pos12 = line1.find(";", pos11 + 1);
-                size_t pos13 = line1.find(";", pos12 + 1);
-                int idSensor1 = stoi(line1.substr(pos11 + 7, pos12 - pos11 - 7), &sz);
-                string instant = line1.substr(0, pos11);
-                double mesure = stod(line1.substr(pos13 + 1), &sz);
-                string attribut = line1.substr(pos12 + 1, pos13 - pos12 - 1);
-                Measurements uneMesure(instant, attribut, mesure);
-                uneListeMesures.push_back(uneMesure);
-            }
-            ++i;
+            size_t pos11 = line1.find(";");
+            size_t pos12 = line1.find(";", pos11 + 1);
+            size_t pos13 = line1.find(";", pos12 + 1);
+            int idSensor1;
+            if (pos11 != string::npos || pos12 != string::npos || pos13 != string::npos)
+                idSensor1 = stoi(line1.substr(pos11 + 7, pos12 - pos11 - 7), &sz);
+            if (idSensor1 != idSensor)
+                break;
+            
+            string instant = line1.substr(0, pos11);
+            double mesure = stod(line1.substr(pos13 + 1), &sz);
+            string attribut = line1.substr(pos12 + 1, pos13 - pos12 - 1);
+            Measurements uneMesure(instant, attribut, mesure);
+            uneListeMesures.push_back(uneMesure);
         }
         this->listeMesures.insert(pair<int, list<Measurements>>(idSensor, uneListeMesures));
     }
@@ -199,3 +242,5 @@ System::~System()
     this->listeCapteurs.clear();
     this->listeMesures.clear();
 } //----- Fin de ~System
+
+#endif // System_H

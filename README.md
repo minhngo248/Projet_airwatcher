@@ -1,13 +1,15 @@
 # Projet_airwatcher
+B3121 : Ngoc Minh NGO, Laetitia BÉZIE
+B3125 : Nathan NOWAKOWSKI, Ghizlane BADAOUI, Henri BAILLEUX
 
-## Commit Minh
-- Enlever tous les notions pointeur pour éviter erreur de segmentation
-- Structure de données pour sauvagarder les données de fichier measurements.csv : map<int, list<Measurements>> 
-// int : Id capteur
-- GetListeCapteurs dans System, je pense que c'est plus logic ...
-- Dans Measurements, periode se change en instant.
-- Il faut private car c'est programmation objet orienté
+## Editions des liens :
+Commande : make
 
-## Note : 
-+ ClassifierCapteurs : done
-+ CalculerQualiteAir : done
+## Verification la fuite des données 
+Commande : make memoryCheck
+
+## Lancer le programme
+Commande : ./main
+
+## Supprimer l'executable
+Commande : make clean

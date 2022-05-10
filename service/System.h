@@ -24,7 +24,8 @@ using namespace std;
 
 //------------------------------------------------------------- Constantes
 const double pi = M_PI;
-
+double getDistanceFromLatLonInKm(double lat1, double lon1, double lat2, double lon2);
+double deg2rad(double deg);
 //------------------------------------------------------------------ Types
 
 //------------------------------------------------------------------------
@@ -68,7 +69,22 @@ private:
 	map<int, list<Measurements>> listeMesures;
 };
 
+double getDistanceFromLatLonInKm(double lat1, double lon1, double lat2, double lon2) {
+    double R = 6371.0; // Radius of the earth in km
+    double dLat = deg2rad(lat2-lat1);  // deg2rad below
+    double dLon = deg2rad(lon2-lon1); 
+    double a = 
+    sin(dLat/2) * sin(dLat/2) +
+    cos(deg2rad(lat1)) * cos(deg2rad(lat2)) * 
+    sin(dLon/2) * sin(dLon/2); 
+    double c = 2 * atan2(sqrt(a), sqrt(1-a)); 
+    double d = R * c; // Distance in km
+    return d;
+}
 
+double deg2rad(double deg) {
+    return deg * (pi/180);
+}
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
@@ -81,15 +97,11 @@ list<Measurements> System::getListeMesure(int sensorId_in)
 
 list<Sensor> System::GetListeCapteurs_zone(Zone &zoneGeo)
 {
-    const float ky = 40000.0 / 360.0;
     list<Sensor> sensorDeLaZone;
     for (auto &i : this->listeCapteurs)
     {
-        float kx = cos(pi * zoneGeo.getLatitude() / 180.0) * ky;
-        float dx = abs(zoneGeo.getLongitude() - i.second.getLongitude()) * kx;
-        float dy = abs(zoneGeo.getLatitude() - i.second.getLatitude()) * ky;
-        if (sqrt(dx * dx + dy * dy) <= zoneGeo.getRayon())
-        {
+        float distance = getDistanceFromLatLonInKm(zoneGeo.getLatitude(), zoneGeo.getLongitude(), i.second.GetLatitude(), i.second.GetLongitude());
+        if (distance <= zoneGeo.getRayon()) {
             sensorDeLaZone.push_back(i.second);
         }
     }
@@ -105,7 +117,7 @@ list<pair<string, double>> System::CalculerQualiteAir_zone(Zone &zoneGeo)
     list<Measurements> mesuresDeLaZone;
     for (auto &i : sensorsDeLaZone)
     {
-        for (auto &j : this->listeMesures.at(i.getId()))
+        for (auto &j : this->listeMesures.at(i.GetId()))
         {
             mesuresDeLaZone.push_back(j);
         }

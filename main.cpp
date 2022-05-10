@@ -2,7 +2,7 @@
 using namespace std;
 
 #include "service/System.h"
-#include "Administrateur.h"
+#include "modele/Administrateur.h"
 
 void testerClassifierCapteurs() {
     System system;
@@ -18,6 +18,7 @@ void testerClassifierCapteurs() {
 
 void testerCalculerQualiteAir_zone() {
     Zone uneZone(44.4, 0.4, 100);
+    // radius : 100 km
     System system;
     list<pair<string, double>> qualite = system.CalculerQualiteAir_zone(uneZone);
     cout << "Attribut |" << " Mesure" << endl;
@@ -30,7 +31,7 @@ void testerCalculerQualiteAir_zone() {
 void testerVerifierFiabliteCapteur(){
     Administrateur a("a", "b", "c", "d");
     Sensor s(24,44.8,1.8); 
-    Sensor sRef(25,44.8,2.5);
+    Sensor sRef(14,44.4,1.8);
     cout << a.verifierFiabiliteCapteur(s, sRef) << endl;
 }
 

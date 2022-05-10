@@ -12,7 +12,6 @@
 using namespace std;
 #include <iostream>
 #include <string>
-#include <chrono>
 
 //--------------------------------------------------- Interfaces utilisées
 //#include "Provider.h"

@@ -32,13 +32,13 @@ class Sensor
 
 public:
     //----------------------------------------------------- Méthodes publiques
-    int getId();
-    double getLatitude();
-    double getLongitude();
+    int GetId();
+    double GetLatitude();
+    double GetLongitude();
 
     //-------------------------------------------- Surchage d'opérateurs
     friend ostream &operator<<(ostream &out, const Sensor &unSensor);
-    friend bool operator==(Sensor &unSensor1, Sensor &unSensor2);
+    bool operator==(const Sensor& unSensor);
 
     //-------------------------------------------- Constructeurs - destructeur
     Sensor(int unSensorId = 0, double unLat = 44.0, double unLong = -1.0);
@@ -58,17 +58,17 @@ private:
 
 //----------------------------------------------------- Méthodes publiques
 
-int Sensor::getId()
+int Sensor::GetId()
 {
     return sensorId;
 } //----- Fin getId
 
-double Sensor::getLatitude()
+double Sensor::GetLatitude()
 {
     return latitude;
 } //----- Fin getLatitude
 
-double Sensor::getLongitude()
+double Sensor::GetLongitude()
 {
     return longitude;
 } //----- Fin getLongitude
@@ -81,10 +81,10 @@ ostream &operator<<(ostream &out, const Sensor &unSensor)
     return out;
 } //----- Fin de operator <<
 
-bool operator==(Sensor &unSensor1, Sensor &unSensor2)
+bool Sensor::operator==(const Sensor& unSensor)
 {
     bool res = false;
-    if (unSensor1.getId() == unSensor2.getId())
+    if (this->sensorId == unSensor.sensorId)
     {
         res = true;
     }

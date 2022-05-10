@@ -1,9 +1,0 @@
-email:a@e.fr,motDePasse:azerty,nom:jean,prenom:albert
-
-email:a@e.fr,motDePasse:azerty,nom:jean,prenom:albert
-
-email:a@e.fr,motDePasse:azerty,nom:jean,prenom:albert
-
-email:a@e.fr,motDePasse:azerty,nom:jean,prenom:albert
-
-email:c,motDePasse:d,nom:a,prenom:b

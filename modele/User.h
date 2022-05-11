@@ -153,11 +153,11 @@ User::User(string unNom, string unPrenom, string unEmail, string unMdp)
     motDePasse = unMdp;
 
     ofstream fSauvegarde;
-    fSauvegarde.open("users.txt", ios::app);
+    fSauvegarde.open("dataset/login.csv", ios::app);
     if (fSauvegarde)
     {
 
-        fSauvegarde << *this;
+        fSauvegarde << nom << ";" << prenom << ";" << email << ";" << motDePasse <<";\n";
     }
     fSauvegarde.close();
 

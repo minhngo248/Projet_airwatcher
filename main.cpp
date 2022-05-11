@@ -3,6 +3,7 @@ using namespace std;
 
 #include "service/System.h"
 #include "modele/Administrateur.h"
+#include "modele/Provider.h"
 
 void testerClassifierCapteurs() {
     System system;
@@ -36,8 +37,8 @@ void testerVerifierFiabliteCapteur(){
 }
 
 int main(int argc, char* argv[]) {
-    testerClassifierCapteurs();
+    //testerClassifierCapteurs();
     //testerCalculerQualiteAir_zone();
-    //testerVerifierFiabliteCapteur();
+    testerVerifierFiabliteCapteur();
     return 0;
 }

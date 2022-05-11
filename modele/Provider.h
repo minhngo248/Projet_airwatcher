@@ -129,7 +129,6 @@ User Provider::CreerCompte(int Provider_ID_in,string nom_in,string prenom_in, st
     string line;
     User user;
     int i=0;
-    // -------------Initialisation de la ListePurificateurs ----------------------
     fic.open("dataset/providers.csv");
     while (!fic.eof()) {
         fic >> line;

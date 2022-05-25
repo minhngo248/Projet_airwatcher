@@ -35,7 +35,8 @@ void testerCalculerQualiteAir_zone() {
     Zone uneZone(44.4, 0.4, 100);
     // radius : 100 km
     System system;
-    list<pair<string, double>> qualite = system.CalculerQualiteAir_zone(uneZone);
+    string periode = "2019-01-01 12:00:00to2019-02-02 12:00:00";
+    list<pair<string, double>> qualite = system.CalculerQualiteAir_zone(uneZone, periode);
     cout << "Attribut |" << " Mesure" << endl;
     for (auto& i:qualite) {
         cout << i.first << "   " << i.second << endl;
@@ -62,6 +63,7 @@ void testerVerifierFiabliteCapteur(){
 }
 
 int main(int argc, char* argv[]) {
+    
     char* choix=argv[1];
     if(strcmp(choix,"1")==0){
         testerClassifierCapteurs();
@@ -72,6 +74,8 @@ int main(int argc, char* argv[]) {
     else if(strcmp(choix,"3")==0){
         testerVerifierFiabliteCapteur();
     }
+
+    
 
     return 0;
 }

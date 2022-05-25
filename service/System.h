@@ -43,7 +43,7 @@ public:
 
     list<Measurements> getListeMesure(int sensorId_in);
     list<Sensor> GetListeCapteurs_zone(Zone &zoneGeo);
-    list<pair<string, double>> CalculerQualiteAir_zone(Zone &zoneGeo);
+    list<pair<string, double>> CalculerQualiteAir_zone(Zone &zoneGeo, string periode = "2019-01-01 12:00:00to2019-12-31 12:00:00");
     double CalculerQualiteAir(list<Measurements> &listeMesures, string periode,
                               string typeMesure);
     multimap<double, int> ClassifierCapteurs(int idCapteurReference, string periode, string typeMesure);
@@ -111,7 +111,7 @@ list<Sensor> System::GetListeCapteurs_zone(Zone &zoneGeo)
     return sensorDeLaZone;
 } //----- Fin de GetListeCapteur_zone
 
-list<pair<string, double>> System::CalculerQualiteAir_zone(Zone &zoneGeo)
+list<pair<string, double>> System::CalculerQualiteAir_zone(Zone &zoneGeo, string periode)
 {
     // string : typeMesure (O3, PM10 ...), double : mesure
     list<pair<string, double>> qualite;
@@ -125,7 +125,7 @@ list<pair<string, double>> System::CalculerQualiteAir_zone(Zone &zoneGeo)
             mesuresDeLaZone.push_back(j);
         }
     }
-    string periode = "2019-01-01 12:00:00to2019-12-31 12:00:00";
+    //string periode = "2019-01-01 12:00:00to2019-12-31 12:00:00";
     double qualiteO3 = CalculerQualiteAir(mesuresDeLaZone, periode, "O3");
     qualite.push_back(pair<string, double>("O3", qualiteO3));
     double qualiteNO2 = CalculerQualiteAir(mesuresDeLaZone, periode, "NO2");

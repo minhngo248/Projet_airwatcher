@@ -35,7 +35,7 @@ class Administrateur : public User
 
 public:
     //----------------------------------------------------- Méthodes publiques
-    bool verifierFiabiliteCapteur(Sensor capteurChoisi, Sensor capteurReference);
+    bool verifierFiabiliteCapteur(Sensor capteurChoisi, Sensor capteurReference, double precision = 0.05);
 
     //------------------------------------------------- Surcharge d'opérateurs
     friend ostream &operator<<(ostream &out, const Administrateur &unAdministrateur);
@@ -58,7 +58,7 @@ protected:
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
-bool Administrateur::verifierFiabiliteCapteur(Sensor capteurChoisi, Sensor capteurReference)
+bool Administrateur::verifierFiabiliteCapteur(Sensor capteurChoisi, Sensor capteurReference, double precision)
 {
     Zone zone = Zone(capteurChoisi.GetLatitude(), capteurChoisi.GetLongitude(), 50); 
     System system = System();
@@ -71,15 +71,17 @@ bool Administrateur::verifierFiabiliteCapteur(Sensor capteurChoisi, Sensor capte
             for(auto& it2:listeMesuresAVerifier) {
                 for (auto& it3:listeMesuresAVerifier){
                     if (it2.getInstant() == it3.getInstant() && it2.getTypeMesure() == it3.getTypeMesure()){
-                        if (it2.getMesure()<(it3.getMesure()-0.05) || (it3.getMesure()+0.05)<it2.getMesure())
+                        if (it2.getMesure()<(it3.getMesure()-precision) || (it3.getMesure()+precision)<it2.getMesure())
                         {
-                            cout << "A exclure : mesures incompatibles avec celles de capteur reference " << endl;
+                            cout << "A exclure : mesures incompatibles avec celles de capteur reference" << endl;
+                            cout << "D'après un intervalle de confiance de " << precision*100 <<"%"<<endl;
                             return false;
                         }
                     }
                 }
             }
             cout << "Le capteur est fiable" << endl;
+            cout << "D'après un intervalle de confiance de " << precision*100 <<"%"<<endl;
             return true;
         }
     }

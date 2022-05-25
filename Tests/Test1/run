@@ -1,0 +1,4 @@
+cd ../bin;
+echo | ./main 1 > ../Test1/std.in;
+cd ../Test1;
+cat

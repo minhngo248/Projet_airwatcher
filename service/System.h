@@ -7,7 +7,7 @@
 *************************************************************************/
 
 //---------- Interface de la classe <System> (fichier System.h) ----------------
-#if ! defined (SYSTEM_H)
+#if !defined(SYSTEM_H)
 #define SYSTEM_H
 using namespace std;
 #include <iostream>
@@ -36,54 +36,56 @@ double deg2rad(double deg);
 
 class System
 {
-//----------------------------------------------------------------- PUBLIC
+    //----------------------------------------------------------------- PUBLIC
 
 public:
-//----------------------------------------------------- Méthodes publiques
+    //----------------------------------------------------- Méthodes publiques
 
     list<Measurements> getListeMesure(int sensorId_in);
-	list<Sensor> GetListeCapteurs_zone(Zone& zoneGeo);
-	list<pair<string, double>> CalculerQualiteAir_zone(Zone & zoneGeo);
-	double CalculerQualiteAir(list<Measurements>& listeMesures, string periode,
-                                 string typeMesure);
+    list<Sensor> GetListeCapteurs_zone(Zone &zoneGeo);
+    list<pair<string, double>> CalculerQualiteAir_zone(Zone &zoneGeo);
+    double CalculerQualiteAir(list<Measurements> &listeMesures, string periode,
+                              string typeMesure);
     multimap<double, int> ClassifierCapteurs(int idCapteurReference, string periode, string typeMesure);
-    //float VerifierAmeliorationAir(Zone & zoneGeo); 
+    // float VerifierAmeliorationAir(Zone & zoneGeo);
 
-//-------------------------------------------- Surchage d'opérateurs
-    friend ostream & operator<<(ostream & out, const System & unSystem);
+    //-------------------------------------------- Surchage d'opérateurs
+    friend ostream &operator<<(ostream &out, const System &unSystem);
 
-//-------------------------------------------- Constructeurs - destructeur
+    //-------------------------------------------- Constructeurs - destructeur
 
-    System( const System & unSystem );
+    System(const System &unSystem);
     System();
     virtual ~System();
     // Mode d'emploi :
 
-//------------------------------------------------------------------ PRIVE
+    //------------------------------------------------------------------ PRIVE
 
-//----------------------------------------------------- Méthodes protégées
+    //----------------------------------------------------- Méthodes protégées
 
-//----------------------------------------------------- Attributs protégés
+    //----------------------------------------------------- Attributs protégés
 private:
     map<int, Sensor> listeCapteurs;
-	map<int, list<Measurements>> listeMesures;
+    map<int, list<Measurements>> listeMesures;
 };
 
-double getDistanceFromLatLonInKm(double lat1, double lon1, double lat2, double lon2) {
-    double R = 6371.0; // Radius of the earth in km
-    double dLat = deg2rad(lat2-lat1);  // deg2rad below
-    double dLon = deg2rad(lon2-lon1); 
-    double a = 
-    sin(dLat/2) * sin(dLat/2) +
-    cos(deg2rad(lat1)) * cos(deg2rad(lat2)) * 
-    sin(dLon/2) * sin(dLon/2); 
-    double c = 2 * atan2(sqrt(a), sqrt(1-a)); 
+double getDistanceFromLatLonInKm(double lat1, double lon1, double lat2, double lon2)
+{
+    double R = 6371.0;                  // Radius of the earth in km
+    double dLat = deg2rad(lat2 - lat1); // deg2rad below
+    double dLon = deg2rad(lon2 - lon1);
+    double a =
+        sin(dLat / 2) * sin(dLat / 2) +
+        cos(deg2rad(lat1)) * cos(deg2rad(lat2)) *
+            sin(dLon / 2) * sin(dLon / 2);
+    double c = 2 * atan2(sqrt(a), sqrt(1 - a));
     double d = R * c; // Distance in km
     return d;
 }
 
-double deg2rad(double deg) {
-    return deg * (pi/180);
+double deg2rad(double deg)
+{
+    return deg * (pi / 180);
 }
 //----------------------------------------------------------------- PUBLIC
 
@@ -101,7 +103,8 @@ list<Sensor> System::GetListeCapteurs_zone(Zone &zoneGeo)
     for (auto &i : this->listeCapteurs)
     {
         float distance = getDistanceFromLatLonInKm(zoneGeo.getLatitude(), zoneGeo.getLongitude(), i.second.GetLatitude(), i.second.GetLongitude());
-        if (distance <= zoneGeo.getRayon()) {
+        if (distance <= zoneGeo.getRayon())
+        {
             sensorDeLaZone.push_back(i.second);
         }
     }
@@ -226,7 +229,7 @@ System::System()
         list<Measurements> uneListeMesures;
         uneListeMesures.clear();
         while (!fic1.eof())
-        {   
+        {
             getline(fic1, line1);
             size_t pos11 = line1.find(";");
             size_t pos12 = line1.find(";", pos11 + 1);
@@ -236,7 +239,7 @@ System::System()
                 idSensor1 = stoi(line1.substr(pos11 + 7, pos12 - pos11 - 7), &sz);
             if (idSensor1 != idSensor)
                 break;
-            
+
             string instant = line1.substr(0, pos11);
             double mesure = stod(line1.substr(pos13 + 1), &sz);
             string attribut = line1.substr(pos12 + 1, pos13 - pos12 - 1);

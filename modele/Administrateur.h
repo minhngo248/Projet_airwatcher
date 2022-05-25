@@ -79,7 +79,7 @@ bool Administrateur::verifierFiabiliteCapteur(Sensor capteurChoisi, Sensor capte
                     }
                 }
             }
-            cout << "Les capteurs sont fiabilités" << endl;
+            cout << "Le capteur est fiable" << endl;
             return true;
         }
     }

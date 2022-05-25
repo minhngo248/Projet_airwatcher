@@ -40,7 +40,7 @@ public:
     //-------------------------------------------- Constructeurs - destructeur
     Cleaner(int CleanerID, float lattitude, float longitude, string Debut, string Fin) {
     #ifdef MAP
-        cout << "Appel au constructeur de <Measurements>" << endl;
+        cout << "Appel au constructeur de <Cleaner>" << endl;
     #endif
         cleanerID = CleanerID;
         Lattitude = lattitude;

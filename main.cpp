@@ -11,7 +11,7 @@ using namespace std;
 chrono::time_point<std::chrono::system_clock> start, fin;
 
 void testerClassifierCapteurs() {
-    start = chrono::system_clock::now();
+
 
     System system;
     string periode = "2019-01-01 12:00:00to2019-05-05 13:00:00";
@@ -24,14 +24,10 @@ void testerClassifierCapteurs() {
     }
     listeCroissante.clear();
 
-    fin = chrono::system_clock::now();
-    chrono::duration<double> elapsed_seconds = fin - start;
-    cout << "Temps d'éxecution : " << elapsed_seconds.count() << endl;
+
 }
 
 void testerCalculerQualiteAir_zone() {
-    start = chrono::system_clock::now();
-
     Zone uneZone(44.4, 0.4, 100);
     // radius : 100 km
     System system;
@@ -43,28 +39,27 @@ void testerCalculerQualiteAir_zone() {
     }
     qualite.clear();
 
-    fin = chrono::system_clock::now();
-    chrono::duration<double> elapsed_seconds = fin - start;
-    cout << "Temps d'éxecution : " << elapsed_seconds.count() << endl;
 }
 
 void testerVerifierFiabliteCapteur(){
-    start = chrono::system_clock::now();
-
     Administrateur a("a", "b", "c", "d");
     Sensor s(24,44.8,1.8);
     Sensor sRef(14,44.4,1.8);
     //cout << a.verifierFiabiliteCapteur(s, sRef) << endl;
     a.verifierFiabiliteCapteur(s, sRef);
 
-    fin = chrono::system_clock::now();
-    chrono::duration<double> elapsed_seconds = fin - start;
-    cout << "Temps d'éxecution : " << elapsed_seconds.count() << endl;
 }
 
 int main(int argc, char* argv[]) {
     
     char* choix=argv[1];
+    char* temps;
+    if(argc>=3){
+        temps=argv[2];
+    }
+
+    start = chrono::system_clock::now();
+
     if(strcmp(choix,"1")==0){
         testerClassifierCapteurs();
     }
@@ -73,6 +68,11 @@ int main(int argc, char* argv[]) {
     }
     else if(strcmp(choix,"3")==0){
         testerVerifierFiabliteCapteur();
+    }
+    fin = chrono::system_clock::now();
+    chrono::duration<double> elapsed_seconds = fin - start;
+    if(strcmp(temps,"t")==0){
+        cout << "Temps d'éxecution : " << elapsed_seconds.count() << endl;
     }
 
     

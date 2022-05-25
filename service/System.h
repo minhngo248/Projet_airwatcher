@@ -47,7 +47,8 @@ public:
     double CalculerQualiteAir(list<Measurements> &listeMesures, string periode,
                               string typeMesure);
     multimap<double, int> ClassifierCapteurs(int idCapteurReference, string periode, string typeMesure);
-    // float VerifierAmeliorationAir(Zone & zoneGeo);
+    list<pair<int,int>> getListeSensorsIndividualUsers();
+    Sensor getSensorById(int id);
 
     //-------------------------------------------- Surchage d'opérateurs
     friend ostream &operator<<(ostream &out, const System &unSystem);
@@ -181,6 +182,43 @@ multimap<double, int> System::ClassifierCapteurs(int idCapteurRef, string period
     }
     return listeQualiteCapteur;
 } //----- Fin de ClassifierCapteurs
+
+list<pair<int,int>> System::getListeSensorsIndividualUsers() {
+    ifstream fChargement;
+    fChargement.open("dataset/users.csv");
+    string line;
+    int idIndividualUser;
+    int idSensor;
+    size_t sz;
+    string str = "User";
+    string str2 = "Sensor";
+    list<pair<int, int>> listeSensors;
+
+    if (fChargement)
+    {
+        
+        while (!fChargement.eof())
+        {
+            fChargement >> line;
+            size_t pos1 = line.find(";");
+            idIndividualUser =  stoi(line.substr(str.length(), pos1 - str.length()), &sz);
+            idSensor =  stoi(line.substr(pos1 +str2.length()+1, line.length()-(pos1 +str2.length()+1)));
+            listeSensors.push_back(pair<int, int>(idIndividualUser, idSensor));
+        }
+    }
+
+    return listeSensors;
+} //----- Fin de getListeSensorsIndividualUsers
+
+Sensor System::getSensorById(int id) {
+    Sensor sensor;
+    for(auto& sen : this->listeCapteurs) {
+        if(id == sen.first) {
+           return sen.second;
+        }
+    }
+    return sensor;
+} //----- Fin de getSensorById
 
 //------------------------------------------------- Surcharge d'opérateurs
 ostream &operator<<(ostream &out, const System &unSystem)

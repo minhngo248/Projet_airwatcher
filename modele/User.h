@@ -86,7 +86,7 @@ bool User::seConnecter(string email_in, string mdp)
     char emailTmp[50];
     char mdpTmp[50];
 
-    fChargement.open("users.txt");
+    fChargement.open("login.csv");
     if (fChargement)
     {
 

@@ -35,7 +35,7 @@ class Administrateur : public User
 
 public:
     //----------------------------------------------------- Méthodes publiques
-    bool verifierFiabiliteCapteur(Sensor capteurChoisi, Sensor capteurReference, double precision = 0.05);
+    bool verifierFiabiliteCapteur(int idSensorToCheck, double precision = 0.05);
 
     //------------------------------------------------- Surcharge d'opérateurs
     friend ostream &operator<<(ostream &out, const Administrateur &unAdministrateur);
@@ -53,80 +53,131 @@ protected:
     //----------------------------------------------------- Attributs protégés
 };
 
-
-
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
-bool Administrateur::verifierFiabiliteCapteur(Sensor capteurChoisi, Sensor capteurReference, double precision)
+bool Administrateur::verifierFiabiliteCapteur(int idSensorToCheck, double precision)
 {
-    Zone zone = Zone(capteurChoisi.GetLatitude(), capteurChoisi.GetLongitude(), 50); 
+    string periode = "2019-01-01 12:00:00to2019-12-31 12:00:00";
     System system = System();
-    list<Sensor> sensorDeLaZone = system.GetListeCapteurs_zone(zone);
-    for(auto& it1:sensorDeLaZone) {
-        if (it1 == capteurReference){
-            list<Measurements> listeMesuresReference = system.getListeMesure(capteurReference.GetId());
-            list<Measurements> listeMesuresAVerifier = system.getListeMesure(capteurChoisi.GetId());
+    bool capteurDeParticulier = false;
+    list<pair<int, int>> sensorsIndividualUsers = system.getListeSensorsIndividualUsers();
+    for (auto &i : sensorsIndividualUsers)
+    {
+        if (i.second == idSensorToCheck)
+        {
+            capteurDeParticulier = true;
+            break;
+        }
+    }
 
-            for(auto& it2:listeMesuresAVerifier) {
-                for (auto& it3:listeMesuresAVerifier){
-                    if (it2.getInstant() == it3.getInstant() && it2.getTypeMesure() == it3.getTypeMesure()){
-                        if (it2.getMesure()<(it3.getMesure()-precision) || (it3.getMesure()+precision)<it2.getMesure())
-                        {
-                            cout << "A exclure : mesures incompatibles avec celles de capteur reference" << endl;
-                            cout << "D'après un intervalle de confiance de " << precision*100 <<"%"<<endl;
-                            return false;
-                        }
+    if (capteurDeParticulier)
+    {
+
+        Sensor capteurChoisi = system.getSensorById(idSensorToCheck);
+
+        // Récupération mesures du capteur
+        Zone zone = Zone(capteurChoisi.GetLatitude(), capteurChoisi.GetLongitude(), 50);
+        list<Measurements> listeMesuresAVerifier = system.getListeMesure(capteurChoisi.GetId());
+
+        // Récupération des mesures des autres capteurs
+
+        list<Sensor> sensorDeLaZone = system.GetListeCapteurs_zone(zone);
+        list<Measurements> listeMesuresReference;
+
+        for (auto &it1 : sensorDeLaZone)
+        {
+            if (it1.GetId() != capteurChoisi.GetId())
+            {
+                for (auto &it2 : system.getListeMesure(it1.GetId()))
+                {
+                    listeMesuresReference.push_back(it2);
+                }
+            }
+        }
+
+        // Calcule qualité air (dans un but de performance toutes les qualités de sont pas calculées d'office)
+        double qualiteO3 = system.CalculerQualiteAir(listeMesuresAVerifier, periode, "O3");
+        double qualiteO3Ref = system.CalculerQualiteAir(listeMesuresReference, periode, "O3");
+
+        cout << "Qualité du choisi : " << qualiteO3 << endl;
+        cout << "Qualité des autres : " << qualiteO3Ref << endl;
+
+        if ((abs(qualiteO3 - qualiteO3Ref) / qualiteO3Ref) <= precision)
+        {
+            cout << "03 PASSED" << endl;
+            double qualiteNO2 = system.CalculerQualiteAir(listeMesuresAVerifier, periode, "NO2");
+            double qualiteNO2Ref = system.CalculerQualiteAir(listeMesuresReference, periode, "NO2");
+            if ((abs(qualiteNO2 - qualiteNO2Ref) / qualiteNO2Ref) <= precision)
+            {
+                cout << "NO2 PASSED" << endl;
+                double qualiteSO2 = system.CalculerQualiteAir(listeMesuresAVerifier, periode, "SO2");
+                double qualiteSO2Ref = system.CalculerQualiteAir(listeMesuresReference, periode, "SO2");
+                if ((abs(qualiteSO2 - qualiteSO2Ref) / qualiteSO2Ref) <= precision)
+                {
+                    cout << "SO2 PASSED" << endl;
+                    double qualitePM10 = system.CalculerQualiteAir(listeMesuresAVerifier, periode, "PM10");
+                    double qualitePM10Ref = system.CalculerQualiteAir(listeMesuresReference, periode, "PM10");
+
+                    if ((abs(qualitePM10 - qualitePM10Ref) / qualitePM10Ref) <= precision)
+                    {
+                        cout << "PM10 PASSED" << endl;
+                        cout << "Le capteur est fiable" << endl;
+                        cout << "D'après un intervalle de confiance de " << precision * 100 << "%" << endl;
+                        return true;
                     }
                 }
             }
-            cout << "Le capteur est fiable" << endl;
-            cout << "D'après un intervalle de confiance de " << precision*100 <<"%"<<endl;
-            return true;
         }
+
+        cout << "A exclure : mesures incompatibles avec celles de capteur reference" << endl;
+        cout << "D'après un intervalle de confiance de " << precision * 100 << "%" << endl;
+        return false;
+    } else {
+        cout << "Ce n'est pas un capteur de particulier" << endl;
+        return false;
     }
-    cout << "capteur reference n'existe pas dans la meme zone que le capteur choisi " << endl;
-    return false;
+
 } //----- Fin de VerifierFiabiliteCapteur
 
 //------------------------------------------------- Surcharge d'opérateurs
-ostream & operator <<(ostream& out, const Administrateur & unAdministrateur)
+ostream &operator<<(ostream &out, const Administrateur &unAdministrateur)
 {
-    out <<"email:"<<unAdministrateur.email;
-    out <<",motDePasse:"<<unAdministrateur.motDePasse;
-    out <<",nom:"<<unAdministrateur.nom <<",prenom:"<<unAdministrateur.prenom << endl;
+    out << "email:" << unAdministrateur.email;
+    out << ",motDePasse:" << unAdministrateur.motDePasse;
+    out << ",nom:" << unAdministrateur.nom << ",prenom:" << unAdministrateur.prenom << endl;
     return out;
 } //----- Fin de operator <<
 
 //-------------------------------------------- Constructeurs - destructeur
-Administrateur::Administrateur ( const Administrateur & unAdministrateur )
+Administrateur::Administrateur(const Administrateur &unAdministrateur)
 {
 #ifdef MAP
     cout << "Appel au constructeur de copie de <Administrateur>" << endl;
 #endif
 } //----- Fin de Administrateur (constructeur de copie)
 
+Administrateur::Administrateur(string unNom, string unPrenom, string unEmail, string unMdp)
+    : User(unNom, unPrenom, unEmail, unMdp)
+{
 
-Administrateur::Administrateur (string unNom, string unPrenom, string unEmail, string unMdp)
-:User(unNom, unPrenom, unEmail, unMdp) {
-
-    #ifdef MAP
-        cout << "Appel au constructeur de <Administrateur>" << endl;
-    #endif
+#ifdef MAP
+    cout << "Appel au constructeur de <Administrateur>" << endl;
+#endif
 } //----- Fin de Administrateur
 
-Administrateur::Administrateur ()
+Administrateur::Administrateur()
 {
-    #ifdef MAP
-        cout << "Appel au constructeur par défaut de <Administrateur>" << endl;
-    #endif
+#ifdef MAP
+    cout << "Appel au constructeur par défaut de <Administrateur>" << endl;
+#endif
 } //----- Fin de Administrateur (par défaut)
 
-Administrateur::~Administrateur ( )
+Administrateur::~Administrateur()
 {
-    #ifdef MAP
-        cout << "Appel au destructeur de <Administrateur>" << endl;
-    #endif
+#ifdef MAP
+    cout << "Appel au destructeur de <Administrateur>" << endl;
+#endif
 } //----- Fin de ~Administrateur
 
 #endif // Administrateur_H

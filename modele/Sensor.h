@@ -41,7 +41,8 @@ public:
     bool operator==(const Sensor& unSensor);
 
     //-------------------------------------------- Constructeurs - destructeur
-    Sensor(int unSensorId = 0, double unLat = 44.0, double unLong = -1.0);
+    Sensor(int unSensorId = -1, double unLat = 0.0, double unLong = 0.0);
+    
     virtual ~Sensor();
     //------------------------------------------------------------------ PRIVE
 
@@ -99,6 +100,7 @@ Sensor::Sensor(int unSensorId, double unLat, double unLong)
     this->latitude = unLat;
     this->longitude = unLong;
 } //----- Fin Sensor
+
 
 Sensor::~Sensor()
 {

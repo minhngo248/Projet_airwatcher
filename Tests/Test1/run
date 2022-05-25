@@ -1,0 +1,2 @@
+../bin/main 3;
+cat temp.txt >sortie.txt;

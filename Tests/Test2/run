@@ -1,4 +1,0 @@
-cd ../bin;
-echo | ./main 2 > ../Test2/std.in;
-cd ../Test2;
-cat

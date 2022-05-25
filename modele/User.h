@@ -86,7 +86,7 @@ bool User::seConnecter(string email_in, string mdp)
     char emailTmp[50];
     char mdpTmp[50];
 
-    fChargement.open("login.csv");
+    fChargement.open("dataset/login.csv");
     if (fChargement)
     {
 
@@ -112,6 +112,7 @@ bool User::seConnecter(string email_in, string mdp)
             }
         }
     }
+    fChargement.close();
     return false;
 } //----- Fin de seConnecter
 

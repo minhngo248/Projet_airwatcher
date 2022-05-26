@@ -164,7 +164,7 @@ double System::CalculerQualiteAir(list<Measurements> &listeMesures, string perio
     return quality;
 } //----- Fin de CalculerQualiteAir
 
-multimap<double, int> System::ClassifierCapteurs(int idCapteurRef, string periode,string typeMesure)
+multimap<double, int> System::ClassifierCapteurs(int idCapteurRef, string periode, string typeMesure)
 {
     multimap<double, int> listeQualiteCapteur;
     // double : similitude, int : idCapteur (idSensor)

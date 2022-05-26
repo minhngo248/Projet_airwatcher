@@ -11,8 +11,8 @@
 #define MEASUREMENTSTYPE_H
 
 //--------------------------------------------------- Interfaces utilisées
-#include <iostream>
-
+#include <string>
+using namespace std;
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types

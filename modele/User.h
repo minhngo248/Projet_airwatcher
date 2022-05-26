@@ -7,12 +7,16 @@
 *************************************************************************/
 
 //---------- Interface de la classe <USER> (fichier USER.h) ----------------
-#if !defined(USER_H)
+#if ! defined (USER_H)
 #define USER_H
 
 using namespace std;
-//--------------------------------------------------- Interfaces utilisées
 #include <string>
+#include <map>
+
+
+//--------------------------------------------------- Interfaces utilisées
+
 
 //------------------------------------------------------------- Constantes
 
@@ -31,13 +35,17 @@ class User
 public:
     //----------------------------------------------------- Méthodes publiques
 
-    //virtual bool seConnecter(string email_in, string mdp);
-    // Mode d'emploi :
-    //  Cette méthode permet de connecter un User grâce à son email et mot de passe. Elle renvoie true si l'authentification s'est réalisée avec succès. Faux sinon.
-
-    virtual bool seDeconnecter(bool connected);
+    virtual bool SeDeconnecter(bool connected);
     // Mode d'emploi :
     //  Cette méthode permet de déconnecter un User. Elle renvoie false si la déconnection s'est réalisée avec succès. True sinon.
+
+    virtual string GetEmail();
+
+    virtual int GetId();
+
+    virtual void SetId(int i);
+
+    virtual string GetMdp();
 
     //------------------------------------------------- Surcharge d'opérateurs
 
@@ -50,7 +58,7 @@ public:
     // Mode d'emploi (constructeur de copie) :
     //
 
-    User(int type, int ID, string unNom, string unPrenom, string unEmail, string unMdp);
+    User(string unNom, string unPrenom, string unEmail, string unMdp);
     // Mode d'emploi :
     //  Cette méthode permet créer un nouvel User.
 
@@ -68,6 +76,7 @@ protected:
     //----------------------------------------------------- Méthodes protégées
 
     //----------------------------------------------------- Attributs protégés
+    int id;
     string nom;
     string prenom;
     string email;
@@ -75,47 +84,12 @@ protected:
 };
 
 
-
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
 
-// bool User::seConnecter(string email_in, string mdp)
-// {
-//     ifstream fChargement;
-//     char emailTmp[50];
-//     char mdpTmp[50];
 
-//     fChargement.open("dataset/login.csv");
-//     if (fChargement)
-//     {
-
-//         while (!fChargement.eof())
-//         {
-
-//             fChargement.getline(emailTmp, 200, ';');
-
-//             fChargement.getline(emailTmp, 200, ';');
-//             if (emailTmp == email_in)
-//             {
-
-//                 fChargement.getline(mdpTmp, 200, ';');
-//                 fChargement.getline(mdpTmp, 200, ';');
-//                 if (mdpTmp == mdp)
-//                 {
-//                     return true;
-//                 }
-//             }
-//             else
-//             {
-//                 fChargement.getline(emailTmp, 1000, '\n');
-//             }
-//         }
-//     }
-//     return false;
-// } //----- Fin de seConnecter
-
-bool User::seDeconnecter(bool connected)
+bool User::SeDeconnecter(bool connected)
 {
     if (connected)
     {
@@ -124,6 +98,22 @@ bool User::seDeconnecter(bool connected)
     }
     return connected;
 } //----- Fin de seDeconnecter
+
+int User::GetId() {
+    return id;
+}
+
+void User::SetId(int i) {
+    this->id = i;
+}
+
+string User::GetEmail() {
+    return email;
+}
+
+string User::GetMdp() {
+    return motDePasse;
+}
 
 //------------------------------------------------- Surcharge d'opérateurs
 
@@ -139,33 +129,23 @@ User::User(const User &unUser)
 #ifdef MAP
     cout << "Appel au constructeur de copie de <User>" << endl;
 #endif
+    this->id = unUser.id;
+    this->nom = unUser.nom;
+    this->prenom = unUser.prenom;
+    this->email = unUser.email;
+    this->motDePasse = unUser.motDePasse;
 } //----- Fin de User (constructeur de copie)
 
-User::User(int type, int ID, string unNom, string unPrenom, string unEmail, string unMdp)
+User::User(string unNom, string unPrenom, string unEmail, string unMdp)
 {
     // type=1 --> particulier, type=2 --> fournisseur, type=3 --> admin
 #ifdef MAP
     cout << "Appel au constructeur de <User>" << endl;
 #endif
-
-    nom = unNom;
-    prenom = unPrenom;
-    email = unEmail;
-    motDePasse = unMdp;
-
-    ofstream fSauvegarde;
-    fSauvegarde.open("dataset/login.csv", ios::app);
-    if (fSauvegarde)
-    {
-        if (type == 1) {
-            fSauvegarde << type << ";" << ID << ";" << nom << ";" << prenom << ";" << email << ";" << motDePasse << ";" << 0 << ";\n";
-        } else {
-            fSauvegarde << type << ";" << ID << ";" << nom << ";" << prenom << ";" << email << ";" << motDePasse <<";\n";
-        }
-        
-    }
-    fSauvegarde.close();
-
+    this->nom = unNom;
+    this->prenom = unPrenom;
+    this->email = unEmail;
+    this->motDePasse = unMdp;
 } //----- Fin de User
 
 User::User()
@@ -173,6 +153,7 @@ User::User()
 #ifdef MAP
     cout << "Appel au constructeur par def de <User>" << endl;
 #endif
+    this->id = 0;
 } //----- Fin de User
 
 User::~User()

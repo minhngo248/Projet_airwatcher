@@ -7,8 +7,9 @@
 *************************************************************************/
 
 //---------- Interface de la classe <System> (fichier System.h) ----------------
-#if !defined(SYSTEM_H)
+#if ! defined (SYSTEM_H)
 #define SYSTEM_H
+
 using namespace std;
 #include <iostream>
 #include <fstream>
@@ -19,8 +20,11 @@ using namespace std;
 //--------------------------------------------------- Interfaces utilisées
 #include "../modele/Zone.h"
 #include "../modele/Measurements.h"
-#include "../modele/MeasurementsType.h"
 #include "../modele/Sensor.h"
+#include "../modele/User.h"
+#include "../modele/Provider.h"
+#include "../modele/IndividualUser.h"
+#include "../modele/Administrateur.h"
 
 //------------------------------------------------------------- Constantes
 const double pi = M_PI;
@@ -41,19 +45,31 @@ class System
 public:
     //----------------------------------------------------- Méthodes publiques
 
+    void CreerCompte(string unNom, string unPrenom, string unEmail, string unMdp, int type);
+    IndividualUser SeConnecterIUser(string unEmail, string unMdp);
+    Provider SeConnecterProvider(string unEmail, string unMdp);
+    
+
     list<Measurements> getListeMesure(int sensorId_in);
     list<Sensor> GetListeCapteurs_zone(Zone &zoneGeo);
     list<pair<string, double>> CalculerQualiteAir_zone(Zone &zoneGeo, string periode = "2019-01-01 12:00:00to2019-12-31 12:00:00");
     double CalculerQualiteAir(list<Measurements> &listeMesures, string periode, string typeMesure);
     multimap<double, int> ClassifierCapteurs(int idCapteurReference, string periode, string typeMesure);
-    list<pair<int,int>> getListeSensorsIndividualUsers();
-    Sensor getSensorById(int id);
+    list<pair<int, int>> getListeSensorsIndividualUsers();
+    list<Sensor> getListeSensorsIndividualUser(int idIndividualUser_check);
+
+    void ConsulterScore(IndividualUser & particulierConnecte);
+    void ConsulterDonneesCapteur(IndividualUser &particulierConnecte, int idCapteur);
+
+    list<Cleaner> GetListePurificateurByProvider(int idProvider);
+    void ConsulterDonneesPurificateur(Provider &fournisseurConnecte, int idPurificateur);
+    bool VerifierFiabiliteCapteur(Administrateur & admin, int idSensorToCheck, double precision = 0.05);
+    void afficher();
+
 
     //-------------------------------------------- Surchage d'opérateurs
-    friend ostream &operator<<(ostream &out, const System &unSystem);
 
     //-------------------------------------------- Constructeurs - destructeur
-
     System(const System &unSystem);
     System();
     virtual ~System();
@@ -67,6 +83,10 @@ public:
 private:
     map<int, Sensor> listeCapteurs;
     map<int, list<Measurements>> listeMesures;
+    map<int, User> listeUsers;
+    map<int, IndividualUser> listeIUser;
+    map<int, Provider> listeProvider;
+    map<int, Cleaner> listeCleaners;
 };
 
 double getDistanceFromLatLonInKm(double lat1, double lon1, double lat2, double lon2)
@@ -90,6 +110,49 @@ double deg2rad(double deg)
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
+
+void System::CreerCompte(string unNom, string unPrenom, string unEmail, string unMdp, int type) {
+    for (auto& i:this->listeUsers) {
+        if (unEmail == i.second.GetEmail()) {
+            cout << "Email existe, inscription échouée." << endl;
+            return;
+        }
+    }
+    int key = listeUsers.size();
+    if (type == 1) {    
+        // 1 : individual user
+        IndividualUser iUser(unNom, unPrenom, unEmail, unMdp);
+        iUser.SetId(key);
+        this->listeUsers.insert(pair<int, User>(key, iUser));
+        this->listeIUser.insert(pair<int, IndividualUser>(key, iUser));
+    } else if (type == 2) {
+        Provider provider(unNom, unPrenom, unEmail, unMdp);
+        provider.SetId(key);
+        this->listeUsers.insert(pair<int, User>(key, provider));
+        this->listeProvider.insert(pair<int, Provider>(key, provider));
+    }
+    cout << "Inscription réussie." << endl;
+}
+
+IndividualUser System::SeConnecterIUser(string unEmail, string unMdp) {
+    for(auto& i : this->listeIUser) {
+        if (i.second.GetEmail() == unEmail && i.second.GetMdp() == unMdp) {
+            cout << "Connexion réussi" << endl;
+            return i.second;
+        }
+    }
+    cout << "Email ou mot de passe incorrect" << endl;
+}
+
+Provider System::SeConnecterProvider(string unEmail, string unMdp) {
+    for(auto& i : this->listeProvider) {
+        if (i.second.GetEmail() == unEmail && i.second.GetMdp() == unMdp) {
+            cout << "Connexion réussi" << endl;
+            return i.second;
+        }
+    }
+    cout << "Email ou mot de passe incorrect" << endl; 
+}
 
 list<Measurements> System::getListeMesure(int sensorId_in)
 {
@@ -125,7 +188,6 @@ list<pair<string, double>> System::CalculerQualiteAir_zone(Zone &zoneGeo, string
             mesuresDeLaZone.push_back(j);
         }
     }
-    //string periode = "2019-01-01 12:00:00to2019-12-31 12:00:00";
     double qualiteO3 = CalculerQualiteAir(mesuresDeLaZone, periode, "O3");
     qualite.push_back(pair<string, double>("O3", qualiteO3));
     double qualiteNO2 = CalculerQualiteAir(mesuresDeLaZone, periode, "NO2");
@@ -134,10 +196,16 @@ list<pair<string, double>> System::CalculerQualiteAir_zone(Zone &zoneGeo, string
     qualite.push_back(pair<string, double>("SO2", qualiteSO2));
     double qualitePM10 = CalculerQualiteAir(mesuresDeLaZone, periode, "PM10");
     qualite.push_back(pair<string, double>("PM10", qualitePM10));
+
+    cout << "Attribut |" << " Mesure" << endl;
+    for (auto& i:qualite) {
+        cout << i.first << "   " << i.second << endl;
+    }
+    
     return qualite;
 } //----- Fin de CalculerQualiteAir_zone
 
-double System::CalculerQualiteAir(list<Measurements> &listeMesures, string periode,string typeMesure)
+double System::CalculerQualiteAir(list<Measurements> & listeMesures, string periode, string typeMesure)
 {
     double quality = 0.0;
     list<Measurements> listeMesuresPeriode;
@@ -165,7 +233,7 @@ double System::CalculerQualiteAir(list<Measurements> &listeMesures, string perio
     return quality;
 } //----- Fin de CalculerQualiteAir
 
-multimap<double, int> System::ClassifierCapteurs(int idCapteurRef, string periode, string typeMesure)
+multimap<double, int> System::ClassifierCapteurs(int idCapteurRef, string periode,string typeMesure)
 {
     multimap<double, int> listeQualiteCapteur;
     // double : similitude, int : idCapteur (idSensor)
@@ -177,10 +245,14 @@ multimap<double, int> System::ClassifierCapteurs(int idCapteurRef, string period
         double similitude = abs(CalculerQualiteAir(listeMesuresParCapteur, periode, typeMesure) - qualiteRef);
         listeQualiteCapteur.insert(pair<double, int>(similitude, i.first));
     }
+    cout << "IdCap   |   " << "similitude" << endl;
+    for(auto& i:listeQualiteCapteur) {
+        cout << i.second << "        " << i.first << endl;
+    }
     return listeQualiteCapteur;
 } //----- Fin de ClassifierCapteurs
 
-list<pair<int,int>> System::getListeSensorsIndividualUsers() {
+list<pair<int, int>> System::getListeSensorsIndividualUsers() {
     ifstream fChargement;
     fChargement.open("dataset/users.csv");
     string line;
@@ -190,43 +262,182 @@ list<pair<int,int>> System::getListeSensorsIndividualUsers() {
     string str = "User";
     string str2 = "Sensor";
     list<pair<int, int>> listeSensors;
-
-    if (fChargement)
+    if (fChargement) {
+    while (!fChargement.eof())
     {
+        fChargement >> line;
+        size_t pos1 = line.find(";");
+        idIndividualUser =  stoi(line.substr(str.length(), pos1 - str.length()), &sz);
         
-        while (!fChargement.eof())
-        {
-            fChargement >> line;
-            size_t pos1 = line.find(";");
-            idIndividualUser =  stoi(line.substr(str.length(), pos1 - str.length()), &sz);
-            idSensor =  stoi(line.substr(pos1 +str2.length()+1, line.length()-(pos1 +str2.length()+1)));
-            listeSensors.push_back(pair<int, int>(idIndividualUser, idSensor));
-        }
-    }
-
+        idSensor =  stoi(line.substr(pos1 +str2.length()+1, line.length()-(pos1 +str2.length()+1)));
+        Sensor unSensor = this->listeCapteurs.at(idSensor);
+        listeSensors.push_back(pair<int,int>(idIndividualUser, idSensor));
+    } }
+    fChargement.close();
     return listeSensors;
 } //----- Fin de getListeSensorsIndividualUsers
 
-Sensor System::getSensorById(int id) {
-    Sensor sensor;
-    for(auto& sen : this->listeCapteurs) {
-        if(id == sen.first) {
-           return sen.second;
+list<Sensor> System::getListeSensorsIndividualUser(int idIndividualUser_check) {
+    ifstream fChargement;
+    fChargement.open("dataset/users.csv");
+    string line;
+    int idIndividualUser;
+    int idSensor;
+    size_t sz;
+    string str = "User";
+    string str2 = "Sensor";
+    list<Sensor> listeSensors;
+ 
+    if(fChargement) {
+    while (!fChargement.eof())
+    {
+        fChargement >> line;
+        size_t pos1 = line.find(";");
+        idIndividualUser =  stoi(line.substr(str.length(), pos1 - str.length()), &sz);
+        if (idIndividualUser == idIndividualUser_check) {
+            idSensor =  stoi(line.substr(pos1 +str2.length()+1, line.length()-(pos1 +str2.length()+1)));
+            Sensor unSensor = this->listeCapteurs.at(idSensor);
+            listeSensors.push_back(unSensor);
+        }
+    } }
+    fChargement.close();
+    return listeSensors;
+} //----- Fin de getListeSensorsIndividualUsers
+
+void System::ConsulterScore(IndividualUser & particulierConnecte) {
+    cout << "--> Votre score est : "<<particulierConnecte.consulterScore() << endl;
+}
+
+void System::ConsulterDonneesCapteur(IndividualUser &particulierConnecte, int idCapteur) {
+    Sensor capt = particulierConnecte.ConsulterDonneesCapteur(idCapteur);
+    if (capt.GetId()!=-1 && capt.GetLatitude()!=0.0 && capt.GetLongitude()!=0.0){
+        cout << "--> "<< capt << endl;
+    } else if (capt.GetId()==-1 && capt.GetLatitude()==0.0 && capt.GetLongitude()==0.0){
+        cout << "--> Vous n'avez pas un capteur d'id " << idCapteur << endl;
+    }
+}
+
+list<Cleaner> System::GetListePurificateurByProvider(int idProvider) {
+    ifstream fic("dataset/providers.csv");
+    list<Cleaner> list;
+    if (fic) {
+        while (!fic.eof()) {
+            string line;
+            getline(fic, line);
+            string str = "Provider";
+            size_t pos1 = line.find(";");
+            int idProvider_t = stoi(line.substr(str.length(), pos1-str.length()));
+            
+            if (idProvider == idProvider_t) {
+                str = "Cleaner";
+                size_t pos2 = line.find(";", pos1+1);
+                int idCleaner = stoi(line.substr(pos1+str.length()+1, pos2-pos1-str.length()));
+                list.push_back(this->listeCleaners.at(idCleaner));
+            }
         }
     }
-    return sensor;
-} //----- Fin de getSensorById
+    fic.close();
+    return list;
+}
+
+void System::ConsulterDonneesPurificateur(Provider &fournisseurConnecte, int idPurificateur) {
+    Cleaner cln = fournisseurConnecte.ConsulterDonneesPurificateur(idPurificateur);
+    if (cln.GetId()!=-1 && cln.GetLatitude()!=0.0 && cln.GetLongitude()!=0.0){
+        cout << "--> "<< cln << endl;
+    } else if (cln.GetId()==-1 && cln.GetLatitude()==0.0 && cln.GetLongitude()==0.0){
+        cout << "--> Vous n'avez pas un purificateur d'id " << idPurificateur << endl;
+    }
+} 
+
+bool System::VerifierFiabiliteCapteur(Administrateur & admin, int idSensorToCheck, double precision) {
+    string periode = "2019-01-01 12:00:00to2019-12-31 12:00:00";
+    bool capteurDeParticulier = false;
+    list<pair<int, int>> sensorsIndividualUsers = this->getListeSensorsIndividualUsers();
+    for (auto &i : sensorsIndividualUsers)
+    {
+        if (i.second == idSensorToCheck)
+        {
+            capteurDeParticulier = true;
+            break;
+        }
+    }
+
+    if (capteurDeParticulier)
+    {
+
+        Sensor capteurChoisi = this->listeCapteurs.at(idSensorToCheck);
+
+        // Récupération mesures du capteur
+        Zone zone = Zone(capteurChoisi.GetLatitude(), capteurChoisi.GetLongitude(), 50);
+        list<Measurements> listeMesuresAVerifier = this->getListeMesure(capteurChoisi.GetId());
+
+        // Récupération des mesures des autres capteurs
+
+        list<Sensor> sensorDeLaZone = this->GetListeCapteurs_zone(zone);
+        list<Measurements> listeMesuresReference;
+
+        for (auto &it1 : sensorDeLaZone)
+        {
+            if (it1.GetId() != capteurChoisi.GetId())
+            {
+                for (auto &it2 : this->getListeMesure(it1.GetId()))
+                {
+                    listeMesuresReference.push_back(it2);
+                }
+            }
+        }
+
+        // Calcule qualité air (dans un but de performance toutes les qualités de sont pas calculées d'office)
+        double qualiteO3 = this->CalculerQualiteAir(listeMesuresAVerifier, periode, "O3");
+        double qualiteO3Ref = this->CalculerQualiteAir(listeMesuresReference, periode, "O3");
+
+        cout << "--> Qualité du capteur choisi : " << qualiteO3 << endl;
+        cout << "--> Qualité des autres capteurs : " << qualiteO3Ref << endl;
+
+        if ((abs(qualiteO3 - qualiteO3Ref) / qualiteO3Ref) <= precision)
+        {
+            cout << "--> 03 PASSED" << endl;
+            double qualiteNO2 = this->CalculerQualiteAir(listeMesuresAVerifier, periode, "NO2");
+            double qualiteNO2Ref = this->CalculerQualiteAir(listeMesuresReference, periode, "NO2");
+            if ((abs(qualiteNO2 - qualiteNO2Ref) / qualiteNO2Ref) <= precision)
+            {
+                cout << "--> NO2 PASSED" << endl;
+                double qualiteSO2 = this->CalculerQualiteAir(listeMesuresAVerifier, periode, "SO2");
+                double qualiteSO2Ref = this->CalculerQualiteAir(listeMesuresReference, periode, "SO2");
+                if ((abs(qualiteSO2 - qualiteSO2Ref) / qualiteSO2Ref) <= precision)
+                {
+                    cout << "--> SO2 PASSED" << endl;
+                    double qualitePM10 = this->CalculerQualiteAir(listeMesuresAVerifier, periode, "PM10");
+                    double qualitePM10Ref = this->CalculerQualiteAir(listeMesuresReference, periode, "PM10");
+
+                    if ((abs(qualitePM10 - qualitePM10Ref) / qualitePM10Ref) <= precision)
+                    {
+                        cout << "--> PM10 PASSED" << endl;
+                        cout << "--> Le capteur est fiable" << endl;
+                        cout << "--> D'après un intervalle de confiance de " << precision * 100 << "%" << endl;
+                        return true;
+                    }
+                }
+            }
+        }
+
+        cout << "--> A exclure : mesures incompatibles avec celles de capteur reference" << endl;
+        cout << "--> D'après un intervalle de confiance de " << precision * 100 << "%" << endl;
+        return false;
+    } else {
+        cout << "--> Ce n'est pas un capteur de particulier" << endl;
+        return false;
+    }
+} //----- Fin de VerifierFiabiliteCapteur
+
+void System::afficher() {
+    list<Cleaner> list = this->GetListePurificateurByProvider(1);
+    for (auto& i : list) {
+        cout << i << endl;
+    }
+}
 
 //------------------------------------------------- Surcharge d'opérateurs
-ostream &operator<<(ostream &out, const System &unSystem)
-{
-    out << "SensorID | Latitude | Longitude" << endl;
-    for (auto &i : unSystem.listeCapteurs)
-    {
-        out << i.first << " " << i.second << endl;
-    }
-    return out;
-} //----- Fin de operator <<
 
 //-------------------------------------------- Constructeurs - destructeur
 
@@ -283,14 +494,42 @@ System::System()
         }
         this->listeMesures.insert(pair<int, list<Measurements>>(idSensor, uneListeMesures));
     }
+
+    User u;
+    this->listeUsers.insert(pair<int, User>(u.GetId(), u));
     fic1.close();
     fic.close();
+
+    ifstream fic2("dataset/cleaners.csv");
+    if (fic2) {
+    while( !fic2.eof() ) {
+        string line;
+        getline(fic2, line);
+        string str = "Cleaner";
+        size_t pos1 = line.find(";");
+        int idCleaner = stoi(line.substr(str.length(), pos1-str.length()));
+        size_t pos2 = line.find(";", pos1+1);
+        double lat = stod(line.substr(pos1+1, pos2-pos1));
+        size_t pos3 = line.find(";", pos2+1);
+        double longi = stod(line.substr(pos2+1, pos3-pos2));
+        size_t pos4 = line.find(";", pos3+1);
+        string debut = line.substr(pos3+1, pos4-pos3-1);
+        size_t pos5 = line.find(";", pos4+1);
+        string fin = line.substr(pos4+1, pos5-1-pos4);
+        Cleaner unCleaner(idCleaner, lat, longi, debut, fin);
+        this->listeCleaners.insert(pair<int, Cleaner>(idCleaner, unCleaner));
+    } }
+    fic2.close();
 } //----- Fin de System
 
 System::~System()
 {
     this->listeCapteurs.clear();
     this->listeMesures.clear();
+    this->listeUsers.clear();
+    this->listeIUser.clear();
+    this->listeProvider.clear();
+    this->listeCleaners.clear();
 } //----- Fin de ~System
 
 #endif // System_H

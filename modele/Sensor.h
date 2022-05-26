@@ -8,7 +8,7 @@
 
 //---------- Interface de la classe <Sensor> (fichier Sensor.h) ----------------
 
-#if !defined(SENSOR_H)
+#if ! defined (SENSOR_H)
 #define SENSOR_H
 
 #include <string>
@@ -42,6 +42,7 @@ public:
 
     //-------------------------------------------- Constructeurs - destructeur
     Sensor(int unSensorId = -1, double unLat = 0.0, double unLong = 0.0);
+    Sensor(const Sensor& unSensor);
     virtual ~Sensor();
     //------------------------------------------------------------------ PRIVE
 
@@ -99,6 +100,12 @@ Sensor::Sensor(int unSensorId, double unLat, double unLong)
     this->latitude = unLat;
     this->longitude = unLong;
 } //----- Fin Sensor
+
+Sensor::Sensor(const Sensor& unSensor) {
+    this->sensorId = unSensor.sensorId;
+    this->latitude = unSensor.latitude;
+    this->longitude = unSensor.longitude;
+}
 
 Sensor::~Sensor()
 {

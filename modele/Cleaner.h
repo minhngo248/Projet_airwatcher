@@ -14,7 +14,7 @@ using namespace std;
 #include <string>
 
 //--------------------------------------------------- Interfaces utilisées
-//#include "Provider.h"
+
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
@@ -46,8 +46,8 @@ public:
     } //----- Fin getLongitude
 
     //-------------------------------------------- Surchage d'opérateurs
-    friend ostream &operator<<(ostream &out, const Cleaner &unCleaner) {
-        out << "CleanerID:" << unCleaner.cleanerID << ",Lattitude:" << unCleaner.Lattitude << ",Longitude:" << unCleaner.Longitude << ",debut:" << unCleaner.debut << ",fin:" << unCleaner.fin << endl;
+    friend ostream &operator<<(ostream & out, const Cleaner &unCleaner) {
+        out << "CleanerID:" << unCleaner.cleanerID << ",Lattitude:" << unCleaner.Lattitude << ",Longitude:" << unCleaner.Longitude << ",debut:" << unCleaner.debut << ",fin:" << unCleaner.fin;
         return out;
     } //----- Fin de operator <<
 
@@ -62,6 +62,14 @@ public:
         debut = Debut;
         fin = Fin;
     } //----- Fin de Cleaner
+
+    Cleaner(const Cleaner& unCleaner) {
+        this->cleanerID = unCleaner.cleanerID;
+        this->Lattitude = unCleaner.Lattitude;
+        this->Longitude = unCleaner.Longitude;
+        this->debut = unCleaner.debut;
+        this->fin = unCleaner.fin;
+    }
     
     ~Cleaner()
     {

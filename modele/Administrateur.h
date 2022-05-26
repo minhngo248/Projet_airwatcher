@@ -16,9 +16,8 @@ using namespace std;
 #include <list>
 #include <iostream>
 #include "User.h"
-#include "../modele/Sensor.h"
-#include "../modele/Zone.h"
-#include "../service/System.h"
+#include "Sensor.h"
+
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
@@ -35,14 +34,14 @@ class Administrateur : public User
 
 public:
     //----------------------------------------------------- Méthodes publiques
-    bool verifierFiabiliteCapteur(int idSensorToCheck, double precision = 0.05);
+    int GetId();
+    void SetId(int i);
 
     //------------------------------------------------- Surcharge d'opérateurs
     friend ostream &operator<<(ostream &out, const Administrateur &unAdministrateur);
 
     //-------------------------------------------- Constructeurs - destructeur
     Administrateur(const Administrateur &unAdministrateur);
-    Administrateur(string unNom, string unPrenom, string unEmail, string unMdp);
     Administrateur();
     virtual ~Administrateur();
 
@@ -56,89 +55,15 @@ protected:
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
-bool Administrateur::verifierFiabiliteCapteur(int idSensorToCheck, double precision)
-{
-    string periode = "2019-01-01 12:00:00to2019-12-31 12:00:00";
-    System system = System();
-    bool capteurDeParticulier = false;
-    list<pair<int, int>> sensorsIndividualUsers = system.getListeSensorsIndividualUsers();
-    for (auto &i : sensorsIndividualUsers)
-    {
-        if (i.second == idSensorToCheck)
-        {
-            capteurDeParticulier = true;
-            break;
-        }
-    }
 
-    if (capteurDeParticulier)
-    {
 
-        Sensor capteurChoisi = system.getSensorById(idSensorToCheck);
+int Administrateur::GetId() {
+    return User::id;
+}
 
-        // Récupération mesures du capteur
-        Zone zone = Zone(capteurChoisi.GetLatitude(), capteurChoisi.GetLongitude(), 50);
-        list<Measurements> listeMesuresAVerifier = system.getListeMesure(capteurChoisi.GetId());
-
-        // Récupération des mesures des autres capteurs
-
-        list<Sensor> sensorDeLaZone = system.GetListeCapteurs_zone(zone);
-        list<Measurements> listeMesuresReference;
-
-        for (auto &it1 : sensorDeLaZone)
-        {
-            if (it1.GetId() != capteurChoisi.GetId())
-            {
-                for (auto &it2 : system.getListeMesure(it1.GetId()))
-                {
-                    listeMesuresReference.push_back(it2);
-                }
-            }
-        }
-
-        // Calcule qualité air (dans un but de performance toutes les qualités de sont pas calculées d'office)
-        double qualiteO3 = system.CalculerQualiteAir(listeMesuresAVerifier, periode, "O3");
-        double qualiteO3Ref = system.CalculerQualiteAir(listeMesuresReference, periode, "O3");
-
-        //cout << "--> Qualité du capteur choisi : " << qualiteO3 << endl;
-        //cout << "--> Qualité des autres capteurs : " << qualiteO3Ref << endl;
-
-        if ((abs(qualiteO3 - qualiteO3Ref) / qualiteO3Ref) <= precision)
-        {
-            cout << "--> 03 PASSED" << endl;
-            double qualiteNO2 = system.CalculerQualiteAir(listeMesuresAVerifier, periode, "NO2");
-            double qualiteNO2Ref = system.CalculerQualiteAir(listeMesuresReference, periode, "NO2");
-            if ((abs(qualiteNO2 - qualiteNO2Ref) / qualiteNO2Ref) <= precision)
-            {
-                cout << "--> NO2 PASSED" << endl;
-                double qualiteSO2 = system.CalculerQualiteAir(listeMesuresAVerifier, periode, "SO2");
-                double qualiteSO2Ref = system.CalculerQualiteAir(listeMesuresReference, periode, "SO2");
-                if ((abs(qualiteSO2 - qualiteSO2Ref) / qualiteSO2Ref) <= precision)
-                {
-                    cout << "--> SO2 PASSED" << endl;
-                    double qualitePM10 = system.CalculerQualiteAir(listeMesuresAVerifier, periode, "PM10");
-                    double qualitePM10Ref = system.CalculerQualiteAir(listeMesuresReference, periode, "PM10");
-
-                    if ((abs(qualitePM10 - qualitePM10Ref) / qualitePM10Ref) <= precision)
-                    {
-                        cout << "--> PM10 PASSED" << endl;
-                        cout << "--> Le capteur est fiable" << endl;
-                        cout << "--> D'après un intervalle de confiance de " << precision * 100 << "%" << endl;
-                        return true;
-                    }
-                }
-            }
-        }
-
-        cout << "--> A exclure : mesures incompatibles avec celles de capteur reference" << endl;
-        cout << "--> D'après un intervalle de confiance de " << precision * 100 << "%" << endl;
-        return false;
-    } else {
-        cout << "--> Ce n'est pas un capteur de particulier" << endl;
-        return false;
-    }
-
-} //----- Fin de VerifierFiabiliteCapteur
+void Administrateur::SetId(int i) {
+    User::SetId(i);
+}
 
 //------------------------------------------------- Surcharge d'opérateurs
 ostream &operator<<(ostream &out, const Administrateur &unAdministrateur)
@@ -150,28 +75,19 @@ ostream &operator<<(ostream &out, const Administrateur &unAdministrateur)
 } //----- Fin de operator <<
 
 //-------------------------------------------- Constructeurs - destructeur
-Administrateur::Administrateur(const Administrateur &unAdministrateur)
+Administrateur::Administrateur(const Administrateur &unAdministrateur) : User(unAdministrateur)
 {
 #ifdef MAP
     cout << "Appel au constructeur de copie de <Administrateur>" << endl;
 #endif
 } //----- Fin de Administrateur (constructeur de copie)
 
-Administrateur::Administrateur(string unNom, string unPrenom, string unEmail, string unMdp)
-    : User(3, 0, unNom, unPrenom, unEmail, unMdp)
+Administrateur::Administrateur() : User()
 {
-
 #ifdef MAP
     cout << "Appel au constructeur de <Administrateur>" << endl;
 #endif
 } //----- Fin de Administrateur
-
-Administrateur::Administrateur()
-{
-#ifdef MAP
-    cout << "Appel au constructeur par défaut de <Administrateur>" << endl;
-#endif
-} //----- Fin de Administrateur (par défaut)
 
 Administrateur::~Administrateur()
 {

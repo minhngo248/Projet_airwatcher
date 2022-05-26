@@ -100,8 +100,8 @@ bool Administrateur::verifierFiabiliteCapteur(int idSensorToCheck, double precis
         double qualiteO3 = system.CalculerQualiteAir(listeMesuresAVerifier, periode, "O3");
         double qualiteO3Ref = system.CalculerQualiteAir(listeMesuresReference, periode, "O3");
 
-        cout << "--> Qualité du capteur choisi : " << qualiteO3 << endl;
-        cout << "--> Qualité des autres capteurs : " << qualiteO3Ref << endl;
+        //cout << "--> Qualité du capteur choisi : " << qualiteO3 << endl;
+        //cout << "--> Qualité des autres capteurs : " << qualiteO3Ref << endl;
 
         if ((abs(qualiteO3 - qualiteO3Ref) / qualiteO3Ref) <= precision)
         {

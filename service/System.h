@@ -46,11 +46,10 @@ public:
     list<pair<string, double>> CalculerQualiteAir_zone(Zone &zoneGeo, string periode = "2019-01-01 12:00:00to2019-12-31 12:00:00");
     double CalculerQualiteAir(list<Measurements> &listeMesures, string periode, string typeMesure);
     multimap<double, int> ClassifierCapteurs(int idCapteurReference, string periode, string typeMesure);
-    list<pair<int,int>> getListeSensorsIndividualUsers();
+    list<pair<int, int>> getListeSensorsIndividualUsers();
     Sensor getSensorById(int id);
 
     //-------------------------------------------- Surchage d'opérateurs
-    friend ostream &operator<<(ostream &out, const System &unSystem);
 
     //-------------------------------------------- Constructeurs - destructeur
 
@@ -125,7 +124,7 @@ list<pair<string, double>> System::CalculerQualiteAir_zone(Zone &zoneGeo, string
             mesuresDeLaZone.push_back(j);
         }
     }
-    //string periode = "2019-01-01 12:00:00to2019-12-31 12:00:00";
+    // string periode = "2019-01-01 12:00:00to2019-12-31 12:00:00";
     double qualiteO3 = CalculerQualiteAir(mesuresDeLaZone, periode, "O3");
     qualite.push_back(pair<string, double>("O3", qualiteO3));
     double qualiteNO2 = CalculerQualiteAir(mesuresDeLaZone, periode, "NO2");
@@ -180,7 +179,8 @@ multimap<double, int> System::ClassifierCapteurs(int idCapteurRef, string period
     return listeQualiteCapteur;
 } //----- Fin de ClassifierCapteurs
 
-list<pair<int,int>> System::getListeSensorsIndividualUsers() {
+list<pair<int, int>> System::getListeSensorsIndividualUsers()
+{
     ifstream fChargement;
     fChargement.open("dataset/users.csv");
     string line;
@@ -193,40 +193,27 @@ list<pair<int,int>> System::getListeSensorsIndividualUsers() {
 
     if (fChargement)
     {
-        
+
         while (!fChargement.eof())
         {
             fChargement >> line;
             size_t pos1 = line.find(";");
-            idIndividualUser =  stoi(line.substr(str.length(), pos1 - str.length()), &sz);
-            idSensor =  stoi(line.substr(pos1 +str2.length()+1, line.length()-(pos1 +str2.length()+1)));
+            idIndividualUser = stoi(line.substr(str.length(), pos1 - str.length()), &sz);
+            idSensor = stoi(line.substr(pos1 + str2.length() + 1, line.length() - (pos1 + str2.length() + 1)));
             listeSensors.push_back(pair<int, int>(idIndividualUser, idSensor));
         }
     }
-
+    fChargement.close();
     return listeSensors;
 } //----- Fin de getListeSensorsIndividualUsers
 
-Sensor System::getSensorById(int id) {
-    Sensor sensor;
-    for(auto& sen : this->listeCapteurs) {
-        if(id == sen.first) {
-           return sen.second;
-        }
-    }
-    return sensor;
+Sensor System::getSensorById(int id)
+{
+    return this->listeCapteurs.at(id);
 } //----- Fin de getSensorById
 
 //------------------------------------------------- Surcharge d'opérateurs
-ostream &operator<<(ostream &out, const System &unSystem)
-{
-    out << "SensorID | Latitude | Longitude" << endl;
-    for (auto &i : unSystem.listeCapteurs)
-    {
-        out << i.first << " " << i.second << endl;
-    }
-    return out;
-} //----- Fin de operator <<
+
 
 //-------------------------------------------- Constructeurs - destructeur
 

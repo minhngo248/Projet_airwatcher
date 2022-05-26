@@ -1,4 +1,11 @@
 #include <iostream>
+<<<<<<< HEAD
+=======
+#include <iomanip>
+#include <chrono>
+#include <ctime>
+#include <assert.h>
+>>>>>>> a7ea12ff4db32e2005e60d3110bcd9ac5a68ceb0
 using namespace std;
 
 #include "service/System.h"
@@ -6,6 +13,7 @@ using namespace std;
 #include "modele/Provider.h"
 #include "modele/IndividualUser.h"
 
+<<<<<<< HEAD
 void testerCreerCompte(int ID, string unNom, string unPrenom, string unEmail, string unMdp, int type){
     // type =1 pour un particulier, type =2 pour un fournisseur
     if (type == 1) {
@@ -83,10 +91,40 @@ void testerCalculerQualiteAir_zone(double unLat, double unLong, double unRayon) 
     list<pair<string, double>> qualite = system.CalculerQualiteAir_zone(uneZone);
     cout << "Attribut |" << " Mesure" << endl;
     for (auto& i:qualite) {
+=======
+void testerClassifierCapteurs()
+{
+    System system;
+    string periode = "2019-01-01 12:00:00to2019-05-05 13:00:00";
+
+    // respecter le format de saisie la periode
+    multimap<double, int> listeCroissante = system.ClassifierCapteurs(2, periode, "PM10");
+    cout << "IdCap  |  " <<
+          "similitude" << endl;
+    for (auto &i : listeCroissante)
+    {
+        cout << i.second << "         " << i.first << endl;
+    }
+    listeCroissante.clear();
+}
+
+void testerCalculerQualiteAir_zone()
+{
+    Zone uneZone(44.4, 0.4, 100);
+    // radius : 100 km
+    System system;
+    string periode = "2019-01-01 12:00:00to2019-02-02 12:00:00";
+    list<pair<string, double>> qualite = system.CalculerQualiteAir_zone(uneZone, periode);
+    cout << "Attribut   |  "
+         << " Mesure" << endl;
+    for (auto &i : qualite)
+    {
+>>>>>>> a7ea12ff4db32e2005e60d3110bcd9ac5a68ceb0
         cout << i.first << "   " << i.second << endl;
     }
     qualite.clear();
 }
+<<<<<<< HEAD
 
 int main(int argc, char* argv[]) {
 
@@ -112,6 +150,23 @@ int main(int argc, char* argv[]) {
 
 
     while (strcmp(lecture,"5")!=0) 
+=======
+
+void testerVerifierFiabliteCapteur()
+{
+    Administrateur a("a", "b", "c", "d");
+    a.verifierFiabiliteCapteur(36, 0.10);
+}
+
+int main(int argc, char *argv[])
+{
+    assert(argc > 1);
+    // Chrono
+    chrono::time_point<std::chrono::system_clock> start, fin;
+    char *choix = argv[1];
+    char *temps;
+    if (argc >= 3)
+>>>>>>> a7ea12ff4db32e2005e60d3110bcd9ac5a68ceb0
     {
         if (strcmp(lecture,"1")==0) 
         {
@@ -152,6 +207,7 @@ int main(int argc, char* argv[]) {
                         cout << "Saisir un chiffre entre 1 et 3 : ";
                         fscanf(stdin,"%99s",lecture);
 
+<<<<<<< HEAD
                         while (strcmp(lecture,"3")!=0) {
                             if (strcmp(lecture,"1")==0) {
                                 testerConsulterScore(particulierConnecte);
@@ -305,6 +361,26 @@ int main(int argc, char* argv[]) {
 
         cout << "Saisir un chiffre entre 1 et 5 : ";
         fscanf(stdin,"%99s",lecture);
+=======
+    if (strcmp(choix, "1") == 0)
+    {
+        testerClassifierCapteurs();
+    }
+    else if (strcmp(choix, "2") == 0)
+    {
+        testerCalculerQualiteAir_zone();
+    }
+    else if (strcmp(choix, "3") == 0)
+    {
+        testerVerifierFiabliteCapteur();
+    }
+
+    fin = chrono::system_clock::now();
+    chrono::duration<double> elapsed_seconds = fin - start;
+    if (strcmp(temps, "-t") == 0)
+    {
+        cout << "Temps d'éxecution : " << elapsed_seconds.count() << endl;
+>>>>>>> a7ea12ff4db32e2005e60d3110bcd9ac5a68ceb0
     }
     return 0;
 }

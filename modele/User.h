@@ -80,7 +80,6 @@ protected:
 
 //----------------------------------------------------- Méthodes publiques
 
-<<<<<<< HEAD
 // bool User::seConnecter(string email_in, string mdp)
 // {
 //     ifstream fChargement;
@@ -115,43 +114,6 @@ protected:
 //     }
 //     return false;
 // } //----- Fin de seConnecter
-=======
-bool User::seConnecter(string email_in, string mdp)
-{
-    ifstream fChargement;
-    char emailTmp[50];
-    char mdpTmp[50];
-
-    fChargement.open("dataset/login.csv");
-    if (fChargement)
-    {
-
-        while (!fChargement.eof())
-        {
-
-            fChargement.getline(emailTmp, 200, ':');
-
-            fChargement.getline(emailTmp, 200, ',');
-            if (emailTmp == email_in)
-            {
-
-                fChargement.getline(mdpTmp, 200, ':');
-                fChargement.getline(mdpTmp, 200, ',');
-                if (mdpTmp == mdp)
-                {
-                    return true;
-                }
-            }
-            else
-            {
-                fChargement.getline(emailTmp, 1000, '\n');
-            }
-        }
-    }
-    fChargement.close();
-    return false;
-} //----- Fin de seConnecter
->>>>>>> a7ea12ff4db32e2005e60d3110bcd9ac5a68ceb0
 
 bool User::seDeconnecter(bool connected)
 {

@@ -59,7 +59,7 @@ protected:
 bool Administrateur::verifierFiabiliteCapteur(int idSensorToCheck, double precision)
 {
     string periode = "2019-01-01 12:00:00to2019-12-31 12:00:00";
-    System system;
+    System system = System();
     bool capteurDeParticulier = false;
     list<pair<int, int>> sensorsIndividualUsers = system.getListeSensorsIndividualUsers();
     for (auto &i : sensorsIndividualUsers)
@@ -73,6 +73,7 @@ bool Administrateur::verifierFiabiliteCapteur(int idSensorToCheck, double precis
 
     if (capteurDeParticulier)
     {
+
         Sensor capteurChoisi = system.getSensorById(idSensorToCheck);
 
         // Récupération mesures du capteur
@@ -80,6 +81,7 @@ bool Administrateur::verifierFiabiliteCapteur(int idSensorToCheck, double precis
         list<Measurements> listeMesuresAVerifier = system.getListeMesure(capteurChoisi.GetId());
 
         // Récupération des mesures des autres capteurs
+
         list<Sensor> sensorDeLaZone = system.GetListeCapteurs_zone(zone);
         list<Measurements> listeMesuresReference;
 

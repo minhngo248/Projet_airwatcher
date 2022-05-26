@@ -9,7 +9,7 @@ Commande : make
 Commande : make memoryCheck
 
 ## Lancer le programme
-Commande : ./main 1 -t    ou ./ main 3
+Commande : ./main 1 t    ou ./ main 3
 
 Options : 
 1:  
@@ -17,7 +17,7 @@ Options :
 2 testerCalculerQualiteAir_zone();
 3 testerVerifierFiabliteCapteur(); 
 2: 
--t pour afficher le temps
+t pour afficher le temps
 
 ## Supprimer l'executable
 Commande : make clean

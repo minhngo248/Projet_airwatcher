@@ -44,8 +44,7 @@ public:
     list<Measurements> getListeMesure(int sensorId_in);
     list<Sensor> GetListeCapteurs_zone(Zone &zoneGeo);
     list<pair<string, double>> CalculerQualiteAir_zone(Zone &zoneGeo, string periode = "2019-01-01 12:00:00to2019-12-31 12:00:00");
-    double CalculerQualiteAir(list<Measurements> &listeMesures, string periode,
-                              string typeMesure);
+    double CalculerQualiteAir(list<Measurements> &listeMesures, string periode, string typeMesure);
     multimap<double, int> ClassifierCapteurs(int idCapteurReference, string periode, string typeMesure);
     list<pair<int,int>> getListeSensorsIndividualUsers();
     Sensor getSensorById(int id);
@@ -138,8 +137,7 @@ list<pair<string, double>> System::CalculerQualiteAir_zone(Zone &zoneGeo, string
     return qualite;
 } //----- Fin de CalculerQualiteAir_zone
 
-double System::CalculerQualiteAir(list<Measurements> &listeMesures, string periode,
-                                  string typeMesure)
+double System::CalculerQualiteAir(list<Measurements> &listeMesures, string periode,string typeMesure)
 {
     double quality = 0.0;
     list<Measurements> listeMesuresPeriode;
@@ -167,8 +165,7 @@ double System::CalculerQualiteAir(list<Measurements> &listeMesures, string perio
     return quality;
 } //----- Fin de CalculerQualiteAir
 
-multimap<double, int> System::ClassifierCapteurs(int idCapteurRef, string periode,
-                                                 string typeMesure)
+multimap<double, int> System::ClassifierCapteurs(int idCapteurRef, string periode,string typeMesure)
 {
     multimap<double, int> listeQualiteCapteur;
     // double : similitude, int : idCapteur (idSensor)

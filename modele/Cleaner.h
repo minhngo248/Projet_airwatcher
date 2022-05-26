@@ -30,6 +30,20 @@ class Cleaner
     //----------------------------------------------------------------- PUBLIC
 public:
     //----------------------------------------------------- Méthodes publiques
+    int GetId()
+    {
+        return cleanerID;
+    } //----- Fin getId
+
+    float GetLatitude()
+    {
+        return Lattitude;
+    } //----- Fin getLatitude
+
+    float GetLongitude()
+    {
+        return Longitude;
+    } //----- Fin getLongitude
 
     //-------------------------------------------- Surchage d'opérateurs
     friend ostream &operator<<(ostream &out, const Cleaner &unCleaner) {
@@ -38,9 +52,9 @@ public:
     } //----- Fin de operator <<
 
     //-------------------------------------------- Constructeurs - destructeur
-    Cleaner(int CleanerID, float lattitude, float longitude, string Debut, string Fin) {
+    Cleaner(int CleanerID=-1, float lattitude=0.0, float longitude=0.0, string Debut="", string Fin="") {
     #ifdef MAP
-        cout << "Appel au constructeur de <Cleaner>" << endl;
+        cout << "Appel au constructeur de <Measurements>" << endl;
     #endif
         cleanerID = CleanerID;
         Lattitude = lattitude;

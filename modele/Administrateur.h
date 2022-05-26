@@ -100,41 +100,41 @@ bool Administrateur::verifierFiabiliteCapteur(int idSensorToCheck, double precis
         double qualiteO3 = system.CalculerQualiteAir(listeMesuresAVerifier, periode, "O3");
         double qualiteO3Ref = system.CalculerQualiteAir(listeMesuresReference, periode, "O3");
 
-        cout << "Qualité du choisi : " << qualiteO3 << endl;
-        cout << "Qualité des autres : " << qualiteO3Ref << endl;
+        cout << "--> Qualité du capteur choisi : " << qualiteO3 << endl;
+        cout << "--> Qualité des autres capteurs : " << qualiteO3Ref << endl;
 
         if ((abs(qualiteO3 - qualiteO3Ref) / qualiteO3Ref) <= precision)
         {
-            cout << "03 PASSED" << endl;
+            cout << "--> 03 PASSED" << endl;
             double qualiteNO2 = system.CalculerQualiteAir(listeMesuresAVerifier, periode, "NO2");
             double qualiteNO2Ref = system.CalculerQualiteAir(listeMesuresReference, periode, "NO2");
             if ((abs(qualiteNO2 - qualiteNO2Ref) / qualiteNO2Ref) <= precision)
             {
-                cout << "NO2 PASSED" << endl;
+                cout << "--> NO2 PASSED" << endl;
                 double qualiteSO2 = system.CalculerQualiteAir(listeMesuresAVerifier, periode, "SO2");
                 double qualiteSO2Ref = system.CalculerQualiteAir(listeMesuresReference, periode, "SO2");
                 if ((abs(qualiteSO2 - qualiteSO2Ref) / qualiteSO2Ref) <= precision)
                 {
-                    cout << "SO2 PASSED" << endl;
+                    cout << "--> SO2 PASSED" << endl;
                     double qualitePM10 = system.CalculerQualiteAir(listeMesuresAVerifier, periode, "PM10");
                     double qualitePM10Ref = system.CalculerQualiteAir(listeMesuresReference, periode, "PM10");
 
                     if ((abs(qualitePM10 - qualitePM10Ref) / qualitePM10Ref) <= precision)
                     {
-                        cout << "PM10 PASSED" << endl;
-                        cout << "Le capteur est fiable" << endl;
-                        cout << "D'après un intervalle de confiance de " << precision * 100 << "%" << endl;
+                        cout << "--> PM10 PASSED" << endl;
+                        cout << "--> Le capteur est fiable" << endl;
+                        cout << "--> D'après un intervalle de confiance de " << precision * 100 << "%" << endl;
                         return true;
                     }
                 }
             }
         }
 
-        cout << "A exclure : mesures incompatibles avec celles de capteur reference" << endl;
-        cout << "D'après un intervalle de confiance de " << precision * 100 << "%" << endl;
+        cout << "--> A exclure : mesures incompatibles avec celles de capteur reference" << endl;
+        cout << "--> D'après un intervalle de confiance de " << precision * 100 << "%" << endl;
         return false;
     } else {
-        cout << "Ce n'est pas un capteur de particulier" << endl;
+        cout << "--> Ce n'est pas un capteur de particulier" << endl;
         return false;
     }
 
@@ -158,7 +158,7 @@ Administrateur::Administrateur(const Administrateur &unAdministrateur)
 } //----- Fin de Administrateur (constructeur de copie)
 
 Administrateur::Administrateur(string unNom, string unPrenom, string unEmail, string unMdp)
-    : User(unNom, unPrenom, unEmail, unMdp)
+    : User(3, 0, unNom, unPrenom, unEmail, unMdp)
 {
 
 #ifdef MAP

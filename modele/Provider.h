@@ -35,8 +35,10 @@ class Provider : public User
 
 public:
 //----------------------------------------------------- Méthodes publiques
+    bool seConnecter(string email_in, string mdp);
     User CreerCompte(int Provider_ID_in,string nom_in,string prenom_in, string email_in, string mdp_in);
-    Cleaner ConsulterDonneesPurificateur();
+    Cleaner ConsulterDonneesPurificateur(int idPurificateur);
+    int GetSizeListePurificateurs();
 
 //------------------------------------------------- Surcharge d'opérateurs
 
@@ -121,6 +123,74 @@ Cleaner CreerCleaner(int cleanerID){
     return cleaner;
 } //----- Fin de CreerCleaner
 
+bool Provider::seConnecter(string email_in, string mdp)
+{
+    ifstream fChargement;
+    char emailTmp[50];
+    char idUserTmp[50];
+    char mdpTmp[50];
+    char typeUser[2];
+    char tmp[50];
+    char scoreTmp[50];
+
+    fChargement.open("dataset/login.csv");
+    if (fChargement)
+    {
+
+        while (!fChargement.eof())
+        {
+            fChargement.getline(typeUser, 200, ';');
+            
+            if (atoi(typeUser)==2) {
+                fChargement.getline(idUserTmp, 200, ';');
+                fChargement.getline(tmp, 200, ';'); //nom
+                fChargement.getline(tmp, 200, ';'); //prenom
+                fChargement.getline(emailTmp, 200, ';');
+                
+                if (emailTmp == email_in)
+                {
+                    fChargement.getline(mdpTmp, 200, ';');
+                    if (mdpTmp == mdp)
+                    {
+                        fChargement.getline(scoreTmp, 200, ';');
+                        providerID = atoi(idUserTmp);
+
+                        size_t sz;
+                        ifstream fic;
+                        string line;
+
+                        fic.open("dataset/providers.csv");
+
+                        while (!fic.eof())
+                        {
+                            fic >> line;
+                            string str = "Provider";
+                            string str1 = "Cleaner";
+                            size_t pos1 = line.find(";");
+                            int idUser = stoi(line.substr(str.length(), pos1 - str.length()), &sz);
+                            int idCleaner = stoi(line.substr(pos1 + 1 + str1.length(), line.length() - (pos1 + 1 + str1.length())), &sz);
+
+                            if (idUser == providerID)
+                            {
+                                listePurificateur.push_back(CreerCleaner(idCleaner));
+                            }
+                        }
+                        fic.close();
+                        return true;
+                    }
+                } else {
+                    fChargement.getline(emailTmp, 1000, '\n');
+                }
+            } else {
+                fChargement.getline(emailTmp, 1000, '\n');
+            }
+            
+        }
+    }
+    return false;
+} //----- Fin de seConnecter
+
+
 User Provider::CreerCompte(int Provider_ID_in,string nom_in,string prenom_in, string email_in, string mdp_in){
     ifstream fChargement;
     bool dejaInscrit=false;
@@ -133,33 +203,43 @@ User Provider::CreerCompte(int Provider_ID_in,string nom_in,string prenom_in, st
     while (!fic.eof()) {
         fic >> line;
         string str = "Provider";
-        string str2="Cleaner";
         size_t pos1 = line.find(";");
         i++;
         int idProvider = stoi(line.substr(str.length(), pos1 - str.length()), &sz);
-        int idCleaner = stoi(line.substr(pos1 +str2.length()+1, line.length()-(pos1 +str2.length()+1)));
-        //cout<<i<<": "<< idProvider << " c "<<idCleaner<<endl;
 
         if(idProvider==Provider_ID_in){
             if(!dejaInscrit) {
-                user=User (nom_in, prenom_in, email_in, mdp_in);
+                user=User (2,idProvider,nom_in, prenom_in, email_in, mdp_in);
                 dejaInscrit=true;
             }
-            listePurificateur.push_back(CreerCleaner(idCleaner));
         }
     }
     fic.close();
+    if (dejaInscrit)
+    {
+        cout << "Profil complet !" << endl;
+    }
+    else
+    {
+        cout << "ce ProviderId n'existe pas !" << endl;
+    }
     return user;
 } //----- Fin de CreerCompte
 
-Cleaner Provider::ConsulterDonneesPurificateur() {
+Cleaner Provider::ConsulterDonneesPurificateur(int idPurificateur) {
+    Cleaner monCleaner;
     for (it = listePurificateur.begin (); it != listePurificateur.end (); ++it) {
-        cout<<*it<<endl;
+        if (it->GetId() == idPurificateur)
+        {
+            monCleaner = *it;
+        }
     }
-    //cout<<listePurificateur.size()<<endl;
-    return *listePurificateur.begin();
+    return monCleaner;
 } //----- Fin de ConsulterDonneesPurificateur
 
+int Provider::GetSizeListePurificateurs(){
+    return listePurificateur.size();
+}
 
 //------------------------------------------------- Surcharge d'opérateurs
 

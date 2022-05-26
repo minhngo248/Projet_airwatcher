@@ -31,7 +31,7 @@ class User
 public:
     //----------------------------------------------------- Méthodes publiques
 
-    virtual bool seConnecter(string email_in, string mdp);
+    //virtual bool seConnecter(string email_in, string mdp);
     // Mode d'emploi :
     //  Cette méthode permet de connecter un User grâce à son email et mot de passe. Elle renvoie true si l'authentification s'est réalisée avec succès. Faux sinon.
 
@@ -50,7 +50,7 @@ public:
     // Mode d'emploi (constructeur de copie) :
     //
 
-    User(string unNom, string unPrenom, string unEmail, string unMdp);
+    User(int type, int ID, string unNom, string unPrenom, string unEmail, string unMdp);
     // Mode d'emploi :
     //  Cette méthode permet créer un nouvel User.
 
@@ -80,40 +80,40 @@ protected:
 
 //----------------------------------------------------- Méthodes publiques
 
-bool User::seConnecter(string email_in, string mdp)
-{
-    ifstream fChargement;
-    char emailTmp[50];
-    char mdpTmp[50];
+// bool User::seConnecter(string email_in, string mdp)
+// {
+//     ifstream fChargement;
+//     char emailTmp[50];
+//     char mdpTmp[50];
 
-    fChargement.open("login.csv");
-    if (fChargement)
-    {
+//     fChargement.open("dataset/login.csv");
+//     if (fChargement)
+//     {
 
-        while (!fChargement.eof())
-        {
+//         while (!fChargement.eof())
+//         {
 
-            fChargement.getline(emailTmp, 200, ':');
+//             fChargement.getline(emailTmp, 200, ';');
 
-            fChargement.getline(emailTmp, 200, ',');
-            if (emailTmp == email_in)
-            {
+//             fChargement.getline(emailTmp, 200, ';');
+//             if (emailTmp == email_in)
+//             {
 
-                fChargement.getline(mdpTmp, 200, ':');
-                fChargement.getline(mdpTmp, 200, ',');
-                if (mdpTmp == mdp)
-                {
-                    return true;
-                }
-            }
-            else
-            {
-                fChargement.getline(emailTmp, 1000, '\n');
-            }
-        }
-    }
-    return false;
-} //----- Fin de seConnecter
+//                 fChargement.getline(mdpTmp, 200, ';');
+//                 fChargement.getline(mdpTmp, 200, ';');
+//                 if (mdpTmp == mdp)
+//                 {
+//                     return true;
+//                 }
+//             }
+//             else
+//             {
+//                 fChargement.getline(emailTmp, 1000, '\n');
+//             }
+//         }
+//     }
+//     return false;
+// } //----- Fin de seConnecter
 
 bool User::seDeconnecter(bool connected)
 {
@@ -141,8 +141,9 @@ User::User(const User &unUser)
 #endif
 } //----- Fin de User (constructeur de copie)
 
-User::User(string unNom, string unPrenom, string unEmail, string unMdp)
+User::User(int type, int ID, string unNom, string unPrenom, string unEmail, string unMdp)
 {
+    // type=1 --> particulier, type=2 --> fournisseur, type=3 --> admin
 #ifdef MAP
     cout << "Appel au constructeur de <User>" << endl;
 #endif
@@ -156,8 +157,12 @@ User::User(string unNom, string unPrenom, string unEmail, string unMdp)
     fSauvegarde.open("dataset/login.csv", ios::app);
     if (fSauvegarde)
     {
-
-        fSauvegarde << nom << ";" << prenom << ";" << email << ";" << motDePasse <<";\n";
+        if (type == 1) {
+            fSauvegarde << type << ";" << ID << ";" << nom << ";" << prenom << ";" << email << ";" << motDePasse << ";" << 0 << ";\n";
+        } else {
+            fSauvegarde << type << ";" << ID << ";" << nom << ";" << prenom << ";" << email << ";" << motDePasse <<";\n";
+        }
+        
     }
     fSauvegarde.close();
 

@@ -42,7 +42,6 @@ public:
 
     //-------------------------------------------- Constructeurs - destructeur
     Sensor(int unSensorId = -1, double unLat = 0.0, double unLong = 0.0);
-    
     virtual ~Sensor();
     //------------------------------------------------------------------ PRIVE
 
@@ -100,7 +99,6 @@ Sensor::Sensor(int unSensorId, double unLat, double unLong)
     this->latitude = unLat;
     this->longitude = unLong;
 } //----- Fin Sensor
-
 
 Sensor::~Sensor()
 {

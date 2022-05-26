@@ -34,12 +34,13 @@ class IndividualUser : public User
 
 public:
 //----------------------------------------------------- Méthodes publiques    
+    bool seConnecter(string email_in, string mdp);
     User CreerCompte(int unUserID, string unNom, string unPrenom, string unEmail, string unMdp);
     int consulterScore();
     void setScore(int unScore);
     Sensor ConsulterDonneesCapteur(int idCapteur);
     Sensor CreerSensor(int unSensorID);
-
+    int GetSizeListeCapteurs();
 
 //------------------------------------------------- Surcharge d'opérateurs
     friend ostream & operator <<(ostream& out, const IndividualUser & unIndividualUser);
@@ -67,6 +68,75 @@ protected:
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
+bool IndividualUser::seConnecter(string email_in, string mdp)
+{
+    ifstream fChargement;
+    char emailTmp[50];
+    char idUserTmp[50];
+    char mdpTmp[50];
+    char typeUser[2];
+    char tmp[50];
+    char scoreTmp[50];
+
+    fChargement.open("dataset/login.csv");
+    if (fChargement)
+    {
+
+        while (!fChargement.eof())
+        {
+            fChargement.getline(typeUser, 200, ';');
+            
+            if (atoi(typeUser)==1) {
+                fChargement.getline(idUserTmp, 200, ';');
+                fChargement.getline(tmp, 200, ';'); //nom
+                fChargement.getline(tmp, 200, ';'); //prenom
+                fChargement.getline(emailTmp, 200, ';');
+                
+                if (emailTmp == email_in)
+                {
+                    fChargement.getline(mdpTmp, 200, ';');
+                    if (mdpTmp == mdp)
+                    {
+                        fChargement.getline(scoreTmp, 200, ';');
+                        score = atoi(scoreTmp);
+                        userID = atoi(idUserTmp);
+
+                        size_t sz;
+                        ifstream fic;
+                        string line;
+
+                        fic.open("dataset/users.csv");
+
+                        while (!fic.eof())
+                        {
+                            fic >> line;
+                            string str = "User";
+                            string str1 = "Sensor";
+                            size_t pos1 = line.find(";");
+                            int idUser = stoi(line.substr(str.length(), pos1 - str.length()), &sz);
+                            int idSensor = stoi(line.substr(pos1 + 1 + str1.length(), line.length() - (pos1 + 1 + str1.length())), &sz);
+
+                            if (idUser == userID)
+                            {
+                                mesCapteurs.push_back(CreerSensor(idSensor));
+                            }
+                        }
+                        fic.close();
+                        return true;
+                    }
+                } else {
+                    fChargement.getline(emailTmp, 1000, '\n');
+                }
+            } else {
+                fChargement.getline(emailTmp, 1000, '\n');
+            }
+            
+        }
+    }
+    return false;
+} //----- Fin de seConnecter
+
+
 User IndividualUser::CreerCompte(int unUserID, string unNom, string unPrenom, string unEmail, string unMdp)
 {
     User user;
@@ -84,7 +154,7 @@ User IndividualUser::CreerCompte(int unUserID, string unNom, string unPrenom, st
         string str1 = "Sensor";
         size_t pos1 = line.find(";");
         int idUser = stoi(line.substr(str.length(), pos1 - str.length()), &sz);
-        int idSensor = stoi(line.substr(pos1 + 1 + str1.length(), line.length() - (pos1 + 1 + str1.length())), &sz);
+        //int idSensor = stoi(line.substr(pos1 + 1 + str1.length(), line.length() - (pos1 + 1 + str1.length())), &sz);
 
         if (idUser == unUserID)
         {
@@ -92,11 +162,11 @@ User IndividualUser::CreerCompte(int unUserID, string unNom, string unPrenom, st
             {
                 userID = unUserID;
                 score = 0;
-                user = User(unNom, unPrenom, unEmail, unMdp);
+                user = User(1, unUserID, unNom, unPrenom, unEmail, unMdp);
 
                 existe = true;
             }
-            mesCapteurs.push_back(CreerSensor(idSensor));
+            //mesCapteurs.push_back(CreerSensor(idSensor));
         }
     }
     fic.close();
@@ -118,7 +188,7 @@ Sensor IndividualUser::ConsulterDonneesCapteur(int idCapteur)
     Sensor monCapteur;
 
     for (it = mesCapteurs.begin(); it != mesCapteurs.end(); ++it)
-    {
+    {   
         if (it->GetId() == idCapteur)
         {
             monCapteur = *it;
@@ -169,6 +239,10 @@ int IndividualUser::consulterScore()
 void IndividualUser::setScore(int unScore)
 {
     score = unScore;
+}
+
+int IndividualUser::GetSizeListeCapteurs() {
+    return mesCapteurs.size();
 }
 
 //------------------------------------------------- Surcharge d'opérateurs

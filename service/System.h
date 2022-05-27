@@ -158,7 +158,17 @@ void System::CreerCompte(string unNom, string unPrenom, string unEmail, string u
             return;
         }
     }
-    int key = listeUsers.size();
+    //int key = this->listeUsers.size();
+    int key;
+    srand(time(0));
+    while (true) {
+        key = rand()%1000 + 1;
+        try {
+            User aUser = this->listeUsers.at(key);    
+        } catch (const std::out_of_range& oor) {
+            break;
+        }
+    }
     if (type == 1) {    
         // 1 : individual user
         IndividualUser iUser(unNom, unPrenom, unEmail, unMdp);

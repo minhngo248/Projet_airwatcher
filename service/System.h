@@ -64,8 +64,8 @@ public:
     list<Cleaner> GetListePurificateurByProvider(int idProvider);
     void ConsulterDonneesPurificateur(Provider &fournisseurConnecte, int idPurificateur);
     bool VerifierFiabiliteCapteur(Administrateur & admin, int idSensorToCheck, double precision = 0.05);
-    void afficher();
-
+    void write_file(User & unUser, int type) const;
+    void read_file_login();
 
     //-------------------------------------------- Surchage d'opérateurs
 
@@ -111,6 +111,47 @@ double deg2rad(double deg)
 
 //----------------------------------------------------- Méthodes publiques
 
+void System::write_file(User & unUser, int type) const {
+    ofstream fic("dataset/login.csv", ios::app);
+    fic << unUser.GetId() << ";" << unUser.GetNom() << ";" << unUser.GetPrenom() << ";" <<
+            unUser.GetEmail() << ";" << unUser.GetMdp() << ";" << type << endl;
+    fic.close();    
+}
+
+void System::read_file_login() {
+    ifstream fic("dataset/login.csv");
+    string line;
+
+    while (!fic.eof()) {
+        getline(fic, line);
+        if (line.length() == 0) break;
+        size_t pos1 = line.find(";");
+        size_t pos2 = line.find(";", pos1+1);
+        size_t pos3 = line.find(";", pos2+1);
+        size_t pos4 = line.find(";", pos3+1);
+        size_t pos5 = line.find(";", pos4+1);
+        int idUser = stoi(line.substr(0, pos1));
+        string nom = line.substr(pos1+1, pos2-pos1-1);
+        string prenom = line.substr(pos2+1, pos3-pos2-1);
+        string mail = line.substr(pos3+1, pos4-pos3-1);
+        string mdp = line.substr(pos4+1, pos5-pos4-1);
+        int type = stoi(line.substr(pos5+1));
+
+        if (type == 1) {
+            IndividualUser iUser(nom, prenom, mail, mdp);
+            iUser.SetId(idUser);
+            this->listeIUser.insert(pair<int, IndividualUser>(idUser, iUser));
+            this->listeUsers.insert(pair<int, User>(idUser, iUser));
+        } else if (type == 2) {
+            Provider pro(nom, prenom, mail, mdp);
+            pro.SetId(idUser);
+            this->listeProvider.insert(pair<int, Provider>(idUser, pro));
+            this->listeUsers.insert(pair<int, User>(idUser, pro));
+        }
+    }
+    fic.close();
+}
+
 void System::CreerCompte(string unNom, string unPrenom, string unEmail, string unMdp, int type) {
     for (auto& i:this->listeUsers) {
         if (unEmail == i.second.GetEmail()) {
@@ -125,16 +166,19 @@ void System::CreerCompte(string unNom, string unPrenom, string unEmail, string u
         iUser.SetId(key);
         this->listeUsers.insert(pair<int, User>(key, iUser));
         this->listeIUser.insert(pair<int, IndividualUser>(key, iUser));
+        this->write_file(iUser, type);
     } else if (type == 2) {
         Provider provider(unNom, unPrenom, unEmail, unMdp);
         provider.SetId(key);
         this->listeUsers.insert(pair<int, User>(key, provider));
         this->listeProvider.insert(pair<int, Provider>(key, provider));
+        this->write_file(provider, type);
     }
     cout << "Inscription réussie." << endl;
 }
 
 IndividualUser System::SeConnecterIUser(string unEmail, string unMdp) {
+    IndividualUser iu;
     for(auto& i : this->listeIUser) {
         if (i.second.GetEmail() == unEmail && i.second.GetMdp() == unMdp) {
             cout << "Connexion réussi" << endl;
@@ -142,9 +186,11 @@ IndividualUser System::SeConnecterIUser(string unEmail, string unMdp) {
         }
     }
     cout << "Email ou mot de passe incorrect" << endl;
+    return iu;
 }
 
 Provider System::SeConnecterProvider(string unEmail, string unMdp) {
+    Provider pro;
     for(auto& i : this->listeProvider) {
         if (i.second.GetEmail() == unEmail && i.second.GetMdp() == unMdp) {
             cout << "Connexion réussi" << endl;
@@ -152,6 +198,7 @@ Provider System::SeConnecterProvider(string unEmail, string unMdp) {
         }
     }
     cout << "Email ou mot de passe incorrect" << endl; 
+    return pro;
 }
 
 list<Measurements> System::getListeMesure(int sensorId_in)
@@ -262,17 +309,18 @@ list<pair<int, int>> System::getListeSensorsIndividualUsers() {
     string str = "User";
     string str2 = "Sensor";
     list<pair<int, int>> listeSensors;
-    if (fChargement) {
+    
     while (!fChargement.eof())
     {
-        fChargement >> line;
+        getline(fChargement, line);
+        if (line.length() == 0) break;
         size_t pos1 = line.find(";");
         idIndividualUser =  stoi(line.substr(str.length(), pos1 - str.length()), &sz);
         
         idSensor =  stoi(line.substr(pos1 +str2.length()+1, line.length()-(pos1 +str2.length()+1)));
         Sensor unSensor = this->listeCapteurs.at(idSensor);
         listeSensors.push_back(pair<int,int>(idIndividualUser, idSensor));
-    } }
+    } 
     fChargement.close();
     return listeSensors;
 } //----- Fin de getListeSensorsIndividualUsers
@@ -288,10 +336,11 @@ list<Sensor> System::getListeSensorsIndividualUser(int idIndividualUser_check) {
     string str2 = "Sensor";
     list<Sensor> listeSensors;
  
-    if(fChargement) {
+    
     while (!fChargement.eof())
     {
-        fChargement >> line;
+        getline(fChargement, line);
+        if (line.length() == 0) break;
         size_t pos1 = line.find(";");
         idIndividualUser =  stoi(line.substr(str.length(), pos1 - str.length()), &sz);
         if (idIndividualUser == idIndividualUser_check) {
@@ -299,7 +348,7 @@ list<Sensor> System::getListeSensorsIndividualUser(int idIndividualUser_check) {
             Sensor unSensor = this->listeCapteurs.at(idSensor);
             listeSensors.push_back(unSensor);
         }
-    } }
+    } 
     fChargement.close();
     return listeSensors;
 } //----- Fin de getListeSensorsIndividualUsers
@@ -320,20 +369,20 @@ void System::ConsulterDonneesCapteur(IndividualUser &particulierConnecte, int id
 list<Cleaner> System::GetListePurificateurByProvider(int idProvider) {
     ifstream fic("dataset/providers.csv");
     list<Cleaner> list;
-    if (fic) {
-        while (!fic.eof()) {
-            string line;
-            getline(fic, line);
-            string str = "Provider";
-            size_t pos1 = line.find(";");
-            int idProvider_t = stoi(line.substr(str.length(), pos1-str.length()));
+ 
+    while (!fic.eof()) {
+        string line;
+        getline(fic, line);
+        if (line.length() == 0) break;
+        string str = "Provider";
+        size_t pos1 = line.find(";");
+        int idProvider_t = stoi(line.substr(str.length(), pos1-str.length()));
             
-            if (idProvider == idProvider_t) {
-                str = "Cleaner";
-                size_t pos2 = line.find(";", pos1+1);
-                int idCleaner = stoi(line.substr(pos1+str.length()+1, pos2-pos1-str.length()));
-                list.push_back(this->listeCleaners.at(idCleaner));
-            }
+        if (idProvider == idProvider_t) {
+            str = "Cleaner";
+            size_t pos2 = line.find(";", pos1+1);
+            int idCleaner = stoi(line.substr(pos1+str.length()+1, pos2-pos1-str.length()));
+            list.push_back(this->listeCleaners.at(idCleaner));
         }
     }
     fic.close();
@@ -430,12 +479,6 @@ bool System::VerifierFiabiliteCapteur(Administrateur & admin, int idSensorToChec
     }
 } //----- Fin de VerifierFiabiliteCapteur
 
-void System::afficher() {
-    list<Cleaner> list = this->GetListePurificateurByProvider(1);
-    for (auto& i : list) {
-        cout << i << endl;
-    }
-}
 
 //------------------------------------------------- Surcharge d'opérateurs
 
@@ -462,7 +505,8 @@ System::System()
     fic1.open("dataset/measurements.csv");
     while (!fic.eof())
     {
-        fic >> line;
+        getline(fic, line);
+        if (line.length() == 0) break;
         string str = "Sensor";
         size_t pos1 = line.find(";");
         int idSensor = stoi(line.substr(str.length(), pos1 - str.length()), &sz);
@@ -477,6 +521,7 @@ System::System()
         while (!fic1.eof())
         {
             getline(fic1, line1);
+            if (line1.length() == 0) break;
             size_t pos11 = line1.find(";");
             size_t pos12 = line1.find(";", pos11 + 1);
             size_t pos13 = line1.find(";", pos12 + 1);
@@ -501,10 +546,10 @@ System::System()
     fic.close();
 
     ifstream fic2("dataset/cleaners.csv");
-    if (fic2) {
     while( !fic2.eof() ) {
         string line;
         getline(fic2, line);
+        if (line == "") break;
         string str = "Cleaner";
         size_t pos1 = line.find(";");
         int idCleaner = stoi(line.substr(str.length(), pos1-str.length()));
@@ -518,8 +563,9 @@ System::System()
         string fin = line.substr(pos4+1, pos5-1-pos4);
         Cleaner unCleaner(idCleaner, lat, longi, debut, fin);
         this->listeCleaners.insert(pair<int, Cleaner>(idCleaner, unCleaner));
-    } }
+    }
     fic2.close();
+    this->read_file_login();
 } //----- Fin de System
 
 System::~System()

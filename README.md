@@ -4,10 +4,11 @@ B3125 : Nathan NOWAKOWSKI, Ghizlane BADAOUI, Henri BAILLEUX
 
 ## Généralité du programme:
 - Toutes les fonctionnalités sont dans "system"
-- Les données de User (Admin, IndividualUser, Provider) sont stockées dans la structure de données de C++ (map, pas dans fichier). 
-C'est mieux car id est généré automatiquement, facile de manipuler, plus "MVC". Pendant l'inscription des utilisateur, on peut vérifier
-dans cette "map" si email saisi existe déjà ou pas. Mais pour se connecter, si on saisit mal, ça va renvoyer segmentation fault. C'est
-normal à cause de toutes les instructions suivantes dans le "main". Je n'ai pas encore trouvé des solutions pour ça. 
+- Les données de User (Admin, IndividualUser, Provider) sont chargées dans la structure de données de C++ (map) au début du programme.
+Chaque fois quelqu'un s'inscrit, les données sont écrites dans le fichier login.csv. C'est mieux car id est généré automatiquement,
+facile de manipuler, plus "MVC". On peut facilement gérer les gens qui saisit le mot de passe incorrect, inscrire avec le même mail, etc.
+- Le console est bon. Mais quand IndividualUser et Provider ont la connexion échouée, la transition de l'affichage sur Console n'est pas
+bonne.
 
 ## Editions des liens :
 Commande : make

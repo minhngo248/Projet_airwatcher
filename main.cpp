@@ -9,7 +9,7 @@ using namespace std;
 #include "modele/IndividualUser.h"
 
 int main(int argc, char* argv[]) {
-
+    System system;
     string lecture;
     string lecture1;
     string lecture2;
@@ -19,8 +19,7 @@ int main(int argc, char* argv[]) {
     double lecture6; 
     double lecture7;
     double lecture8;
-    System system;
-
+    
     do
     {    
         cout << "\n----------------- Menu principal : Je suis un : --------------" << endl;
@@ -215,7 +214,7 @@ int main(int argc, char* argv[]) {
                 cin >> lecture;
             } 
         }   
-    } while ( !(lecture == "5") ); 
+    } while ( !(lecture == "5") );
     return 0;
 }
 

@@ -40,12 +40,11 @@ public:
     //  Cette méthode permet de déconnecter un User. Elle renvoie false si la déconnection s'est réalisée avec succès. True sinon.
 
     virtual string GetEmail();
-
     virtual int GetId();
-
     virtual void SetId(int i);
-
     virtual string GetMdp();
+    virtual string GetNom();
+    virtual string GetPrenom();
 
     //------------------------------------------------- Surcharge d'opérateurs
 
@@ -113,6 +112,14 @@ string User::GetEmail() {
 
 string User::GetMdp() {
     return motDePasse;
+}
+
+string User::GetNom() {
+    return nom;
+}
+
+string User::GetPrenom() {
+    return prenom;
 }
 
 //------------------------------------------------- Surcharge d'opérateurs

@@ -126,7 +126,8 @@ string User::GetPrenom() {
 
 ostream &operator<<(ostream &out, const User &unUser)
 {
-    out << "email:" << unUser.email << ",motDePasse:" << unUser.motDePasse << ",nom:" << unUser.nom << ",prenom:" << unUser.prenom << endl;
+    out << unUser.id << ";" << unUser.nom << ";" << unUser.prenom << ";" <<
+            unUser.email << ";" << unUser.motDePasse;
     return out;
 } //----- Fin de operator << 
 

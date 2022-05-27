@@ -113,8 +113,7 @@ double deg2rad(double deg)
 
 void System::write_file(User & unUser, int type) const {
     ofstream fic("dataset/login.csv", ios::app);
-    fic << unUser.GetId() << ";" << unUser.GetNom() << ";" << unUser.GetPrenom() << ";" <<
-            unUser.GetEmail() << ";" << unUser.GetMdp() << ";" << type << endl;
+    fic << unUser << ";" << type << endl;
     fic.close();    
 }
 

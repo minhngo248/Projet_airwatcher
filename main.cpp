@@ -1,5 +1,6 @@
 #include <iostream>
 #include <limits>
+#include <chrono>
 using namespace std;
 
 #include "service/System.h"
@@ -59,9 +60,15 @@ int main(int argc, char* argv[]) {
                     cin >> lecture1;
                     cout << "\t\tEntrez votre mot de passe : " ;
                     cin >> lecture2;
+                    
+                    auto start = std::chrono::high_resolution_clock::now();
                     IndividualUser particulierConnecte = system.SeConnecterIUser(lecture1, lecture2);
                     list<Sensor> listeSensor = system.getListeSensorsIndividualUser(particulierConnecte.GetId());
                     particulierConnecte.SetListeCapteurs(listeSensor);
+                    auto finish = std::chrono::high_resolution_clock::now();
+                    std::chrono::duration<double> elapsed = finish - start;
+                    cout << "Temps d'exécution: " << elapsed.count() << " s\n";
+                    
                     if (particulierConnecte.GetSizeListeCapteurs() != 0) {
                         
                         cout << "\n----------------- Menu (2) Particulier : --------------" <<endl;
@@ -77,7 +84,13 @@ int main(int argc, char* argv[]) {
                             } else if (lecture == "2") {
                                 cout << "\t\tEntrez l'id du capteur : " ;
                                 cin >> lecture5;
+
+                                auto start = std::chrono::high_resolution_clock::now();
                                 system.ConsulterDonneesCapteur(particulierConnecte, lecture5);
+                                auto finish = std::chrono::high_resolution_clock::now();
+                                std::chrono::duration<double> elapsed = finish - start;
+                                cout << "Temps d'exécution: " << elapsed.count() << " s\n";
+                                
                             }
                             cout << "----------------- Menu (2) Particulier : --------------" <<endl;
                             cout << "       1 : Consulter mon score" <<endl;
@@ -122,9 +135,14 @@ int main(int argc, char* argv[]) {
                     cin >> lecture1;
                     cout << "\t\tEntrez votre mot de passe : " ;
                     cin >> lecture2;
+                    auto start = std::chrono::high_resolution_clock::now();
                     Provider fournisseurConnecte = system.SeConnecterProvider(lecture1,lecture2);
                     list<Cleaner> listCleaner = system.GetListePurificateurByProvider(fournisseurConnecte.GetId());
                     fournisseurConnecte.SetListePuri(listCleaner);
+                    auto finish = std::chrono::high_resolution_clock::now();
+                    std::chrono::duration<double> elapsed = finish - start;
+                    cout << "Temps d'exécution: " << elapsed.count() << " s\n";
+                    
                     if (fournisseurConnecte.GetSizeListePurificateurs() != 0) {
                         cout << "\n----------------- Menu (2) Fournisseur : --------------" <<endl;
                         cout << "       1 : Consulter les données d'un purificateur" <<endl;
@@ -167,7 +185,12 @@ int main(int argc, char* argv[]) {
                     cin >> lecture5;
                     cout << "\t\tEntrez la précision : " ;
                     cin >> lecture6;
+                    auto start = std::chrono::high_resolution_clock::now();
                     system.VerifierFiabiliteCapteur(admin, lecture5, lecture6);
+                    auto finish = std::chrono::high_resolution_clock::now();
+                    std::chrono::duration<double> elapsed = finish - start;
+                    cout << "Temps d'exécution: " << elapsed.count() << " s\n";
+                    
                 }
                 cout << "\n----------------- Menu Admin: --------------" <<endl;
                 cout << "       1 : Vérifier la fiabilité d'un capteur" <<endl;
@@ -194,7 +217,12 @@ int main(int argc, char* argv[]) {
                     cout << "\t\tEntrez le rayon de la zone : " ;
                     cin >> lecture8;
                     Zone uneZone(lecture6, lecture7, lecture8);
+                    
+                    auto start = std::chrono::high_resolution_clock::now();
                     system.CalculerQualiteAir_zone(uneZone);
+                    auto finish = std::chrono::high_resolution_clock::now();
+                    std::chrono::duration<double> elapsed = finish - start;
+                    cout << "Temps d'exécution: " << elapsed.count() << " s\n";
                 } else if (lecture == "2") {
                     cout << "\t\tEntrez l'id du capteur référence : " ;
                     cin >> lecture5;
@@ -203,7 +231,13 @@ int main(int argc, char* argv[]) {
                     getline(cin, lecture4);
                     cout << "\t\tChoisissez un type de mesure (O3, NO2, SO2, PM10) : " ;
                     cin >> lecture3;
+
+                    auto start = std::chrono::high_resolution_clock::now();
                     system.ClassifierCapteurs(lecture5, lecture4, lecture3);
+                    auto finish = std::chrono::high_resolution_clock::now();
+                    std::chrono::duration<double> elapsed = finish - start;
+                    cout << "Temps d'exécution: " << elapsed.count() << " s\n";
+                    
                 }
                 cout << "\n----------------- Menu Utilisateur: --------------" <<endl;
                 cout << "       1 : Calculer la qualité de l'air dans une zone géographique" <<endl;

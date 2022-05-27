@@ -31,8 +31,7 @@ class IndividualUser : public User {
 //----------------------------------------------------------------- PUBLIC
 
 public:
-//----------------------------------------------------- Méthodes publiques    
-    bool SeConnecter(string email_in, string mdp);
+//----------------------------------------------------- Méthodes publiques
     int consulterScore();
     void setScore(int unScore);
     Sensor ConsulterDonneesCapteur(int idCapteur);

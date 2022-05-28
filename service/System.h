@@ -291,8 +291,11 @@ double System::CalculerQualiteAir(list<Measurements> & listeMesures, string peri
     return quality;
 } //----- Fin de CalculerQualiteAir
 
-multimap<double, int> System::ClassifierCapteurs(int idCapteurRef, string periode,string typeMesure)
+multimap<double, int> System::ClassifierCapteurs(int idCapteurRef, string periode, string typeMesure)
 {
+    if (periode == "-1")
+        periode = "2019-01-01 12:00:00to2019-02-02 12:00:00";
+
     multimap<double, int> listeQualiteCapteur;
     // double : similitude, int : idCapteur (idSensor)
     list<Measurements> listeMesuresRef = this->listeMesures[idCapteurRef];

@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
                     std::chrono::duration<double> elapsed = finish - start;
                     cout << "Temps d'exécution: " << elapsed.count() << " s\n";
 
-                    if (particulierConnecte.GetSizeListeCapteurs() != 0)
+                    if (particulierConnecte.GetId() != -1)
                     {
 
                         cout << "\n----------------- Menu (2) Particulier : --------------" << endl;
@@ -127,8 +127,6 @@ int main(int argc, char *argv[])
                                 cout << "\t\tEntrez une période en respactant le format '2019-01-01 12:00:00to2019-02-02 12:00:00'\n ";
                                 cout << "\t\tRentrez '-1' si vous voulez prendre en compte toutes les données : ";
                                 getline(cin, lecture4);
-                                if (lecture4 == "-1")
-                                    lecture4 = "2019-01-01 12:00:00to2019-02-02 12:00:00";
                                 cout << "\t\tChoisissez un type de mesure (O3, NO2, SO2, PM10) : ";
                                 cin >> lecture3;
 
@@ -197,7 +195,7 @@ int main(int argc, char *argv[])
                     std::chrono::duration<double> elapsed = finish - start;
                     cout << "Temps d'exécution: " << elapsed.count() << " s\n";
 
-                    if (fournisseurConnecte.GetSizeListePurificateurs() != 0)
+                    if (fournisseurConnecte.GetId() != -1)
                     {
                         cout << "\n----------------- Menu (2) Fournisseur : --------------" << endl;
                         cout << "       1 : Consulter les données d'un purificateur" << endl;
@@ -239,8 +237,6 @@ int main(int argc, char *argv[])
                                 cout << "\t\tEntrez une période en respactant le format '2019-01-01 12:00:00to2019-02-02 12:00:00'\n ";
                                 cout << "\t\tRentrez '-1' si vous voulez prendre en compte toutes les données : ";
                                 getline(cin, lecture4);
-                                if (lecture4 == "-1")
-                                    lecture4 = "2019-01-01 12:00:00to2019-02-02 12:00:00";
                                 cout << "\t\tChoisissez un type de mesure (O3, NO2, SO2, PM10) : ";
                                 cin >> lecture3;
 
@@ -317,8 +313,6 @@ int main(int argc, char *argv[])
                     cout << "\t\tEntrez une période en respactant le format '2019-01-01 12:00:00to2019-02-02 12:00:00'\n ";
                     cout << "\t\tRentrez '-1' si vous voulez prendre en compte toutes les données : ";
                     getline(cin, lecture4);
-                    if (lecture4 == "-1")
-                        lecture4 = "2019-01-01 12:00:00to2019-02-02 12:00:00";
                     cout << "\t\tChoisissez un type de mesure (O3, NO2, SO2, PM10) : ";
                     cin >> lecture3;
 
@@ -374,8 +368,6 @@ int main(int argc, char *argv[])
                     cout << "\t\tEntrez une période en respactant le format '2019-01-01 12:00:00to2019-02-02 12:00:00'\n ";
                     cout << "\t\tRentrez '-1' si vous voulez prendre en compte toutes les données : ";
                     getline(cin, lecture4);
-                    if (lecture4 == "-1")
-                        lecture4 = "2019-01-01 12:00:00to2019-02-02 12:00:00";
                     cout << "\t\tChoisissez un type de mesure (O3, NO2, SO2, PM10) : ";
                     cin >> lecture3;
 

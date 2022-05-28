@@ -194,6 +194,7 @@ IndividualUser System::SeConnecterIUser(string unEmail, string unMdp) {
             return i.second;
         }
     }
+    iu.SetId(-1);
     cout << "Email ou mot de passe incorrect" << endl;
     return iu;
 }
@@ -206,6 +207,7 @@ Provider System::SeConnecterProvider(string unEmail, string unMdp) {
             return i.second;
         }
     }
+    pro.SetId(-1);
     cout << "Email ou mot de passe incorrect" << endl; 
     return pro;
 }

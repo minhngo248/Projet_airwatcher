@@ -36,6 +36,7 @@ public:
 //----------------------------------------------------- Méthodes publiques
     Cleaner ConsulterDonneesPurificateur(int idPurificateur);
     int GetSizeListePurificateurs();
+    list<Cleaner> GetListePurificateurs();
 
     string GetEmail();
     int GetId();
@@ -93,6 +94,10 @@ Cleaner Provider::ConsulterDonneesPurificateur(int idPurificateur) {
 
 int Provider::GetSizeListePurificateurs(){
     return listePurificateur.size();
+}
+
+list<Cleaner> Provider::GetListePurificateurs(){
+    return listePurificateur;
 }
 
 string Provider::GetEmail() {

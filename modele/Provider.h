@@ -35,7 +35,6 @@ class Provider : public User {
 public:
 //----------------------------------------------------- Méthodes publiques
     Cleaner ConsulterDonneesPurificateur(int idPurificateur);
-    int GetSizeListePurificateurs();
     list<Cleaner> GetListePurificateurs();
 
     string GetEmail();
@@ -91,10 +90,6 @@ Cleaner Provider::ConsulterDonneesPurificateur(int idPurificateur) {
     }
     return monCleaner;
 } //----- Fin de ConsulterDonneesPurificateur
-
-int Provider::GetSizeListePurificateurs(){
-    return listePurificateur.size();
-}
 
 list<Cleaner> Provider::GetListePurificateurs(){
     return listePurificateur;

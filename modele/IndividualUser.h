@@ -36,7 +36,6 @@ public:
     void setScore(int unScore);
     Sensor ConsulterDonneesCapteur(int idCapteur);
     void SetListeCapteurs(list<Sensor> & uneListe);
-    int GetSizeListeCapteurs();
 
     string GetEmail();
     int GetId();
@@ -94,10 +93,6 @@ int IndividualUser::consulterScore()
 void IndividualUser::setScore(int unScore)
 {
     score = unScore;
-}
-
-int IndividualUser::GetSizeListeCapteurs() {
-    return mesCapteurs.size();
 }
 
 string IndividualUser::GetEmail() {

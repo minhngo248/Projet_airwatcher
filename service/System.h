@@ -55,7 +55,7 @@ public:
     list<pair<string, double>> CalculerQualiteAir_zone(Zone &zoneGeo, string periode = "2019-01-01 12:00:00to2019-12-31 12:00:00");
     double CalculerQualiteAir(list<Measurements> &listeMesures, string periode, string typeMesure);
     multimap<double, int> ClassifierCapteurs(int idCapteurReference, string periode, string typeMesure);
-    list<pair<int, int>> getListeSensorsIndividualUsers();
+    map<int, list<int>> getListeSensorsIndividualUsers();
     list<Sensor> getListeSensorsIndividualUser(int idIndividualUser_check);
 
     void ConsulterScore(IndividualUser & particulierConnecte);
@@ -64,8 +64,6 @@ public:
     list<Cleaner> GetListePurificateurByProvider(int idProvider);
     void ConsulterDonneesPurificateur(Provider &fournisseurConnecte, int idPurificateur);
     bool VerifierFiabiliteCapteur(Administrateur & admin, int idSensorToCheck, double precision = 0.05);
-    void write_file(User & unUser, int type) const;
-    void read_file_login();
 
     //-------------------------------------------- Surchage d'opérateurs
 
@@ -87,6 +85,8 @@ private:
     map<int, IndividualUser> listeIUser;
     map<int, Provider> listeProvider;
     map<int, Cleaner> listeCleaners;
+    void write_file(User & unUser, int type) const;
+    void read_file_login();
 };
 
 double getDistanceFromLatLonInKm(double lat1, double lon1, double lat2, double lon2)
@@ -313,7 +313,8 @@ multimap<double, int> System::ClassifierCapteurs(int idCapteurRef, string period
     return listeQualiteCapteur;
 } //----- Fin de ClassifierCapteurs
 
-list<pair<int, int>> System::getListeSensorsIndividualUsers() {
+map<int, list<int>> System::getListeSensorsIndividualUsers() {
+    // User 1 <--> n Sensors
     ifstream fChargement;
     fChargement.open("dataset/users.csv");
     string line;
@@ -322,7 +323,7 @@ list<pair<int, int>> System::getListeSensorsIndividualUsers() {
     size_t sz;
     string str = "User";
     string str2 = "Sensor";
-    list<pair<int, int>> listeSensors;
+    map<int, list<int>> mapSensors;
     
     while (!fChargement.eof())
     {
@@ -330,40 +331,28 @@ list<pair<int, int>> System::getListeSensorsIndividualUsers() {
         if (line.length() == 0) break;
         size_t pos1 = line.find(";");
         idIndividualUser =  stoi(line.substr(str.length(), pos1 - str.length()), &sz);
-        
         idSensor =  stoi(line.substr(pos1 +str2.length()+1, line.length()-(pos1 +str2.length()+1)));
-        Sensor unSensor = this->listeCapteurs.at(idSensor);
-        listeSensors.push_back(pair<int,int>(idIndividualUser, idSensor));
-    } 
-    fChargement.close();
-    return listeSensors;
-} //----- Fin de getListeSensorsIndividualUsers
-
-list<Sensor> System::getListeSensorsIndividualUser(int idIndividualUser_check) {
-    ifstream fChargement;
-    fChargement.open("dataset/users.csv");
-    string line;
-    int idIndividualUser;
-    int idSensor;
-    size_t sz;
-    string str = "User";
-    string str2 = "Sensor";
-    list<Sensor> listeSensors;
- 
-    
-    while (!fChargement.eof())
-    {
-        getline(fChargement, line);
-        if (line.length() == 0) break;
-        size_t pos1 = line.find(";");
-        idIndividualUser =  stoi(line.substr(str.length(), pos1 - str.length()), &sz);
-        if (idIndividualUser == idIndividualUser_check) {
-            idSensor =  stoi(line.substr(pos1 +str2.length()+1, line.length()-(pos1 +str2.length()+1)));
-            Sensor unSensor = this->listeCapteurs.at(idSensor);
-            listeSensors.push_back(unSensor);
+        try {
+            list<int> listeSensor = mapSensors.at(idIndividualUser);
+            listeSensor.push_back(idSensor);
+            mapSensors[idIndividualUser] = listeSensor;
+        } catch (const std::out_of_range& oor) {
+            list<int> listeSensors;
+            listeSensors.push_back(idSensor);
+            mapSensors.insert(pair<int, list<int>>(idIndividualUser, listeSensors));
         }
     } 
     fChargement.close();
+    return mapSensors;
+} //----- Fin de getListeSensorsIndividualUsers
+
+list<Sensor> System::getListeSensorsIndividualUser(int idIndividualUser_check) {
+    list<Sensor> listeSensors;
+    list<int> liste = this->getListeSensorsIndividualUsers().at(idIndividualUser_check);
+    for (auto& i : liste) {
+        Sensor sensor = this->listeCapteurs[i];
+        listeSensors.push_back(sensor);
+    }
     return listeSensors;
 } //----- Fin de getListeSensorsIndividualUsers
 
@@ -415,14 +404,16 @@ void System::ConsulterDonneesPurificateur(Provider &fournisseurConnecte, int idP
 bool System::VerifierFiabiliteCapteur(Administrateur & admin, int idSensorToCheck, double precision) {
     string periode = "2019-01-01 12:00:00to2019-12-31 12:00:00";
     bool capteurDeParticulier = false;
-    list<pair<int, int>> sensorsIndividualUsers = this->getListeSensorsIndividualUsers();
-    for (auto &i : sensorsIndividualUsers)
-    {
-        if (i.second == idSensorToCheck)
-        {
-            capteurDeParticulier = true;
-            break;
+    map<int, list<int>> sensorsIndividualUsers = this->getListeSensorsIndividualUsers();
+    for (auto &i : sensorsIndividualUsers) {
+        list<int> listeSensors = i.second;
+        for (auto & j : listeSensors) {
+            if (idSensorToCheck == j) {
+                capteurDeParticulier = true;
+                break;
+            }
         }
+        if (capteurDeParticulier) break;
     }
 
     if (capteurDeParticulier)

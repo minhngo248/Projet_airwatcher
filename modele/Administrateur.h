@@ -42,6 +42,7 @@ public:
 
     //-------------------------------------------- Constructeurs - destructeur
     Administrateur(const Administrateur &unAdministrateur);
+    Administrateur(string unNom, string unPrenom, string unEmail, string unMdp);
     Administrateur();
     virtual ~Administrateur();
 
@@ -82,10 +83,18 @@ Administrateur::Administrateur(const Administrateur &unAdministrateur) : User(un
 #endif
 } //----- Fin de Administrateur (constructeur de copie)
 
-Administrateur::Administrateur() : User()
+Administrateur::Administrateur(string unNom, string unPrenom, string unEmail, string unMdp) :
+        User(unNom, unPrenom, unEmail, unMdp)
 {
 #ifdef MAP
     cout << "Appel au constructeur de <Administrateur>" << endl;
+#endif
+} //----- Fin de Administrateur
+
+Administrateur::Administrateur()
+{
+#ifdef MAP
+    cout << "Appel au constructeur par défaut de <Administrateur>" << endl;
 #endif
 } //----- Fin de Administrateur
 

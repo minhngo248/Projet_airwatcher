@@ -48,6 +48,7 @@ public:
     void CreerCompte(string unNom, string unPrenom, string unEmail, string unMdp, int type);
     IndividualUser SeConnecterIUser(string unEmail, string unMdp);
     Provider SeConnecterProvider(string unEmail, string unMdp);
+    Administrateur SeConnecterAdmin(string unEmail, string unMdp);
     
 
     list<Measurements> getListeMesure(int sensorId_in);
@@ -84,6 +85,7 @@ private:
     map<int, User> listeUsers;
     map<int, IndividualUser> listeIUser;
     map<int, Provider> listeProvider;
+    map<int, Administrateur> listeAdmin;
     map<int, Cleaner> listeCleaners;
     void write_file(User & unUser, int type) const;
     void read_file_login();
@@ -146,6 +148,11 @@ void System::read_file_login() {
             pro.SetId(idUser);
             this->listeProvider.insert(pair<int, Provider>(idUser, pro));
             this->listeUsers.insert(pair<int, User>(idUser, pro));
+        } else if (type == 3) {
+            Administrateur admin(nom,prenom,mail,mdp);
+            admin.SetId(idUser);
+            this->listeAdmin.insert(pair<int, Administrateur>(idUser, admin));
+            this->listeUsers.insert(pair<int, User>(idUser, admin));
         }
     }
     fic.close();
@@ -190,7 +197,7 @@ IndividualUser System::SeConnecterIUser(string unEmail, string unMdp) {
     IndividualUser iu;
     for(auto& i : this->listeIUser) {
         if (i.second.GetEmail() == unEmail && i.second.GetMdp() == unMdp) {
-            cout << "Connexion réussi" << endl;
+            cout << "Connexion réussie" << endl;
             return i.second;
         }
     }
@@ -203,13 +210,26 @@ Provider System::SeConnecterProvider(string unEmail, string unMdp) {
     Provider pro;
     for(auto& i : this->listeProvider) {
         if (i.second.GetEmail() == unEmail && i.second.GetMdp() == unMdp) {
-            cout << "Connexion réussi" << endl;
+            cout << "Connexion réussie" << endl;
             return i.second;
         }
     }
     pro.SetId(-1);
     cout << "Email ou mot de passe incorrect" << endl; 
     return pro;
+}
+
+Administrateur System::SeConnecterAdmin(string unEmail, string unMdp) {
+    Administrateur admin;
+    for(auto& i : this->listeAdmin) {
+        if (i.second.GetEmail() == unEmail && i.second.GetMdp() == unMdp) {
+            cout << "Connexion réussie" << endl;
+            return i.second;
+        }
+    }
+    admin.SetId(-1);
+    cout << "Email ou mot de passe incorrect" << endl; 
+    return admin;
 }
 
 list<Measurements> System::getListeMesure(int sensorId_in)
@@ -445,24 +465,35 @@ bool System::VerifierFiabiliteCapteur(Administrateur & admin, int idSensorToChec
         double qualiteO3 = this->CalculerQualiteAir(listeMesuresAVerifier, periode, "O3");
         double qualiteO3Ref = this->CalculerQualiteAir(listeMesuresReference, periode, "O3");
 
-        cout << "--> Qualité du capteur choisi : " << qualiteO3 << endl;
-        cout << "--> Qualité des autres capteurs : " << qualiteO3Ref << endl;
+        cout << "--> Qualité O3 du capteur choisi : " << qualiteO3 << endl;
+        cout << "--> Qualité O3 des autres capteurs : " << qualiteO3Ref << endl;
 
         if ((abs(qualiteO3 - qualiteO3Ref) / qualiteO3Ref) <= precision)
         {
             cout << "--> 03 PASSED" << endl;
             double qualiteNO2 = this->CalculerQualiteAir(listeMesuresAVerifier, periode, "NO2");
             double qualiteNO2Ref = this->CalculerQualiteAir(listeMesuresReference, periode, "NO2");
+
+            cout << "--> Qualité NO2 du capteur choisi : " << qualiteNO2 << endl;
+            cout << "--> Qualité NO2 des autres capteurs : " << qualiteNO2Ref << endl;
+
             if ((abs(qualiteNO2 - qualiteNO2Ref) / qualiteNO2Ref) <= precision)
             {
                 cout << "--> NO2 PASSED" << endl;
                 double qualiteSO2 = this->CalculerQualiteAir(listeMesuresAVerifier, periode, "SO2");
                 double qualiteSO2Ref = this->CalculerQualiteAir(listeMesuresReference, periode, "SO2");
+
+                cout << "--> Qualité SO2 du capteur choisi : " << qualiteSO2 << endl;
+                cout << "--> Qualité SO2 des autres capteurs : " << qualiteSO2Ref << endl;
+
                 if ((abs(qualiteSO2 - qualiteSO2Ref) / qualiteSO2Ref) <= precision)
                 {
                     cout << "--> SO2 PASSED" << endl;
                     double qualitePM10 = this->CalculerQualiteAir(listeMesuresAVerifier, periode, "PM10");
                     double qualitePM10Ref = this->CalculerQualiteAir(listeMesuresReference, periode, "PM10");
+
+                    cout << "--> Qualité PM10 du capteur choisi : " << qualitePM10 << endl;
+                    cout << "--> Qualité PM10 des autres capteurs : " << qualitePM10Ref << endl;
 
                     if ((abs(qualitePM10 - qualitePM10Ref) / qualitePM10Ref) <= precision)
                     {

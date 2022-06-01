@@ -377,15 +377,20 @@ map<int, list<int>> System::getListeSensorsIndividualUsers() {
 list<Sensor> System::getListeSensorsIndividualUser(int idIndividualUser_check) {
     list<Sensor> listeSensors;
     list<int> liste = this->getListeSensorsIndividualUsers().at(idIndividualUser_check);
-    for (auto& i : liste) {
-        Sensor sensor = this->listeCapteurs[i];
-        listeSensors.push_back(sensor);
+    for (int& i : liste) {
+        try {
+            Sensor sensor = this->listeCapteurs.at(i);
+            listeSensors.push_back(sensor);
+        } catch (const std::out_of_range& oor) {
+            Sensor sensor = this->listeCapteurs_exclu.at(i);
+            listeSensors.push_back(sensor);
+        }
     }
     return listeSensors;
 } //----- Fin de getListeSensorsIndividualUsers
 
 void System::ConsulterScore(IndividualUser & particulierConnecte) {
-    cout << "--> Votre score est : "<<particulierConnecte.consulterScore() << endl;
+    cout << "--> Votre score est : "<< particulierConnecte.consulterScore() << endl;
 }
 
 void System::ConsulterDonneesCapteur(IndividualUser &particulierConnecte, int idCapteur) {
@@ -393,7 +398,7 @@ void System::ConsulterDonneesCapteur(IndividualUser &particulierConnecte, int id
     if (capt.GetId()!=-1 && capt.GetLatitude()!=0.0 && capt.GetLongitude()!=0.0){
         cout << "--> "<< capt << endl;
     } else if (capt.GetId()==-1 && capt.GetLatitude()==0.0 && capt.GetLongitude()==0.0){
-        cout << "--> Vous n'avez pas un capteur d'id " << idCapteur << " ou il a été exclu." << endl;
+        cout << "--> Vous n'avez pas un capteur d'id " << idCapteur << "." << endl;
     }
 }
 

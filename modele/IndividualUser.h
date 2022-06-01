@@ -70,7 +70,7 @@ Sensor IndividualUser::ConsulterDonneesCapteur(int idCapteur)
     list<Sensor>::iterator it;
     Sensor monCapteur;
 
-    for (it = mesCapteurs.begin(); it != mesCapteurs.end(); ++it)
+    for (it = this->mesCapteurs.begin(); it != this->mesCapteurs.end(); ++it)
     {   
         if (it->GetId() == idCapteur)
         {

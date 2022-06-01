@@ -81,6 +81,7 @@ public:
     //----------------------------------------------------- Attributs protégés
 private:
     map<int, Sensor> listeCapteurs;
+    map<int, Sensor> listeCapteurs_exclu;
     map<int, list<Measurements>> listeMesures;
     map<int, User> listeUsers;
     map<int, IndividualUser> listeIUser;
@@ -312,12 +313,19 @@ double System::CalculerQualiteAir(list<Measurements> & listeMesures, string peri
 } //----- Fin de CalculerQualiteAir
 
 multimap<double, int> System::ClassifierCapteurs(int idCapteurRef, string periode, string typeMesure)
-{
+{   
+    // double : similitude, int : idCapteur (idSensor)
+    multimap<double, int> listeQualiteCapteur;
+    try {
+        Sensor unSensor = this->listeCapteurs_exclu.at(idCapteurRef);
+        cout << "Capteur id " << idCapteurRef << " a été exclu." << endl;
+        return listeQualiteCapteur;
+    } catch (const std::out_of_range & oor) {
+
+    }
     if (periode == "-1")
         periode = "2019-01-01 12:00:00to2019-02-02 12:00:00";
-
-    multimap<double, int> listeQualiteCapteur;
-    // double : similitude, int : idCapteur (idSensor)
+    
     list<Measurements> listeMesuresRef = this->listeMesures[idCapteurRef];
     double qualiteRef = CalculerQualiteAir(listeMesuresRef, periode, typeMesure);
     for (auto &i : this->listeCapteurs)
@@ -385,7 +393,7 @@ void System::ConsulterDonneesCapteur(IndividualUser &particulierConnecte, int id
     if (capt.GetId()!=-1 && capt.GetLatitude()!=0.0 && capt.GetLongitude()!=0.0){
         cout << "--> "<< capt << endl;
     } else if (capt.GetId()==-1 && capt.GetLatitude()==0.0 && capt.GetLongitude()==0.0){
-        cout << "--> Vous n'avez pas un capteur d'id " << idCapteur << endl;
+        cout << "--> Vous n'avez pas un capteur d'id " << idCapteur << " ou il a été exclu." << endl;
     }
 }
 
@@ -505,12 +513,20 @@ bool System::VerifierFiabiliteCapteur(Administrateur & admin, int idSensorToChec
                 }
             }
         }
-
+        
+        // Exclure ce capteur et ses measurements
+        Sensor sensorExclu = this->listeCapteurs.at(idSensorToCheck);
+        map<int, Sensor>::iterator it = this->listeCapteurs.find(sensorExclu.GetId());
+        this->listeCapteurs.erase(it);
+        this->listeCapteurs_exclu.insert(pair<int, Sensor>(sensorExclu.GetId(), sensorExclu));
+        map<int, list<Measurements>>::iterator it1 = this->listeMesures.find(sensorExclu.GetId());
+        this->listeMesures.erase(it1);
+        ///////////////////////////////////////////////
         cout << "--> A exclure : mesures incompatibles avec celles de capteur reference" << endl;
         cout << "--> D'après un intervalle de confiance de " << precision * 100 << "%" << endl;
         return false;
     } else {
-        cout << "--> Ce n'est pas un capteur de particulier" << endl;
+        cout << "--> Ce n'est pas un capteur de particulier ou il a été exclu." << endl;
         return false;
     }
 } //----- Fin de VerifierFiabiliteCapteur
@@ -607,10 +623,12 @@ System::System()
 System::~System()
 {
     this->listeCapteurs.clear();
+    this->listeCapteurs_exclu.clear();
     this->listeMesures.clear();
     this->listeUsers.clear();
     this->listeIUser.clear();
     this->listeProvider.clear();
+    this->listeAdmin.clear();
     this->listeCleaners.clear();
 } //----- Fin de ~System
 

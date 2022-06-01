@@ -4,6 +4,7 @@
         "*.html": "c",
         "list": "cpp",
         "xstring": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "map": "cpp"
     }
 }

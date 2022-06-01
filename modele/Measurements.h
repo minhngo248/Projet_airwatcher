@@ -7,7 +7,7 @@
 *************************************************************************/
 
 //---------- Interface de la classe <Measurements> (fichier Measurements.h) ----------------
-#if !defined(MEASUREMENTS_H)
+#if ! defined (MEASUREMENTS_H)
 #define MEASUREMENTS_H
 
 #include <iostream>

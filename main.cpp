@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
             cout << "\n----------------- Menu (1) Particulier : --------------" << endl;
             cout << "       1 : Creer un compte" << endl;
             cout << "       2 : Se connecter" << endl;
-            cout << "       3 : Revenir à au menu principal " << endl;
+            cout << "       3 : Revenir au menu principal " << endl;
             cout << "Saisir un chiffre entre 1 et 3 : ";
             cin >> lecture;
 
@@ -156,7 +156,7 @@ int main(int argc, char *argv[])
                 cout << "\n----------------- Menu (1) Particulier : --------------" << endl;
                 cout << "       1 : Creer un compte" << endl;
                 cout << "       2 : Se connecter" << endl;
-                cout << "       3 : Revenir à au menu principal " << endl;
+                cout << "       3 : Revenir au menu principal " << endl;
                 cout << "Saisir un chiffre entre 1 et 3 : ";
                 cin >> lecture;
             }
@@ -167,7 +167,7 @@ int main(int argc, char *argv[])
             cout << "\n----------------- Menu (1) Fournisseur : --------------" << endl;
             cout << "       1 : Creer un compte" << endl;
             cout << "       2 : Se connecter" << endl;
-            cout << "       3 : Revenir à au menu principal " << endl;
+            cout << "       3 : Revenir au menu principal " << endl;
             cout << "Saisir un chiffre entre 1 et 3 : ";
             cin >> lecture;
 
@@ -271,7 +271,7 @@ int main(int argc, char *argv[])
                 cout << "\n----------------- Menu (1) Fournisseur : --------------" << endl;
                 cout << "       1 : Creer un compte" << endl;
                 cout << "       2 : Se connecter" << endl;
-                cout << "       3 : Revenir à au menu principal " << endl;
+                cout << "       3 : Revenir au menu principal " << endl;
                 cout << "Saisir un chiffre entre 1 et 3 : ";
                 cin >> lecture;
             }
@@ -281,7 +281,7 @@ int main(int argc, char *argv[])
 
             cout << "\n----------------- Menu (1) Administrateur : --------------" << endl;
             cout << "       1 : Se connecter" << endl;
-            cout << "       2 : Revenir à au menu principal " << endl;
+            cout << "       2 : Revenir au menu principal " << endl;
             cout << "Saisir un chiffre entre 1 et 2 : ";
             cin >> lecture;
 
@@ -369,7 +369,7 @@ int main(int argc, char *argv[])
                 }
                 cout << "\n----------------- Menu (1) Administrateur : --------------" << endl;
                 cout << "       1 : Se connecter" << endl;
-                cout << "       2 : Revenir à au menu principal " << endl;
+                cout << "       2 : Revenir au menu principal " << endl;
                 cout << "Saisir un chiffre entre 1 et 2 : ";
                 cin >> lecture;
             }
@@ -380,7 +380,7 @@ int main(int argc, char *argv[])
             cout << "\n----------------- Menu Utilisateur: --------------" << endl;
             cout << "       1 : Calculer la qualité de l'air dans une zone géographique" << endl;
             cout << "       2 : Classifier les capteurs " << endl;
-            cout << "       3 : Revenir à au menu principal " << endl;
+            cout << "       3 : Revenir au menu principal " << endl;
 
             cout << "Saisir un chiffre entre 1 et 3 : ";
             cin >> lecture;
@@ -423,7 +423,7 @@ int main(int argc, char *argv[])
                 cout << "\n----------------- Menu Utilisateur: --------------" << endl;
                 cout << "       1 : Calculer la qualité de l'air dans une zone géographique" << endl;
                 cout << "       2 : Classifier les capteurs " << endl;
-                cout << "       3 : Revenir à au menu principal " << endl;
+                cout << "       3 : Revenir au menu principal " << endl;
 
                 cout << "Saisir un chiffre entre 1 et 4 : ";
                 cin >> lecture;

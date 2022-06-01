@@ -280,7 +280,6 @@ list<pair<string, double>> System::CalculerQualiteAir_zone(Zone &zoneGeo, string
     for (auto& i:qualite) {
         cout << i.first << "   " << i.second << endl;
     }
-    
     return qualite;
 } //----- Fin de CalculerQualiteAir_zone
 

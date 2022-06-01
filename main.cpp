@@ -115,8 +115,12 @@ int main(int argc, char *argv[])
                                 cin >> lecture6;
                                 cout << "\t\tEntrez la longitude de la zone : ";
                                 cin >> lecture7;
-                                cout << "\t\tEntrez le rayon de la zone : ";
-                                cin >> lecture8;
+                                do {
+                                    cout << "\t\tEntrez le rayon de la zone : ";
+                                    cin >> lecture8;
+                                    if (lecture8 <= 0)
+                                        cout << "Le rayon doit être positif." << endl;
+                                } while (lecture8 <= 0);
                                 Zone uneZone(lecture6, lecture7, lecture8);
 
                                 auto start = std::chrono::high_resolution_clock::now();
@@ -231,8 +235,12 @@ int main(int argc, char *argv[])
                                 cin >> lecture6;
                                 cout << "\t\tEntrez la longitude de la zone : ";
                                 cin >> lecture7;
-                                cout << "\t\tEntrez le rayon de la zone : ";
-                                cin >> lecture8;
+                                do {
+                                    cout << "\t\tEntrez le rayon de la zone : ";
+                                    cin >> lecture8;
+                                    if (lecture8 <= 0)
+                                        cout << "Le rayon doit être positif." << endl;
+                                } while (lecture8 <= 0);
                                 Zone uneZone(lecture6, lecture7, lecture8);
 
                                 auto start = std::chrono::high_resolution_clock::now();
@@ -330,8 +338,12 @@ int main(int argc, char *argv[])
                                 cin >> lecture6;
                                 cout << "\t\tEntrez la longitude de la zone : ";
                                 cin >> lecture7;
-                                cout << "\t\tEntrez le rayon de la zone : ";
-                                cin >> lecture8;
+                                do {
+                                    cout << "\t\tEntrez le rayon de la zone : ";
+                                    cin >> lecture8;
+                                    if (lecture8 <= 0)
+                                        cout << "Le rayon doit être positif." << endl;
+                                } while (lecture8 <= 0);
                                 Zone uneZone(lecture6, lecture7, lecture8);
 
                                 auto start = std::chrono::high_resolution_clock::now();
@@ -393,8 +405,12 @@ int main(int argc, char *argv[])
                     cin >> lecture6;
                     cout << "\t\tEntrez la longitude de la zone : ";
                     cin >> lecture7;
-                    cout << "\t\tEntrez le rayon de la zone : ";
-                    cin >> lecture8;
+                    do {
+                        cout << "\t\tEntrez le rayon de la zone : ";
+                        cin >> lecture8;
+                        if (lecture8 <= 0)
+                            cout << "Le rayon doit être positif." << endl;
+                    } while (lecture8 <= 0);
                     Zone uneZone(lecture6, lecture7, lecture8);
 
                     auto start = std::chrono::high_resolution_clock::now();
